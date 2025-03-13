@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/about/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/about/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/cards/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/cards/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/contribs/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/contribs/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/credits/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/credits/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/gantt/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/gantt/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/intro/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/intro/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/spantable/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/spantable/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/timeline/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/timeline/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/mkdocs-plugins/web/oad/</loc>
+         <loc>https://neoteroi.github.io/mkdocs-plugins/web/oad/</loc>
          <lastmod>2024-02-10</lastmod>
          <changefreq>daily</changefreq>
     </url>

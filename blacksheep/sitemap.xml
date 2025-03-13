@@ -1,207 +1,207 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/about/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/about/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/anti-request-forgery/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/anti-request-forgery/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/application/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/application/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/asgi/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/asgi/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/authentication/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/authentication/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/authorization/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/authorization/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/background-tasks/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/background-tasks/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/binders/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/binders/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/cache-control/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/cache-control/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/cli/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/cli/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/client/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/client/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/compression/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/compression/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/contributing/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/contributing/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/controllers/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/controllers/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/cors/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/cors/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/dataprotection/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/dataprotection/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/dependency-injection/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/dependency-injection/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/develop-with-https/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/develop-with-https/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/extensions/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/extensions/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/getting-started/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/getting-started/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/hsts/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/hsts/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/middlewares/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/middlewares/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/mounting/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/mounting/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/mvc-project-template/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/mvc-project-template/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/openapi/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/openapi/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/openid-connect/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/openid-connect/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/remotes/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/remotes/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/request-handlers/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/request-handlers/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/requests/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/requests/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/responses/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/responses/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/routing/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/routing/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/server-sent-events/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/server-sent-events/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/sessions/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/sessions/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/settings/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/settings/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/static-files/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/static-files/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/templating/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/templating/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/testing/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/testing/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/websocket/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/websocket/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/examples/marshmallow/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/examples/marshmallow/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.neoteroi.dev/blacksheep/versions/migrating-to-v2/</loc>
+         <loc>https://neoteroi.github.io/blacksheep/versions/migrating-to-v2/</loc>
          <lastmod>2024-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
