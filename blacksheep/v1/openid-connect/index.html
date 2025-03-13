@@ -1,0 +1,1609 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+      
+      
+        <meta name="author" content="Roberto Prevato">
+      
+      
+        <link rel="canonical" href="https://www.neoteroi.dev/blacksheep/openid-connect/">
+      
+      
+        <link rel="prev" href="/blacksheep/v1/authorization/">
+      
+      
+        <link rel="next" href="/blacksheep/v1/sessions/">
+      
+      <link rel="icon" href="/blacksheep/v1/img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+    
+    
+      
+        <title>OpenID Connect - BlackSheep</title>
+      
+    
+    
+      <link rel="stylesheet" href="/blacksheep/v1/assets/stylesheets/main.26e3688c.min.css">
+      
+        
+        <link rel="stylesheet" href="/blacksheep/v1/assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="/blacksheep/v1/css/neoteroi.css">
+    
+      <link rel="stylesheet" href="/blacksheep/v1/css/extra.css?v=20221120">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T65MX5XNF2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T65MX5XNF2');
+</script>
+
+    
+    
+  
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BlackSheep - OpenID Connect">
+  <meta property="og:description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+  <meta property="og:url" content="https://www.neoteroi.dev/blacksheep/openid-connect/">
+  <meta property="og:image" content="https://www.neoteroi.dev/blacksheep/img/banner.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1080">
+  <meta property="og:image:height" content="568">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@RobertoPrevato">
+  <meta name="twitter:creator" content="@RobertoPrevato">
+  <meta name="twitter:title" content="BlackSheep - OpenID Connect">
+  <meta name="twitter:description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+  <meta name="twitter:image" content="https://www.neoteroi.dev/blacksheep/img/banner.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#openid-connect" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="/blacksheep/v1/" title="BlackSheep" class="md-header__button md-logo" aria-label="BlackSheep" data-md-component="logo">
+      
+  <img src="/blacksheep/v1/img/logow.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlackSheep
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              OpenID Connect
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Neoteroi/BlackSheep" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Neoteroi/BlackSheep
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="/blacksheep/v1/" title="BlackSheep" class="md-nav__button md-logo" aria-label="BlackSheep" data-md-component="logo">
+      
+  <img src="/blacksheep/v1/img/logow.svg" alt="logo">
+
+    </a>
+    BlackSheep
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Neoteroi/BlackSheep" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Neoteroi/BlackSheep
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/getting-started/" class="md-nav__link">
+        Getting started: basics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/mvc-project-template/" class="md-nav__link">
+        Getting started: MVC
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/dependency-injection/" class="md-nav__link">
+        Dependency injection
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/openapi/" class="md-nav__link">
+        OpenAPI Docs
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/application/" class="md-nav__link">
+        Application
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/routing/" class="md-nav__link">
+        Routing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/request-handlers/" class="md-nav__link">
+        Request handlers
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/requests/" class="md-nav__link">
+        Requests
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/responses/" class="md-nav__link">
+        Responses
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/testing/" class="md-nav__link">
+        Testing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/templating/" class="md-nav__link">
+        Templating
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/controllers/" class="md-nav__link">
+        Controllers
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/middlewares/" class="md-nav__link">
+        Middlewares
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/websocket/" class="md-nav__link">
+        WebSocket
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/static-files/" class="md-nav__link">
+        Serving static files
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/authentication/" class="md-nav__link">
+        Authentication
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/authorization/" class="md-nav__link">
+        Authorization
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          OpenID Connect
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        OpenID Connect
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-example" class="md-nav__link">
+    Basic example
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use_openid_connect" class="md-nav__link">
+    use_openid_connect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openidsettings" class="md-nav__link">
+    OpenIDSettings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples-using-custom-scopes" class="md-nav__link">
+    Examples using custom scopes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    Events
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storing-tokens" class="md-nav__link">
+    Storing tokens
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#useful-references" class="md-nav__link">
+    Useful references
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-tokens-are-protected" class="md-nav__link">
+    How tokens are protected
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/sessions/" class="md-nav__link">
+        Sessions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_21" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_21" id="__nav_21_label" tabindex="0">
+          Security
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_21_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_21">
+          <span class="md-nav__icon md-icon"></span>
+          Security
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/cors/" class="md-nav__link">
+        CORS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/anti-request-forgery/" class="md-nav__link">
+        Anti-Forgery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/dataprotection/" class="md-nav__link">
+        Data protection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/hsts/" class="md-nav__link">
+        HSTS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/remotes/" class="md-nav__link">
+        Remotes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
+          Response features
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_22">
+          <span class="md-nav__icon md-icon"></span>
+          Response features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/cache-control/" class="md-nav__link">
+        Cache control
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/compression/" class="md-nav__link">
+        Compression
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_23">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/examples/marshmallow/" class="md-nav__link">
+        Using Marshmallow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/settings/" class="md-nav__link">
+        Settings
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/binders/" class="md-nav__link">
+        Binders
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/background-tasks/" class="md-nav__link">
+        Background tasks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/mounting/" class="md-nav__link">
+        Mounting apps
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/client/" class="md-nav__link">
+        HTTP Client
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/develop-with-https/" class="md-nav__link">
+        Develop using HTTPS
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/asgi/" class="md-nav__link">
+        ASGI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/" class="md-nav__link">
+        Neoteroi docs home
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-example" class="md-nav__link">
+    Basic example
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use_openid_connect" class="md-nav__link">
+    use_openid_connect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openidsettings" class="md-nav__link">
+    OpenIDSettings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples-using-custom-scopes" class="md-nav__link">
+    Examples using custom scopes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    Events
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storing-tokens" class="md-nav__link">
+    Storing tokens
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#useful-references" class="md-nav__link">
+    Useful references
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-tokens-are-protected" class="md-nav__link">
+    How tokens are protected
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+<div class="admonition warning version-warning">
+    <p class="admonition-title">Version 1</p>
+    <p>This documentation refers to the version 1.x of the web framework.
+    The current version of the <code>main</code> branch is <a href="/blacksheep/">documented here</a>.</p>
+</div>
+
+  
+                  
+
+
+<h1 id="openid-connect">OpenID Connect<a class="headerlink" href="#openid-connect" title="Permanent link">&para;</a></h1>
+<p>BlackSheep implements built-in support for OpenID Connect authentication,
+meaning that it can be easily integrated with identity provider services such
+as:</p>
+<ul>
+<li><a href="https://auth0.com">Auth0</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/active-directory/">Azure Active Directory</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview">Azure Active Directory B2C</a></li>
+<li><a href="https://www.okta.com">Okta</a></li>
+</ul>
+<p>This page documents:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to use OpenID Connect integration to provide sign-in and sign-up features,
+  and to identify users who use the application</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to use OpenID Connect integration to obtain <code>access_token</code>s to use APIs
+  (in addition, or instead of <code>id_token</code>s)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How tokens are protected and how to configure applications to support
+  multiple instances and regions</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using JWT Bearer and OpenID integrations requires more dependencies: use
+<code>pip install blacksheep[full]</code> to use these features</p>
+</div>
+<h2 id="basic-example">Basic example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h2>
+<p>A basic example with any of the identity providers listed above, having
+implicit flow enabled for <code>id_token</code>, looks like the following:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">pretty_json</span>
+<span class="kn">from</span> <span class="nn">blacksheep.server.authentication.oidc</span> <span class="kn">import</span> <span class="n">OpenIDSettings</span><span class="p">,</span> <span class="n">use_openid_connect</span>
+<span class="kn">from</span> <span class="nn">guardpost.authentication</span> <span class="kn">import</span> <span class="n">Identity</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+
+<span class="n">use_openid_connect</span><span class="p">(</span>
+    <span class="n">app</span><span class="p">,</span>
+    <span class="n">OpenIDSettings</span><span class="p">(</span>
+        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;&lt;YOUR_AUTHORITY&gt;&quot;</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;&lt;CLIENT_ID&gt;&quot;</span><span class="p">,</span>
+        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;&lt;CALLBACK_PATH&gt;&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">pretty_json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">return</span> <span class="n">html</span><span class="p">(</span><span class="s2">&quot;&lt;a href=&#39;/sign-in&#39;&gt;Sign in&lt;/a&gt;&lt;br/&gt;&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>When the application is configured with <code>use_openid_connect</code>, request handlers
+are automatically configured to handle users' sign-in, the redirect after a
+user signs-in, and signs-out. After a user signs-in successfully, a signed and
+encrypted cookie containing the claims of the <code>id_token</code> is set automatically
+for the client, having an expiration time matching the expiration time of the
+<code>id_token</code> itself. User's identity is automatically restored at each web
+request by an authentication middleware, and can be read as in the provided
+examples:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+        <span class="o">...</span>
+</code></pre></div>
+<h3 id="use_openid_connect">use_openid_connect<a class="headerlink" href="#use_openid_connect" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type, default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>app</td>
+<td>Application</td>
+<td>Instance of BlackSheep application.</td>
+</tr>
+<tr>
+<td>settings</td>
+<td>OpenIDSettings</td>
+<td>Instance of OpenIDSettings.</td>
+</tr>
+<tr>
+<td>tokens_store</td>
+<td>Optional[BaseTokensStore] = None</td>
+<td>Optional instance of <code>BaseTokensStore</code>, used to store and restore <code>access_token</code>s and <code>refresh_token</code>s.</td>
+</tr>
+<tr>
+<td>parameters_builder</td>
+<td>Optional[ParametersBuilder] = None</td>
+<td>Optional instance of <code>ParametersBuilder</code>, used to handle parameters configured in redirects and requests to the authorization server.</td>
+</tr>
+<tr>
+<td>is_default</td>
+<td>bool = True</td>
+<td>If default, clients are automatically redirected to the <code>sign-in</code> page when a non-authenticated user tries to access in <code>GET</code> a web page that requires authentication.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="openidsettings">OpenIDSettings<a class="headerlink" href="#openidsettings" title="Permanent link">&para;</a></h3>
+<p>The <code>OpenIDSettings</code> class has the following properties:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type, default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>client_id</td>
+<td>str</td>
+<td>ID of the application in the identity server.</td>
+</tr>
+<tr>
+<td>authority</td>
+<td>Optional[str] = None</td>
+<td>If specified, URL of the authorization server.</td>
+</tr>
+<tr>
+<td>audience</td>
+<td>Optional[str] = None</td>
+<td>If specified, the <code>audience</code> for requests using scopes to an API (<a href="https://auth0.com/docs/configure/apis/scopes/sample-use-cases-scopes-and-claims#request-custom-api-access">ref.</a>).</td>
+</tr>
+<tr>
+<td>client_secret</td>
+<td>Optional[str] = None</td>
+<td>For requests that use <code>Authorization Code Grant</code> flow, the secret of the client application in the identity server.</td>
+</tr>
+<tr>
+<td>discovery_endpoint</td>
+<td>Optional[str] = None</td>
+<td>If specified, the exact URL to the discovery point (useful with Okta when using custom scopes for an authorization server).</td>
+</tr>
+<tr>
+<td>entry_path</td>
+<td>str = "/sign-in"</td>
+<td>The local entry-path for sign-in (this redirects to the sign-in page of the identity server).</td>
+</tr>
+<tr>
+<td>logout_path</td>
+<td>str = "/sign-out"</td>
+<td>The local path to the sign-out endpoint (this removes authentication cookie).</td>
+</tr>
+<tr>
+<td>post_logout_redirect_path</td>
+<td>str = "/"</td>
+<td>The local path to which a user is redirected after signing-out.</td>
+</tr>
+<tr>
+<td>callback_path</td>
+<td>str = "/authorization-callback"</td>
+<td>The local path to handle the redirect after a user signs-in (the reply_url in the identity server must be configured accordingly).</td>
+</tr>
+<tr>
+<td>scope</td>
+<td>str = "openid profile email"</td>
+<td>The scope of the request, by default an <code>id_token</code> is obtained with email and profile.</td>
+</tr>
+<tr>
+<td>redirect_uri</td>
+<td>Optional[str] = None</td>
+<td>If specified, the redirect URL that must match the one configured for the application. If not provided, a redirect_url is obtained automatically (see note 🗡️).</td>
+</tr>
+<tr>
+<td>scheme_name</td>
+<td>str = "OpenIDConnect"</td>
+<td>The name of the authentication scheme, affecting the name of authentication cookies (see note 🍒).</td>
+</tr>
+<tr>
+<td>error_redirect_path</td>
+<td>Optional[str] = None</td>
+<td>If specified, the local path to which a user is redirected in case of error.</td>
+</tr>
+</tbody>
+</table>
+<p>Notes:</p>
+<ul>
+<li>🗡️ obtaining a redirect_url automatically can require handling of forward
+  headers, when an application is deployed behind a proxy. See
+  <a href="/blacksheep/v1/remotes">remotes for more information</a>.</li>
+<li>🍒 this should be changed when configuring more than one OIDC identity
+  provider.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><code>access_token</code>s issued for APIs can be validated using
+<a href="/blacksheep/v1/authentication/#jwt-bearer">JWT Bearer authentication</a></p>
+</div>
+<h2 id="examples-using-custom-scopes">Examples using custom scopes<a class="headerlink" href="#examples-using-custom-scopes" title="Permanent link">&para;</a></h2>
+<p>An integration with a <code>Auth0</code> application that uses custom scopes, where the
+application obtains both an <code>id_token</code> and an <code>access_token</code> for an API,
+looks like the following:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">pretty_json</span>
+<span class="kn">from</span> <span class="nn">blacksheep.server.authentication.oidc</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">OpenIDSettings</span><span class="p">,</span>
+    <span class="n">use_openid_connect</span><span class="p">,</span>
+    <span class="n">CookiesTokensStore</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">guardpost.authentication</span> <span class="kn">import</span> <span class="n">Identity</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+
+<span class="c1"># basic Auth0 integration that handles only an id_token</span>
+<span class="n">use_openid_connect</span><span class="p">(</span>
+    <span class="n">app</span><span class="p">,</span>
+    <span class="n">OpenIDSettings</span><span class="p">(</span>
+        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;&lt;YOUR_AUTHORITY&gt;&quot;</span><span class="p">,</span>
+        <span class="n">audience</span><span class="o">=</span><span class="s2">&quot;&lt;API_ID&gt;&quot;</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;&lt;CLIENT_ID&gt;&quot;</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;AUTH0_APP_SECRET&quot;</span><span class="p">],</span>
+        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;&lt;CALLBACK_PATH&gt;&quot;</span><span class="p">,</span>
+        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid profile custom_scope&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tokens_store</span><span class="o">=</span><span class="n">CookiesTokensStore</span><span class="p">(),</span>
+<span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">pretty_json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">return</span> <span class="n">html</span><span class="p">(</span><span class="s2">&quot;&lt;a href=&#39;/sign-in&#39;&gt;Sign in&lt;/a&gt;&lt;br/&gt;&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>An integration with <code>Azure Active Directory</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">use_openid_connect</span><span class="p">(</span>
+    <span class="n">app</span><span class="p">,</span>
+    <span class="n">OpenIDSettings</span><span class="p">(</span>
+        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;https://login.microsoftonline.com/&lt;YOUR_TENANT_ID&gt;/v2.0/&quot;</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;&lt;CLIENT_ID&gt;&quot;</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;AAD_APP_SECRET&quot;</span><span class="p">],</span>
+        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid profile custom_scope&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tokens_store</span><span class="o">=</span><span class="n">CookiesTokensStore</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>An integration with <code>Okta</code>, using the <code>default</code> authorization server:</p>
+<div class="highlight"><pre><span></span><code><span class="n">use_openid_connect</span><span class="p">(</span>
+    <span class="n">app</span><span class="p">,</span>
+    <span class="n">OpenIDSettings</span><span class="p">(</span>
+        <span class="n">discovery_endpoint</span><span class="o">=</span><span class="s2">&quot;https://&lt;YOUR_DOMAIN&gt;.okta.com/oauth2/default/.well-known/oauth-authorization-server&quot;</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;&lt;CLIENT_ID&gt;&quot;</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OKTA_APP_SECRET&quot;</span><span class="p">],</span>
+        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid email custom_scope&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tokens_store</span><span class="o">=</span><span class="n">CookiesTokensStore</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h2>
+<p>The API exposes the following events:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep.server.authentication.oidc</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">OpenIDSettings</span><span class="p">,</span>
+    <span class="n">TokenResponse</span><span class="p">,</span>
+    <span class="n">use_openid_connect</span>
+<span class="p">)</span>
+
+
+<span class="n">oidc</span> <span class="o">=</span> <span class="n">use_openid_connect</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+
+<span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_id_token_validated</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">id_token_callback</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">id_token_claims</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This callback is called after an id_token is received, successfully</span>
+<span class="sd">    verified using public RSA keys from the identity provider, and parsed</span>
+
+<span class="sd">    Using this event handler is possible to modify the claims obtained from the</span>
+<span class="sd">    id_token before they are set in the authentication cookie. For example to</span>
+<span class="sd">    remove certain claims, or add other information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_tokens_received</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">on_tokens_received</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">token_response</span><span class="p">:</span> <span class="n">TokenResponse</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This callback is called after a successful web request to the token</span>
+<span class="sd">    endpoint to exchange a code with an access_token, and eventually</span>
+<span class="sd">    refresh_token, and id_token.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_error</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">on_error</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This callback is called when an error is returned by the authorization</span>
+<span class="sd">    server in the redirect handler.</span>
+<span class="sd">    Note that this can happen for a common scenario, like the user refusing</span>
+<span class="sd">    to grant consent on the application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</code></pre></div>
+<h2 id="storing-tokens">Storing tokens<a class="headerlink" href="#storing-tokens" title="Permanent link">&para;</a></h2>
+<p>By default, <code>access_token</code>(s) and <code>refresh_token</code>(s) are not stored. To store
+them, the <code>use_openid_connect</code> function supports a <code>BaseTokensStore</code> parameter
+that will handle storing and restoring tokens. A concrete implementation is
+provided in <code>CookiesTokenStore</code>, storing tokens in cookies. It is possible to
+create custom implementations of the <code>BaseTokensStore</code>, to use other mechanisms,
+for example to store tokens in a Redis cache.</p>
+<p>When a user is authenticated, and has an <code>access_token</code> (and/or a
+<code>refresh_token</code>), they are accessible through the <code>Identity</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">access_token</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">)</span>
+        <span class="o">...</span>
+</code></pre></div>
+<p>To see how to use a <code>BaseTokensStore</code>, refer to the examples above that use
+the built-in <code>CookiesTokensStore</code>.</p>
+<h2 id="useful-references">Useful references<a class="headerlink" href="#useful-references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://auth0.com/docs/security/tokens/access-tokens">https://auth0.com/docs/security/tokens/access-tokens</a></li>
+<li><a href="https://www.oauth.com/oauth2-servers/server-side-apps/possible-errors/">https://www.oauth.com/oauth2-servers/server-side-apps/possible-errors/</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-implicit-grant-flow">https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-implicit-grant-flow</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc">https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc</a></li>
+<li><a href="https://connect2id.com/learn/openid-connect">https://connect2id.com/learn/openid-connect</a></li>
+</ul>
+<h2 id="how-tokens-are-protected">How tokens are protected<a class="headerlink" href="#how-tokens-are-protected" title="Permanent link">&para;</a></h2>
+<p>Tokens that are stored in cookies are signed and encrypted using <code>itsdangerous</code>,
+with symmetric encryption. This means that BlackSheep applications need secrets
+to protect sensitive data. When keys are not specified, they are generated
+automatically in memory, for best user's experience.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>This means that keys are <strong>not persisted</strong> when applications
+restart, and not consistent when multiple instances of the same application
+are deployed across regions, or within a same server. This is acceptable during
+local development, but should not be the case in production environments.</p>
+</div>
+<p>To use consistent keys, configure one or more environment variables like the
+following:</p>
+<ul>
+<li>APPSECRET_1="***"</li>
+<li>APPSECRET_2="***"</li>
+<li>APPSECRET_3="***"</li>
+</ul>
+<p>Keys can be configured in a host environment, or fetched from a dedicated
+service such as <code>AWS Secrets Manager</code> or <code>Azure Key Vault</code> at application
+start-up, and configured as environment settings for the application.
+<strong>DO NOT</strong> store secrets that are meant to be used in production
+under source control.</p>
+<p>For more information, refer to <a href="/blacksheep/v1/dataprotection/">data protection</a>.</p>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2022-11-20 10:54:13</p><div class="nt-contributors"><div class="nt-contributor image nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (4)" style="background-image: url('https://avatars.githubusercontent.com/u/2576032?s=400&amp;u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&amp;v=4')"><span class="nt-initials" /></div><div class="nt-contributor nt-group-1" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div></div></div>
+
+
+
+
+
+<!-- Giscus snippet -->
+<script src="https://giscus.app/client.js"
+    data-repo="Neoteroi/BlackSheep-Docs"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzNzYyOTM4ODI="
+    data-category="Q&A"
+    data-category-id="DIC_kwDOFm3J-s4CSpF8"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark_tritanopia"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+</script>
+
+<!-- Synchronize Giscus theme with palette -->
+<script>
+  var giscus = document.querySelector("script[src*=giscus]")
+
+  /* Set palette on initial load */
+  var palette = __md_get("__palette")
+  if (palette && typeof palette.color === "object") {
+    var theme = palette.color.scheme === "slate" ? "dark" : "light"
+    giscus.setAttribute("data-theme", theme)
+  }
+
+  /* Register event handlers after documented loaded */
+  document.addEventListener("DOMContentLoaded", function() {
+    var ref = document.querySelector("[data-md-component=palette]")
+    ref.addEventListener("change", function() {
+      var palette = __md_get("__palette")
+      if (palette && typeof palette.color === "object") {
+        var theme = palette.color.scheme === "slate" ? "dark" : "light"
+
+        /* Instruct Giscus to change theme */
+        var frame = document.querySelector(".giscus-frame")
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme } } },
+          "https://giscus.app"
+        )
+      }
+    })
+  })
+</script>
+
+                
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": 1}</script>
+    
+    
+      <script src="/blacksheep/v1/assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1868 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+      
+      
+        <meta name="author" content="Roberto Prevato">
+      
+      
+        <link rel="canonical" href="https://www.neoteroi.dev/blacksheep/testing/">
+      
+      
+        <link rel="prev" href="/blacksheep/responses/">
+      
+      
+        <link rel="next" href="/blacksheep/templating/">
+      
+      <link rel="icon" href="/blacksheep/img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+    
+    
+      
+        <title>Testing - BlackSheep</title>
+      
+    
+    
+      <link rel="stylesheet" href="/blacksheep/assets/stylesheets/main.26e3688c.min.css">
+      
+        
+        <link rel="stylesheet" href="/blacksheep/assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="/blacksheep/css/neoteroi.css">
+    
+      <link rel="stylesheet" href="/blacksheep/css/extra.css?v=20221120">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T65MX5XNF2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T65MX5XNF2');
+</script>
+
+    
+    
+  
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BlackSheep - Testing">
+  <meta property="og:description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+  <meta property="og:url" content="https://www.neoteroi.dev/blacksheep/testing/">
+  <meta property="og:image" content="https://www.neoteroi.dev/blacksheep/img/banner.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1080">
+  <meta property="og:image:height" content="568">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@RobertoPrevato">
+  <meta name="twitter:creator" content="@RobertoPrevato">
+  <meta name="twitter:title" content="BlackSheep - Testing">
+  <meta name="twitter:description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+  <meta name="twitter:image" content="https://www.neoteroi.dev/blacksheep/img/banner.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#testing-a-blacksheep-app" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="/blacksheep/" title="BlackSheep" class="md-header__button md-logo" aria-label="BlackSheep" data-md-component="logo">
+      
+  <img src="/blacksheep/img/logow.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlackSheep
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Testing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Neoteroi/BlackSheep" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Neoteroi/BlackSheep
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="/blacksheep/" title="BlackSheep" class="md-nav__button md-logo" aria-label="BlackSheep" data-md-component="logo">
+      
+  <img src="/blacksheep/img/logow.svg" alt="logo">
+
+    </a>
+    BlackSheep
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Neoteroi/BlackSheep" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Neoteroi/BlackSheep
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/getting-started/" class="md-nav__link">
+        Getting started: basics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/mvc-project-template/" class="md-nav__link">
+        Getting started: MVC
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/dependency-injection/" class="md-nav__link">
+        Dependency injection
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/openapi/" class="md-nav__link">
+        OpenAPI Docs
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/application/" class="md-nav__link">
+        Application
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/routing/" class="md-nav__link">
+        Routing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/request-handlers/" class="md-nav__link">
+        Request handlers
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/requests/" class="md-nav__link">
+        Requests
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/responses/" class="md-nav__link">
+        Responses
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Testing
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Testing
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview-of-the-testclient-class" class="md-nav__link">
+    Overview of the TestClient class
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tutorial" class="md-nav__link">
+    Tutorial
+  </a>
+  
+    <nav class="md-nav" aria-label="Tutorial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preparing-the-project-structure" class="md-nav__link">
+    Preparing the project structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#navigating-the-api-using-openapi-documentation" class="md-nav__link">
+    Navigating the API using OpenAPI Documentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-mocked-todos-api" class="md-nav__link">
+    Creating a mocked TODOs API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-testclient-with-pytest" class="md-nav__link">
+    Using the TestClient with pytest
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-run-integration-tests-using-a-server-process" class="md-nav__link">
+    How to run integration tests using a server process.
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/templating/" class="md-nav__link">
+        Templating
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/controllers/" class="md-nav__link">
+        Controllers
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/middlewares/" class="md-nav__link">
+        Middlewares
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/static-files/" class="md-nav__link">
+        Serving static files
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/websocket/" class="md-nav__link">
+        WebSocket
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/server-sent-events/" class="md-nav__link">
+        Server-sent events
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/authentication/" class="md-nav__link">
+        Authentication
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/authorization/" class="md-nav__link">
+        Authorization
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/openid-connect/" class="md-nav__link">
+        OpenID Connect
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/sessions/" class="md-nav__link">
+        Sessions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
+          Security
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_22">
+          <span class="md-nav__icon md-icon"></span>
+          Security
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/cors/" class="md-nav__link">
+        CORS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/anti-request-forgery/" class="md-nav__link">
+        Anti-Forgery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/dataprotection/" class="md-nav__link">
+        Data protection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/hsts/" class="md-nav__link">
+        HSTS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/remotes/" class="md-nav__link">
+        Remotes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="0">
+          Response features
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_23">
+          <span class="md-nav__icon md-icon"></span>
+          Response features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/cache-control/" class="md-nav__link">
+        Cache control
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/compression/" class="md-nav__link">
+        Compression
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_24">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/examples/marshmallow/" class="md-nav__link">
+        Using Marshmallow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/settings/" class="md-nav__link">
+        Settings
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/binders/" class="md-nav__link">
+        Binders
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/background-tasks/" class="md-nav__link">
+        Background tasks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/mounting/" class="md-nav__link">
+        Mounting apps
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/client/" class="md-nav__link">
+        HTTP Client
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/cli/" class="md-nav__link">
+        More about the CLI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/versions/migrating-to-v2/" class="md-nav__link">
+        From V1 to V2
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/develop-with-https/" class="md-nav__link">
+        Develop using HTTPS
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/asgi/" class="md-nav__link">
+        ASGI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/" class="md-nav__link">
+        Neoteroi docs home
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview-of-the-testclient-class" class="md-nav__link">
+    Overview of the TestClient class
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tutorial" class="md-nav__link">
+    Tutorial
+  </a>
+  
+    <nav class="md-nav" aria-label="Tutorial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preparing-the-project-structure" class="md-nav__link">
+    Preparing the project structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#navigating-the-api-using-openapi-documentation" class="md-nav__link">
+    Navigating the API using OpenAPI Documentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-mocked-todos-api" class="md-nav__link">
+    Creating a mocked TODOs API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-testclient-with-pytest" class="md-nav__link">
+    Using the TestClient with pytest
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-run-integration-tests-using-a-server-process" class="md-nav__link">
+    How to run integration tests using a server process.
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+  
+                  
+
+
+<h1 id="testing-a-blacksheep-app">Testing a BlackSheep app<a class="headerlink" href="#testing-a-blacksheep-app" title="Permanent link">&para;</a></h1>
+<p>This page describes how a BlackSheep web application can be tested, documenting
+the built-in <code>TestClient</code> class and providing a tutorial that shows how it can
+be used with <code>pytest</code> to test an API. It covers the following:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to use the provided <code>TestClient</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to configure tests using <code>pytest</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to run integration tests using a server process.</li>
+</ul>
+<p><strong>TL;DR</strong> A complete example with testing configured for <code>pytest</code> is
+available at:
+<a href="https://github.com/Neoteroi/BlackSheep-Examples/tree/main/testing-api">./testing-api</a>.
+Those who don't want to follow the tutorial on this page can read the code
+in the example.</p>
+<h2 id="overview-of-the-testclient-class">Overview of the TestClient class<a class="headerlink" href="#overview-of-the-testclient-class" title="Permanent link">&para;</a></h2>
+<p>The <code>TestClient</code> class provides useful methods to test a <code>blacksheep</code>
+application, simulating web requests from an <code>ASGI</code> server. Simulating web
+requests has the benefit that tests execute fast and don't require a real HTTP
+Server and actual HTTP client-server interactions. At the same time, they
+recreate a full end-to-end scenario of how requests are handled by an
+application server.</p>
+<p>A basic example of the <code>TestClient</code> would look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<span class="kn">from</span> <span class="nn">blacksheep.testing</span> <span class="kn">import</span> <span class="n">TestClient</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;World&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="c1"># the application needs to handle its start event, to recreate a valid scenario</span>
+    <span class="k">await</span> <span class="n">app</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;Hello, World!&quot;</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Foo&quot;</span><span class="p">})</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;Hello, Foo!&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">)</span>
+
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">test</span><span class="p">())</span>
+</code></pre></div>
+<p>A test client provides the following methods:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>get</strong></td>
+<td>Simulates an HTTP GET request.</td>
+</tr>
+<tr>
+<td><strong>post</strong></td>
+<td>Simulates an HTTP POST request.</td>
+</tr>
+<tr>
+<td><strong>put</strong></td>
+<td>Simulates an HTTP PUT request.</td>
+</tr>
+<tr>
+<td><strong>patch</strong></td>
+<td>Simulates an HTTP PATCH request.</td>
+</tr>
+<tr>
+<td><strong>delete</strong></td>
+<td>Simulates an HTTP DELETE request.</td>
+</tr>
+<tr>
+<td><strong>head</strong></td>
+<td>Simulates an HTTP HEAD request.</td>
+</tr>
+<tr>
+<td><strong>options</strong></td>
+<td>Simulates an HTTP OPTIONS request.</td>
+</tr>
+<tr>
+<td><strong>trace</strong></td>
+<td>Simulates an HTTP TRACE request.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>By default a <code>TestClient</code> simulates web requests creating <code>ASGI</code> scopes,
+however, it can be configured with a custom implementation of
+<code>AbstractTestSimulator</code> to generate real HTTP requests against a real HTTP
+server. For simplicity, this is not documented here.</p>
+</div>
+<h2 id="tutorial">Tutorial<a class="headerlink" href="#tutorial" title="Permanent link">&para;</a></h2>
+<p>This tutorial illustrates how to create a basic TODOs API and prepare tests for
+it, step by step.</p>
+<h3 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The requirements described for the <a href="/blacksheep/getting-started/">getting
+started tutorial</a></li>
+<li>Familiarity with test frameworks and common concepts like <code>fixtures</code>; if you
+  are not familiar with this subject, read <code>pytest</code> documentation for an
+  overview (e.g. <a href="https://docs.pytest.org/">pytest home</a>, <a href="https://docs.pytest.org/en/6.2.x/fixture.html#what-fixtures-are">what are
+  fixtures</a>)</li>
+<li>Basic knowledge about <a href="https://pydantic-docs.helpmanual.io"><code>pydantic</code></a>
+  models is a plus, however, the same principles can be applied to Python
+  built-in <code>dataclasses</code></li>
+</ul>
+<h3 id="preparing-the-project-structure">Preparing the project structure<a class="headerlink" href="#preparing-the-project-structure" title="Permanent link">&para;</a></h3>
+<p>Prepare a Python virtual environment, as described in the <a href="/blacksheep/getting-started">getting started
+tutorial</a>. In addition to <code>blacksheep</code> and <code>uvicorn</code>,
+install the following packages in the virtual environment:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pytest<span class="w"> </span>pytest-asyncio<span class="w"> </span>pydantic
+</code></pre></div>
+<p>Then create a basic folder structure, like described by the following tree:</p>
+<div class="highlight"><pre><span></span><code>.
+├── app
+│   ├── __init__.py
+│   ├── app.py
+│   └── routes
+│       └── __init__.py
+├── domain.py
+└── server.py
+</code></pre></div>
+<p>For example, using <a href="https://www.gnu.org/software/bash/">GNU Bash</a>:</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>app
+touch<span class="w"> </span>app/app.py
+touch<span class="w"> </span>app/__init__.py
+
+mkdir<span class="w"> </span>app/routes
+touch<span class="w"> </span>app/routes/__init__.py
+
+touch<span class="w"> </span>domain.py
+touch<span class="w"> </span>server.py
+</code></pre></div>
+<p>Edit <code>domain.py</code> file, to define two domain classes:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+
+<span class="k">class</span> <span class="nc">ToDo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="k">class</span> <span class="nc">CreateToDoInput</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Create a <code>todos.py</code> file in <code>app.routes</code> package, that will contain the
+definition of the TODOs API. Start with the following contents:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ./app/routes/todos.py</span>
+
+<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">delete</span>
+<span class="kn">from</span> <span class="nn">domain</span> <span class="kn">import</span> <span class="n">ToDo</span><span class="p">,</span> <span class="n">CreateToDoInput</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_todos</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToDo</span><span class="p">]:</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create_todo</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">CreateToDoInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span><span class="p">:</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">delete_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+</code></pre></div>
+<p>Create a <code>main.py</code> file in <code>app</code> package, that declares an application:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+</code></pre></div>
+<p>And finally a <code>server.py</code> file at the project's root:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">app.main</span> <span class="kn">import</span> <span class="n">app</span>
+</code></pre></div>
+<h3 id="navigating-the-api-using-openapi-documentation">Navigating the API using OpenAPI Documentation<a class="headerlink" href="#navigating-the-api-using-openapi-documentation" title="Permanent link">&para;</a></h3>
+<p>At this point, the application can already be started. The API methods are not
+implemented, yet, so they cannot do anything interesting. However, the
+framework can generate OpenAPI Documentation and expose a documentation UI.</p>
+<p>To do so, create a <code>docs.py</code> file in the <code>app</code> package:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ./app/docs.py</span>
+
+<span class="kn">from</span> <span class="nn">blacksheep.server.openapi.v3</span> <span class="kn">import</span> <span class="n">OpenAPIHandler</span>
+<span class="kn">from</span> <span class="nn">openapidocs.v3</span> <span class="kn">import</span> <span class="n">Info</span>
+
+<span class="n">docs</span> <span class="o">=</span> <span class="n">OpenAPIHandler</span><span class="p">(</span>
+    <span class="n">info</span><span class="o">=</span><span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Demo API&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.0.1&quot;</span><span class="p">),</span> <span class="n">anonymous_access</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># include only endpoints whose path starts with &quot;/api/&quot;</span>
+<span class="n">docs</span><span class="o">.</span><span class="n">include</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/api/&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>And modify <code>/app/main.py</code> file to configure the generation of OpenAPI
+Documentation:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span>
+
+<span class="kn">from</span> <span class="nn">.docs</span> <span class="kn">import</span> <span class="n">docs</span>  <span class="c1"># +++</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<span class="n">docs</span><span class="o">.</span><span class="n">bind_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>  <span class="c1"># +++</span>
+</code></pre></div>
+<p>Start the application using the following command:</p>
+<div class="highlight"><pre><span></span><code>uvicorn<span class="w"> </span>server:app<span class="w"> </span>--reload<span class="w"> </span>--port<span class="o">=</span><span class="m">44555</span>
+</code></pre></div>
+<p>And navigate to the <a href="http://127.0.0.1:44555/docs">http://127.0.0.1:44555/docs</a>
+to see the documentation generated automatically by BlackSheep:</p>
+<p><img alt="TODOs API docs" src="/blacksheep/img/todos-api-docs.png" /></p>
+<p>Note how, thanks to type annotations and support for <code>pydantic</code>, blacksheep
+generates automatically OpenAPI Documentation version 3 for all responses
+and input request bodies and parameters.</p>
+<h3 id="creating-a-mocked-todos-api">Creating a mocked TODOs API<a class="headerlink" href="#creating-a-mocked-todos-api" title="Permanent link">&para;</a></h3>
+<p>For the sake of the testing demo, let's mock the implementation of the TODOs
+API to work with data stored in memory:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ./app/routes/todos.py</span>
+
+<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">not_found</span><span class="p">,</span> <span class="n">post</span>
+<span class="kn">from</span> <span class="nn">domain</span> <span class="kn">import</span> <span class="n">CreateToDoInput</span><span class="p">,</span> <span class="n">ToDo</span>
+
+
+<span class="n">_MOCKED</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">ToDo</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;BlackSheep Documentation&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Update the documentation with information about the new features.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Transfer the documentation&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Transfer the documentation from Azure DevOps to GitHub.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Mow the grass&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Like in title.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_todos</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToDo</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_MOCKED</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_MOCKED</span><span class="p">[</span><span class="n">todo_id</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">not_found</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+
+
+<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create_todo</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">CreateToDoInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span><span class="p">:</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">ToDo</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">_MOCKED</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">_MOCKED</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+    <span class="k">return</span> <span class="n">item</span>
+
+
+<span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">delete_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">_MOCKED</span><span class="p">[</span><span class="n">todo_id</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">pass</span>
+</code></pre></div>
+<p>Now that the API is mocked, let's see how to add tests for it.</p>
+<h3 id="using-the-testclient-with-pytest">Using the TestClient with pytest<a class="headerlink" href="#using-the-testclient-with-pytest" title="Permanent link">&para;</a></h3>
+<p>Create a <code>tests</code> package and the following files:</p>
+<div class="highlight"><pre><span></span><code>└── tests
+    ├── __init__.py
+    ├── conftest.py
+    └── test_todos_api.py
+</code></pre></div>
+<p><code>conftest.py</code> is a special file used by <code>pytest</code> to arrange fixtures. Edit this
+file to include fixtures definition to arrange tests for the web application:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ./tests/conftest.py</span>
+
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">pytest_asyncio</span>
+<span class="kn">from</span> <span class="nn">blacksheep.testing</span> <span class="kn">import</span> <span class="n">TestClient</span>
+<span class="kn">from</span> <span class="nn">server</span> <span class="kn">import</span> <span class="n">app</span> <span class="k">as</span> <span class="n">app_server</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">event_loop</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop_policy</span><span class="p">()</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
+    <span class="k">yield</span> <span class="n">loop</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">api</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">app_server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">yield</span> <span class="n">app_server</span>
+    <span class="k">await</span> <span class="n">app_server</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_client</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+<p>Note how the file contains three fixtures:</p>
+<ol>
+<li><code>event_loop</code>, for asyncio: it needs to be redefined to support <code>session</code>
+   scope</li>
+<li><code>api</code>, which yields an instance of the started web application</li>
+<li><code>test_client</code>, which returns the instance of <code>TestClient</code> that can be used
+   to fire web requests on the web application</li>
+</ol>
+<p>These fixtures enable testing all request handlers defined in the application.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>💡 It is possible to apply special configuration to the application server,
+for example overriding services in the DI container just for tests, for
+example replacing a class that interacts with a PostgreSQL Server to use
+instead SQLite for tests.</p>
+</div>
+<p>Finally, define a first test for the TODOs API:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ./tests/test_todos_api.py</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">blacksheep.contents</span> <span class="kn">import</span> <span class="n">JSONContent</span>
+<span class="kn">from</span> <span class="nn">blacksheep.testing</span> <span class="kn">import</span> <span class="n">TestClient</span>
+<span class="kn">from</span> <span class="nn">domain</span> <span class="kn">import</span> <span class="n">CreateToDoInput</span><span class="p">,</span> <span class="n">ToDo</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_create_and_get_todo</span><span class="p">(</span><span class="n">test_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">create_input</span> <span class="o">=</span> <span class="n">CreateToDoInput</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Update documentation&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Update blacksheep&#39;s documentation to describe all new features.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;/api/todos&quot;</span><span class="p">,</span>
+        <span class="n">content</span><span class="o">=</span><span class="n">JSONContent</span><span class="p">(</span><span class="n">create_input</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">data</span>
+
+    <span class="n">todo_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/api/todos/</span><span class="si">{</span><span class="n">todo_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="n">todo</span> <span class="o">=</span> <span class="n">ToDo</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="n">create_input</span><span class="o">.</span><span class="n">title</span>
+    <span class="k">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="n">create_input</span><span class="o">.</span><span class="n">description</span>
+</code></pre></div>
+<p>Now it's possible to start the tests using <code>pytest</code>:</p>
+<div class="highlight"><pre><span></span><code>pytest
+</code></pre></div>
+<p>If the steps above were done correctly, the test succeeds and <code>pytest</code> produces
+feedback like in the following picture (using the verbose flag <code>-v</code>):</p>
+<p><img alt="pytest run" src="/blacksheep/img/pytest-tests.png" /></p>
+<hr />
+<h2 id="how-to-run-integration-tests-using-a-server-process">How to run integration tests using a server process.<a class="headerlink" href="#how-to-run-integration-tests-using-a-server-process" title="Permanent link">&para;</a></h2>
+<p>The following example shows how to configure a <code>@pytest.fixture</code> that starts
+an <code>uvicorn</code> process in memory to run integration tests against a real <code>ASGI</code>
+server:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># example server fixture</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">uvicorn</span>
+<span class="kn">from</span> <span class="nn">server</span> <span class="kn">import</span> <span class="n">app</span>
+
+
+<span class="k">def</span> <span class="nf">get_sleep_time</span><span class="p">():</span>
+    <span class="c1"># when starting a server process,</span>
+    <span class="c1"># a longer sleep time is necessary on Windows</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.5</span>
+    <span class="k">return</span> <span class="mf">0.5</span>
+
+
+<span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+<span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
+
+
+<span class="k">def</span> <span class="nf">_start_server</span><span class="p">():</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">server_host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">server_port</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">server</span><span class="p">():</span>
+    <span class="n">server_process</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_start_server</span><span class="p">)</span>
+    <span class="n">server_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="n">get_sleep_time</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">server_process</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The server process did not start!&quot;</span><span class="p">)</span>
+
+    <span class="k">yield</span> <span class="mi">1</span>
+
+    <span class="n">sleep</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>
+    <span class="n">server_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</code></pre></div>
+<p>The same server <code>host</code> and <code>port</code> can then be used with the desired HTTP Client
+implementation to run tests on the server, to recreate a full HTTP
+client-server communication.</p>
+<p>The following code shows an example of <code>@pytest.fixture</code> returning an HTTP
+client that can make requests to the running servers, using
+<strong><a href="https://pypi.org/project/requests/">requests</a></strong> library:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urljoin</span>
+
+
+<span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+<span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
+
+
+<span class="k">class</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">url</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">session_two</span><span class="p">(</span><span class="n">server_host</span><span class="p">,</span> <span class="n">server_port_two</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ClientSession</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">server_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">server_port_two</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>And a full example for the TODO API described in the tutorial could look like
+the following (the example requires the <code>requests</code> library):</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urljoin</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">uvicorn</span>
+<span class="kn">from</span> <span class="nn">server</span> <span class="kn">import</span> <span class="n">app</span>
+
+
+<span class="k">class</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">url</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_sleep_time</span><span class="p">():</span>
+    <span class="c1"># when starting a server process,</span>
+    <span class="c1"># a longer sleep time is necessary on Windows</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.5</span>
+    <span class="k">return</span> <span class="mf">0.5</span>
+
+
+<span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+<span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">client_session</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">ClientSession</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">server_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">server_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_start_server</span><span class="p">():</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">server_host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">server_port</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">server</span><span class="p">():</span>
+    <span class="n">server_process</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_start_server</span><span class="p">)</span>
+    <span class="n">server_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="n">get_sleep_time</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">server_process</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The server process did not start!&quot;</span><span class="p">)</span>
+
+    <span class="k">yield</span> <span class="mi">1</span>
+
+    <span class="n">sleep</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>
+    <span class="n">server_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get</span><span class="p">(</span><span class="n">client_session</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/todos/1&quot;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Fixtures can be defined in a dedicated module, to keep the tests code
+clean.</p>
+</div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2023-12-18 17:52:09</p><div class="nt-contributors"><div class="nt-contributor image nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (4)" style="background-image: url('https://avatars.githubusercontent.com/u/2576032?s=400&amp;u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&amp;v=4')"><span class="nt-initials" /></div><div class="nt-contributor nt-group-1" title="Alex &lt;122354532+sinnwise@users.noreply.github.com&gt; (1)"><span class="nt-initials">A</span></div><div class="nt-contributor nt-group-2" title="Elliot Waite &lt;elliot@elliotwaite.com&gt; (1)"><span class="nt-initials">EW</span></div><div class="nt-contributor nt-group-3" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div></div></div>
+
+
+
+
+
+<!-- Giscus snippet -->
+<script src="https://giscus.app/client.js"
+    data-repo="Neoteroi/BlackSheep-Docs"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzNzYyOTM4ODI="
+    data-category="Q&A"
+    data-category-id="DIC_kwDOFm3J-s4CSpF8"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark_tritanopia"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+</script>
+
+<!-- Synchronize Giscus theme with palette -->
+<script>
+  var giscus = document.querySelector("script[src*=giscus]")
+
+  /* Set palette on initial load */
+  var palette = __md_get("__palette")
+  if (palette && typeof palette.color === "object") {
+    var theme = palette.color.scheme === "slate" ? "dark" : "light"
+    giscus.setAttribute("data-theme", theme)
+  }
+
+  /* Register event handlers after documented loaded */
+  document.addEventListener("DOMContentLoaded", function() {
+    var ref = document.querySelector("[data-md-component=palette]")
+    ref.addEventListener("change", function() {
+      var palette = __md_get("__palette")
+      if (palette && typeof palette.color === "object") {
+        var theme = palette.color.scheme === "slate" ? "dark" : "light"
+
+        /* Instruct Giscus to change theme */
+        var frame = document.querySelector(".giscus-frame")
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme } } },
+          "https://giscus.app"
+        )
+      }
+    })
+  })
+</script>
+
+                
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="/blacksheep/responses/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Responses" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Responses
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="/blacksheep/templating/" class="md-footer__link md-footer__link--next" aria-label="Next: Templating" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Templating
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer", "content.code.copy", "content.action.view"], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": 2}</script>
+    
+    
+      <script src="/blacksheep/assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>

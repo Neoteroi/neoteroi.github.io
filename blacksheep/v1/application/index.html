@@ -1,0 +1,1620 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+      
+      
+        <meta name="author" content="Roberto Prevato">
+      
+      
+        <link rel="canonical" href="https://www.neoteroi.dev/blacksheep/application/">
+      
+      
+        <link rel="prev" href="/blacksheep/v1/openapi/">
+      
+      
+        <link rel="next" href="/blacksheep/v1/routing/">
+      
+      <link rel="icon" href="/blacksheep/v1/img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+    
+    
+      
+        <title>Application - BlackSheep</title>
+      
+    
+    
+      <link rel="stylesheet" href="/blacksheep/v1/assets/stylesheets/main.26e3688c.min.css">
+      
+        
+        <link rel="stylesheet" href="/blacksheep/v1/assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="/blacksheep/v1/css/neoteroi.css">
+    
+      <link rel="stylesheet" href="/blacksheep/v1/css/extra.css?v=20221120">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T65MX5XNF2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T65MX5XNF2');
+</script>
+
+    
+    
+  
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BlackSheep - Application">
+  <meta property="og:description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+  <meta property="og:url" content="https://www.neoteroi.dev/blacksheep/application/">
+  <meta property="og:image" content="https://www.neoteroi.dev/blacksheep/img/banner.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1080">
+  <meta property="og:image:height" content="568">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@RobertoPrevato">
+  <meta name="twitter:creator" content="@RobertoPrevato">
+  <meta name="twitter:title" content="BlackSheep - Application">
+  <meta name="twitter:description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
+  <meta name="twitter:image" content="https://www.neoteroi.dev/blacksheep/img/banner.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-application-class" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="/blacksheep/v1/" title="BlackSheep" class="md-header__button md-logo" aria-label="BlackSheep" data-md-component="logo">
+      
+  <img src="/blacksheep/v1/img/logow.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlackSheep
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Application
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Neoteroi/BlackSheep" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Neoteroi/BlackSheep
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="/blacksheep/v1/" title="BlackSheep" class="md-nav__button md-logo" aria-label="BlackSheep" data-md-component="logo">
+      
+  <img src="/blacksheep/v1/img/logow.svg" alt="logo">
+
+    </a>
+    BlackSheep
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Neoteroi/BlackSheep" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Neoteroi/BlackSheep
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/getting-started/" class="md-nav__link">
+        Getting started: basics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/mvc-project-template/" class="md-nav__link">
+        Getting started: MVC
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/dependency-injection/" class="md-nav__link">
+        Dependency injection
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/openapi/" class="md-nav__link">
+        OpenAPI Docs
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Application
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Application
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#handling-errors" class="md-nav__link">
+    Handling errors
+  </a>
+  
+    <nav class="md-nav" aria-label="Handling errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuring-exceptions-handlers" class="md-nav__link">
+    Configuring exceptions handlers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuring-exception-handlers-using-decorators" class="md-nav__link">
+    Configuring exception handlers using decorators
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overriding-the-default-exception-handler-for-unhandled-exceptions" class="md-nav__link">
+    Overriding the default exception handler for unhandled exceptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-events" class="md-nav__link">
+    Application events
+  </a>
+  
+    <nav class="md-nav" aria-label="Application events">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-the-lifespan-decorator" class="md-nav__link">
+    Using the lifespan decorator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on_start" class="md-nav__link">
+    on_start
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after_start" class="md-nav__link">
+    after_start
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on_stop" class="md-nav__link">
+    on_stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-life-cycle" class="md-nav__link">
+    Application life cycle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-register-event-handlers" class="md-nav__link">
+    How to register event handlers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next" class="md-nav__link">
+    Next
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/routing/" class="md-nav__link">
+        Routing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/request-handlers/" class="md-nav__link">
+        Request handlers
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/requests/" class="md-nav__link">
+        Requests
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/responses/" class="md-nav__link">
+        Responses
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/testing/" class="md-nav__link">
+        Testing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/templating/" class="md-nav__link">
+        Templating
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/controllers/" class="md-nav__link">
+        Controllers
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/middlewares/" class="md-nav__link">
+        Middlewares
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/websocket/" class="md-nav__link">
+        WebSocket
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/static-files/" class="md-nav__link">
+        Serving static files
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/authentication/" class="md-nav__link">
+        Authentication
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/authorization/" class="md-nav__link">
+        Authorization
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/openid-connect/" class="md-nav__link">
+        OpenID Connect
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/sessions/" class="md-nav__link">
+        Sessions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_21" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_21" id="__nav_21_label" tabindex="0">
+          Security
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_21_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_21">
+          <span class="md-nav__icon md-icon"></span>
+          Security
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/cors/" class="md-nav__link">
+        CORS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/anti-request-forgery/" class="md-nav__link">
+        Anti-Forgery
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/dataprotection/" class="md-nav__link">
+        Data protection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/hsts/" class="md-nav__link">
+        HSTS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/remotes/" class="md-nav__link">
+        Remotes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
+          Response features
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_22">
+          <span class="md-nav__icon md-icon"></span>
+          Response features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/cache-control/" class="md-nav__link">
+        Cache control
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/compression/" class="md-nav__link">
+        Compression
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_23">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/examples/marshmallow/" class="md-nav__link">
+        Using Marshmallow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/settings/" class="md-nav__link">
+        Settings
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/binders/" class="md-nav__link">
+        Binders
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/background-tasks/" class="md-nav__link">
+        Background tasks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/mounting/" class="md-nav__link">
+        Mounting apps
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/client/" class="md-nav__link">
+        HTTP Client
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/develop-with-https/" class="md-nav__link">
+        Develop using HTTPS
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/asgi/" class="md-nav__link">
+        ASGI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/blacksheep/v1/about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/" class="md-nav__link">
+        Neoteroi docs home
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#handling-errors" class="md-nav__link">
+    Handling errors
+  </a>
+  
+    <nav class="md-nav" aria-label="Handling errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuring-exceptions-handlers" class="md-nav__link">
+    Configuring exceptions handlers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuring-exception-handlers-using-decorators" class="md-nav__link">
+    Configuring exception handlers using decorators
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overriding-the-default-exception-handler-for-unhandled-exceptions" class="md-nav__link">
+    Overriding the default exception handler for unhandled exceptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-events" class="md-nav__link">
+    Application events
+  </a>
+  
+    <nav class="md-nav" aria-label="Application events">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-the-lifespan-decorator" class="md-nav__link">
+    Using the lifespan decorator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on_start" class="md-nav__link">
+    on_start
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after_start" class="md-nav__link">
+    after_start
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on_stop" class="md-nav__link">
+    on_stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-life-cycle" class="md-nav__link">
+    Application life cycle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-register-event-handlers" class="md-nav__link">
+    How to register event handlers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next" class="md-nav__link">
+    Next
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+<div class="admonition warning version-warning">
+    <p class="admonition-title">Version 1</p>
+    <p>This documentation refers to the version 1.x of the web framework.
+    The current version of the <code>main</code> branch is <a href="/blacksheep/">documented here</a>.</p>
+</div>
+
+  
+                  
+
+
+<h1 id="the-application-class">The Application class<a class="headerlink" href="#the-application-class" title="Permanent link">&para;</a></h1>
+<p>The <code>Application</code> class in BlackSheep is responsible of handling the
+application life cicle (start, working state, stop), routing, web requests,
+exceptions. This page describes details of the <code>Application</code> class:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to handle errors.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Application events and life cycle.</li>
+</ul>
+<h2 id="handling-errors">Handling errors<a class="headerlink" href="#handling-errors" title="Permanent link">&para;</a></h2>
+<p>BlackSheep catches any unhandled exception that happens during the execution of
+request handlers, producing a <code>HTTP 500 Internal Server Error</code> response. To see
+this in practice, start an application like the following:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<span class="n">get</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">crash_test</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Crash test&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>And observe how a request to its root produces a response with HTTP status 500,
+and the text "Internal server error".</p>
+<p>Exception details are hidden to the client by default: it would be a security
+issue if the web application returned error details to the client. However,
+while developing and occasionally while investigating issues, it is useful to
+be able to obtain error details directly from the web requests that are
+failing. To enable error details, update the app declaration as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p>Now the application returns the details of the exception with the full stack
+trace, serving a page like the following:</p>
+<p><img alt="Internal server error page" src="/blacksheep/v1/img/internal-server-error-page.png" /></p>
+<p>Consider using environmental variables to handle this kind of settings that
+can vary across environments. For example:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SHOW_ERROR_DETAILS&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)))</span>
+<span class="n">get</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">crash_test</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Crash test&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>BlackSheep project templates use a library to handle application
+settings and configuration roots. Consider using
+<a href="https://github.com/Neoteroi/essentials-configuration"><code>essentials-configuration</code></a>
+for this.</p>
+</div>
+<h3 id="configuring-exceptions-handlers">Configuring exceptions handlers<a class="headerlink" href="#configuring-exceptions-handlers" title="Permanent link">&para;</a></h3>
+<p>The BlackSheep <code>Application</code> object has a <code>exceptions_handlers</code> dictionary that
+defines how errors should be handled. When an exception happens while handling
+a web request and reaches the application, the application checks if there is a
+matching handler for that kind of exception. An exception handler is defined as
+a function with the following signature:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<p>In the exception below
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">CustomException</span><span class="p">):</span>
+    <span class="k">nonlocal</span> <span class="n">app</span>
+    <span class="k">assert</span> <span class="bp">self</span> <span class="ow">is</span> <span class="n">app</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">CustomException</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">TextContent</span><span class="p">(</span><span class="s1">&#39;Called&#39;</span><span class="p">))</span>
+
+
+<span class="c1"># Register the exception handler for the CustomException type:</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exceptions_handlers</span><span class="p">[</span><span class="n">CustomException</span><span class="p">]</span> <span class="o">=</span> <span class="n">exception_handler</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="c1"># of course, the exception can be risen at any point</span>
+    <span class="c1"># for example in the business logic layer</span>
+    <span class="k">raise</span> <span class="n">CustomException</span><span class="p">()</span>
+</code></pre></div></p>
+<p>Exceptions inheriting from <code>HTTPException</code> can be mapped to handlers by their type or by
+their status code, using <code>int</code> keys; while user defined exceptions are mapped to handlers
+by their type.</p>
+<p>When an exception handler is registered for a type of exception, all subclasses
+are also handled by that handler. It is however possible to define a more
+specific handler for one of the descendant classes.</p>
+<h3 id="configuring-exception-handlers-using-decorators">Configuring exception handlers using decorators<a class="headerlink" href="#configuring-exception-handlers-using-decorators" title="Permanent link">&para;</a></h3>
+<p>It is also possible to register exception handlers using decorators, instead
+of interacting with <code>app.exceptions_handlers</code> dictionary:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">CustomException</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">handler_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">CustomException</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre></div>
+<h3 id="overriding-the-default-exception-handler-for-unhandled-exceptions">Overriding the default exception handler for unhandled exceptions<a class="headerlink" href="#overriding-the-default-exception-handler-for-unhandled-exceptions" title="Permanent link">&para;</a></h3>
+<p>To override how unhandled exceptions are handled, define a custom <code>Application</code>
+class overriding its <code>handle_internal_server_error</code> method, like in the
+following example:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">json</span>
+<span class="kn">from</span> <span class="nn">blacksheep.messages</span> <span class="kn">import</span> <span class="n">Request</span>
+
+
+<span class="k">class</span> <span class="nc">MyApp</span><span class="p">(</span><span class="n">Application</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_internal_server_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
+        <span class="c1"># TODO: handle this like you wish!</span>
+        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Oh, no!&quot;</span><span class="p">},</span> <span class="mi">500</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="application-events">Application events<a class="headerlink" href="#application-events" title="Permanent link">&para;</a></h2>
+<p>A BlackSheep application exposes three events: <strong>on_start</strong>, <strong>after_start</strong>,
+<strong>on_stop</strong>. These events can be used to configure callbacks and services that
+depend on application lifecycle. The application class also offers a useful
+method to configure objects that need to be initialized when the application
+starts, and disposed when the application stops: <strong>lifespan</strong>.</p>
+<h3 id="using-the-lifespan-decorator">Using the lifespan decorator<a class="headerlink" href="#using-the-lifespan-decorator" title="Permanent link">&para;</a></h3>
+<p>The <code>Application.lifespan</code> method can be used to register objects bound to the
+application life cycle. Common examples of such objects are HTTP clients and
+database clients, since they use connection pools that can be initialized
+and must be disposed when the application stops.</p>
+<p>The following example illustrates how to use the <code>@app.lifespan</code> decorator to
+create an HTTP <code>ClientSession</code> that will be disposed when the application
+stops. Note how the instance of <code>ClientSession</code> is also bound to application
+services, so that it can be injected into request handlers that need it.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span>
+<span class="kn">from</span> <span class="nn">blacksheep.client.pool</span> <span class="kn">import</span> <span class="n">ClientConnectionPools</span>
+<span class="kn">from</span> <span class="nn">blacksheep.client.session</span> <span class="kn">import</span> <span class="n">ClientSession</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">lifespan</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">register_http_client</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">ClientSession</span><span class="p">(</span>
+        <span class="n">pools</span><span class="o">=</span><span class="n">ClientConnectionPools</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">())</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client created and registered as singleton&quot;</span><span class="p">)</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ClientSession</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+        <span class="k">yield</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client disposed&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">http_client</span><span class="p">:</span> <span class="n">ClientSession</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">http_client</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;client_instance_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">(</span><span class="n">http_client</span><span class="p">)}</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">uvicorn</span>
+
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">44777</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="n">lifespan</span><span class="o">=</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The method leverages <code>contextlib.asynccontextmanager</code>. What is defined
+before the <code>yield</code> statement executes when the application starts, and what
+is defined after the <code>yield</code> statement executes when the application stops.</p>
+</div>
+<p>The following example illustrates how a <code>redis-py</code> <a href="https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html">connection can be disposed</a>
+using the same method:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">redis.asyncio</span> <span class="k">as</span> <span class="nn">redis</span>
+
+<span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">lifespan</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">configure_redis</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Configure an async Redis client, and dispose its connections when the</span>
+<span class="sd">    application stops.</span>
+<span class="sd">    See:</span>
+<span class="sd">    https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ping successful: </span><span class="si">{</span><span class="k">await</span><span class="w"> </span><span class="n">connection</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">connection</span><span class="p">)</span>
+
+    <span class="k">yield</span> <span class="n">connection</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Disposing the Redis connection pool...&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Example using Redis</p>
+<p>The <code>BlackSheep-Examples</code> repository includes an example where <code>Redis</code> is
+used to store access tokens and refresh tokens obtained using
+<code>OpenID Connect</code>: <a href="https://github.com/Neoteroi/BlackSheep-Examples/blob/main/oidc/scopes_redis_aad.py">example</a>. For more information on <code>redis-py</code> and its async
+interface, refer to its <a href="https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html">official documentation</a>.</p>
+</div>
+<h3 id="on_start">on_start<a class="headerlink" href="#on_start" title="Permanent link">&para;</a></h3>
+<p>This event should be used to configure things such as new request handlers,
+and service registered in <code>app.services</code>, such as database connection pools,
+HTTP client sessions.</p>
+<h3 id="after_start">after_start<a class="headerlink" href="#after_start" title="Permanent link">&para;</a></h3>
+<p>This event should be used to configure things that must happen after request
+handlers are normalized. At this point, the application router contains information
+about actual routes handled by the web application, and routes can be inspected.
+For example, the built-in generation of OpenAPI Documentation generates the
+API specification file at this point.</p>
+<h3 id="on_stop">on_stop<a class="headerlink" href="#on_stop" title="Permanent link">&para;</a></h3>
+<p>This event should be used to fire callbacks that need to happen when the application
+is stopped. For example, disposing of services that require disposal, such as
+database connection pools, HTTP client sessions using connection pools.</p>
+<h3 id="application-life-cycle">Application life cycle<a class="headerlink" href="#application-life-cycle" title="Permanent link">&para;</a></h3>
+<p>Refer to the following diagram to know more about when application events
+are fired, and the state of the application when they are executed.</p>
+<p><img alt="App life cycle" src="/blacksheep/v1/img/app-life-cycle.svg" /></p>
+<h3 id="how-to-register-event-handlers">How to register event handlers<a class="headerlink" href="#how-to-register-event-handlers" title="Permanent link">&para;</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Using decorators</label><label for="__tabbed_1_2">Using +=</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Event handlers can be registered using decorators.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">text</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<span class="n">get</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example Async&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_start</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">before_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before start&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">after_start</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">after_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After start&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_stop</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">on_stop</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On stop&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>In alternative to decorators, event handlers can be registered using <code>+=</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">text</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<span class="n">get</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span>
+
+
+<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example Async&quot;</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">before_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before start&quot;</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">after_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After start&quot;</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">on_stop</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On stop&quot;</span><span class="p">)</span>
+
+
+<span class="n">app</span><span class="o">.</span><span class="n">on_start</span> <span class="o">+=</span> <span class="n">before_start</span>
+<span class="n">app</span><span class="o">.</span><span class="n">after_start</span> <span class="o">+=</span> <span class="n">after_start</span>
+<span class="n">app</span><span class="o">.</span><span class="n">on_stop</span> <span class="o">+=</span> <span class="n">on_stop</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>For example, to define an <code>after_start</code> callback that logs all routes registered
+in the application router:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">after_start</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">after_start_print_routes</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">application</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">routes</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
+<p>Read about the details of <a href="/blacksheep/v1/routing">routing in BlackSheep</a>.</p>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2023-07-16 08:51:27</p><div class="nt-contributors"><div class="nt-contributor image nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (7)" style="background-image: url('https://avatars.githubusercontent.com/u/2576032?s=400&amp;u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&amp;v=4')"><span class="nt-initials" /></div><div class="nt-contributor nt-group-1" title="Dmytro &lt;t.dmitry@gmail.com&gt; (1)"><span class="nt-initials">D</span></div><div class="nt-contributor nt-group-2" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div></div></div>
+
+
+
+
+
+<!-- Giscus snippet -->
+<script src="https://giscus.app/client.js"
+    data-repo="Neoteroi/BlackSheep-Docs"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzNzYyOTM4ODI="
+    data-category="Q&A"
+    data-category-id="DIC_kwDOFm3J-s4CSpF8"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark_tritanopia"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+</script>
+
+<!-- Synchronize Giscus theme with palette -->
+<script>
+  var giscus = document.querySelector("script[src*=giscus]")
+
+  /* Set palette on initial load */
+  var palette = __md_get("__palette")
+  if (palette && typeof palette.color === "object") {
+    var theme = palette.color.scheme === "slate" ? "dark" : "light"
+    giscus.setAttribute("data-theme", theme)
+  }
+
+  /* Register event handlers after documented loaded */
+  document.addEventListener("DOMContentLoaded", function() {
+    var ref = document.querySelector("[data-md-component=palette]")
+    ref.addEventListener("change", function() {
+      var palette = __md_get("__palette")
+      if (palette && typeof palette.color === "object") {
+        var theme = palette.color.scheme === "slate" ? "dark" : "light"
+
+        /* Instruct Giscus to change theme */
+        var frame = document.querySelector(".giscus-frame")
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme } } },
+          "https://giscus.app"
+        )
+      }
+    })
+  })
+</script>
+
+                
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": 1}</script>
+    
+    
+      <script src="/blacksheep/v1/assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>

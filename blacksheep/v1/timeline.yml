@@ -1,0 +1,44 @@
+- title: The work on V2 starts
+  sub_title: 2022-Q3
+  icon: ':material-rocket-launch-outline:'
+  content: >
+    The work on the second version of the web framework starts.
+    The documentation site is modified to host the documentation for
+    v1 and the current actively developed version of the system.
+- title: SSR Refactoring
+  content: >
+    The integration with `Jinja2` is modified to support different
+    libraries to achieve server side rendering (SSR). `Jinja2` becomes
+    an optional dependency, and handling of `view` and `view_async`
+    is improved considerably.
+- title: Library Simplification
+  content: >
+    The HTTP Client will be removed, and the library will be simplified.
+    At the beginning, `blacksheep` implemented both an HTTP server and
+    and HTTP client. The classes used to handle web requests are
+    bidirectional: the `Request` and `Response` classes are the same both for incoming
+    requests and outgoing web requests and responses. Even though this is arguably a
+    good principle, it constitutes a great complication for the code.
+    Version 2.x of the framework drops the HTTP Client and removes the complexity to
+    support bidirectional flows.
+- title: Configuration Strategy
+  content: >
+    The framework will provide a strategy to handle application settings.
+- title: DI Refactoring
+  icon: ':octicons-question-16:'
+  content: >
+    _Under consideration:_ the integration with `rodi` might be modified
+    to support different libraries to achieve dependency injection (DI).
+    `rodi` might become an optional dependency.
+- title: Name Change
+  icon: ':octicons-question-16:'
+  content: >
+    _Under consideration:_ the web framework might be renamed, to have a more abstract
+    name and to adopt a more consistent naming convention across the libraries.
+- title: Application Builder
+  icon: ':octicons-question-16:'
+  content: >
+    _Under consideration:_ the _Builder pattern_ might be adopted to simplify the
+    `Application` class. In such scenario, an `ApplicationBuilder` class would be used
+    to configure the application, and an instance of the application would be obtained
+    through it.

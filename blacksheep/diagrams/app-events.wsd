@@ -1,0 +1,25 @@
+@startuml app-life-cycle
+
+skinparam style strictuml
+|#Application|setup|
+start
+:App instantiated;
+:Routes configuration;
+:Service container configuration;
+:start();
+|#AntiqueWhite|on_start|
+:fire **on_start** callbacks;
+:configure controllers;
+:build the graph of services;
+:normalize request handlers;
+:configure middlewares;
+|#cornsilk|after_start|
+:fire **after_start** callbacks;
+|#aaf|working|
+:Handle web requests;
+:...;
+:stop();
+|#AntiqueWhite|on_stop|
+:fire **on_stop** callbacks;
+stop
+@enduml
