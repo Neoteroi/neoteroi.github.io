@@ -45,12 +45,6 @@ jobs:
           cd blacksheep
           mkdocs build
 
-      - name: Fix links
-        run: |
-          cd blacksheep
-          chmod +x ./fixlinks.sh
-          ./fixlinks.sh
-
       - name: Zip built files
         run: |
           cd blacksheep
