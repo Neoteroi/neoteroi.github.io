@@ -85,10 +85,7 @@ extra_css:
 
 plugins:
   - search
-  - neoteroi.contribs:
-      contributors:
-        - email: roberto.prevato@gmail.com
-          image: https://avatars.githubusercontent.com/u/2576032?s=400&u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&v=4
+  - neoteroi.contribs
 
 markdown_extensions:
   - admonition
@@ -109,5 +106,5 @@ markdown_extensions:
   - neoteroi.cards
   - neoteroi.projects
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
