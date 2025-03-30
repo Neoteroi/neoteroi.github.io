@@ -19,6 +19,7 @@ nav:
   - Info:
       - Credits: credits.md
       - About: about.md
+  - Neoteroi docs home: "/"
 
 theme:
   palette:

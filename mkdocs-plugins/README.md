@@ -1,5 +1,3 @@
-# mkdocs-plugins-docs
-Repository containing the documentation of mkdocs-plugins.
+# MkDocs Plugins docs 📜
 
-* [DEV](https://neoteroideveuwstacc.z6.web.core.windows.net/mkdocs-plugins/)
-* [PROD](https://www.neoteroi.dev/mkdocs-plugins/)
+[www.neoteroi.dev](https://www.neoteroi.dev/mkdocs-plugins/).
