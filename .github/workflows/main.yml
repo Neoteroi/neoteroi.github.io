@@ -55,7 +55,7 @@ jobs:
           7z a -r site.zip blacksheep
 
       - name: Upload distribution package
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: .build/site.zip

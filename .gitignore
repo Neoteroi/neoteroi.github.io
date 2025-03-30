@@ -4,5 +4,4 @@ venv
 .env
 
 # temporary
-mkdocs-plugins
 rodi
