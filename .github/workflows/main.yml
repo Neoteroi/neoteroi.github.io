@@ -90,7 +90,5 @@ jobs:
           git add .
           git commit -m "Deploy documentation on $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
-          git checkout -b test  # TODO: remove
-          git push origin test
-
-          echo "Published to test"
+          git push origin gh-pages
+          echo "Published to gh-pages"
