@@ -16,6 +16,13 @@ for folder in "${folders[@]}" ; do
 
     mkdocs build
 
+    # check if there is a copy-archive.sh file, to support including docs
+    # of older versions of the library
+    if [ -f "copy-archive.sh" ]; then
+        echo "File $FILE exists."
+        ./copy-archive.sh
+    fi
+
     mv site/* ../site/$folder
     rm -rf site
     cd ../

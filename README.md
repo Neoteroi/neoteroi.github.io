@@ -12,8 +12,8 @@ The code has been modified to unify different projects.
 
 ## How to contribute
 
-The documentation uses MkDocs. For information on how to use MkDocs, refer to its
-documentation.
+The documentation uses MkDocs and Material for MkDocs. For information on how
+to use these tools, refer to their documentation.
 
 ```bash
 $ mkdocs serve

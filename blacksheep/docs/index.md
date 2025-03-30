@@ -16,13 +16,13 @@ pip install blacksheep
 ## BlackSheep offers...
 
 - A rich code API, based on dependency injection and inspired by Flask and
-  ASP.NET Core
+  ASP.NET Core.
 - A typing-friendly codebase, which enables a comfortable development
-  experience thanks to hints when coding with IDEs
+  experience thanks to hints when coding with IDEs.
 - Built-in generation of OpenAPI Documentation, supporting version 3, YAML, and
-  JSON
-- A cross-platform framework, using the most modern versions of Python
-- Good performance
+  JSON.
+- A cross-platform framework, using the most modern versions of Python.
+- Good performance.
 
 ## Getting started
 
