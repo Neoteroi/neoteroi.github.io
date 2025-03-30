@@ -3,6 +3,7 @@ venv
 .build
 .env
 site.zip
+deploy
 
 # temporary
 rodi
