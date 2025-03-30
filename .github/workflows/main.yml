@@ -2,6 +2,11 @@ name: Main
 
 on:
   workflow_dispatch:
+    inputs:
+      publish_artifacts:
+        description: "Publish artifacts (Y|N)"
+        required: true
+        default: "N"
   release:
     types: [published]
   push:
@@ -50,3 +55,38 @@ jobs:
         with:
           name: site
           path: site.zip
+
+  publish:
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.publish_artifacts == 'Y')
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: site
+          path: site
+
+      - name: Unzip artifact
+        run: |
+          unzip site/site.zip -d site
+
+      - name: Deploy to gh-pages branch
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git checkout --orphan gh-pages
+          git reset --hard
+          mv site/* .
+          rm -rf site
+          git clean -fdx
+          remote_repo="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git add .
+          git commit -m "Deploy documentation to gh-pages"
+          git push --force $remote_repo gh-pages
