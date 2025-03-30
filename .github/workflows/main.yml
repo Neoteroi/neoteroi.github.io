@@ -66,6 +66,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: gh-pages
+          path: neoteroi
 
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -79,7 +80,20 @@ jobs:
 
       - name: Deploy to gh-pages branch
         run: |
-          # git config user.name "${GITHUB_ACTOR}"
-          # git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-
           tree
+
+          find neoteroi -mindepth 1 ! -name '.git' ! -name 'CNAME' ! -name 'README.md' ! -path 'neoteroi/.git/*' -exec rm -rf {} +
+          cp -r site/* neoteroi/
+          rm -rf site
+
+          cd neoteroi
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+          git add .
+          git commit -m "Deploy documentation on $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+          git checkout -b test
+          git push origin test --force
+
+          echo "Published to test"

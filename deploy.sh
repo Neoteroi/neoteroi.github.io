@@ -20,7 +20,7 @@ if [[ "$confirmation" =~ ^[Yy]$ ]]; then
     cp copy/CNAME ../site/
     cp copy/README.md ../site/
 
-    rm -rf copy/*
+    find copy -mindepth 1 ! -name '.git' ! -name 'CNAME' ! -name 'README.md' ! -path 'copy/.git/*' -exec rm -rf {} +
     cp -r ../site/* copy/
 
     cd copy/
