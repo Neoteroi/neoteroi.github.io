@@ -1,6 +1,7 @@
 #! /bin/bash
-folders=( blacksheep
-          mkdocs-plugins
+folders=(
+    blacksheep
+    mkdocs-plugins
 )
 
 rm -rf site
