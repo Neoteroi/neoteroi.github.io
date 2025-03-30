@@ -80,11 +80,8 @@ jobs:
 
       - name: Deploy to gh-pages branch
         run: |
-          tree
-
           find neoteroi -mindepth 1 ! -name '.git' ! -name 'CNAME' ! -name 'README.md' ! -path 'neoteroi/.git/*' -exec rm -rf {} +
-          cp -r site/* neoteroi/
-          rm -rf site
+          cp -r site/site/* neoteroi/
 
           cd neoteroi
           git config user.name "${GITHUB_ACTOR}"
@@ -93,7 +90,7 @@ jobs:
           git add .
           git commit -m "Deploy documentation on $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
-          git checkout -b test
-          git push origin test --force
+          git checkout -b test  # TODO: remove
+          git push origin test
 
           echo "Published to test"
