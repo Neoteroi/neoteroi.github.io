@@ -115,7 +115,7 @@ For example, a middleware that disables cache-control by default can be defined 
 class NoCacheControlMiddleware(CacheControlMiddleware):
     """
     Disable client caching globally, by default, setting a
-    Cache-Contro: no-cache, no-store for all responses.
+    Cache-Control: no-cache, no-store for all responses.
     """
 
     def __init__(self) -> None:

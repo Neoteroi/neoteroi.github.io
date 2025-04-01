@@ -1,3 +1,51 @@
+html {
+    overflow-y: scroll;
+}
+
+/* For large screens, make better use of the horizontal space */
+@media screen and (min-width: 2000px) {
+    .md-grid {
+        max-width: 98%;
+    }
+
+    .md-sidebar {
+        width: auto;
+        min-width: 15%;
+    }
+
+    body.fullscreen #fullscreen-form label {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    html.fullscreen {
+        .md-grid {
+            max-width: 98%;
+        }
+
+        .md-sidebar {
+            width: auto;
+            min-width: 15%;
+        }
+    }
+}
+
+#fullscreen-form label {
+    display: none;
+}
+
+html:not(.fullscreen) #full-screen {
+    display: inline-block !important;
+}
+
+html.fullscreen #full-screen-exit {
+    display: inline-block !important;
+}
+
+html.fullscreen #full-screen {
+    display: none !important;
+}
 
 [data-md-color-scheme="default"] .md-typeset [type="checkbox"]:checked + .task-list-indicator::before {
     background-color: #2d319f;

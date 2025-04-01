@@ -39,6 +39,8 @@ nav:
     - Compression: compression.md
   - Examples:
     - Using Marshmallow: examples/marshmallow.md
+  - Production deployments:
+    - Behind proxies: behind-proxies.md
   - Settings: settings.md
   - Binders: binders.md
   - Background tasks: background-tasks.md
@@ -83,6 +85,9 @@ extra_css:
   - css/neoteroi.css
   - css/extra.css?v=20221120
 
+extra_javascript:
+  - js/fullscreen.js
+
 plugins:
   - search
   - neoteroi.contribs:
@@ -94,6 +99,7 @@ markdown_extensions:
   - admonition
   - markdown.extensions.codehilite:
       guess_lang: false
+  - pymdownx.blocks.details
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid

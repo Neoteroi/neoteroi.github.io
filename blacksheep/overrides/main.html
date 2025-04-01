@@ -19,6 +19,14 @@
   <meta name="twitter:title" content="{{ title }}">
   <meta name="twitter:description" content="{{ config.site_description }}">
   <meta name="twitter:image" content="{{ image }}">
+  <script>
+    (function () {
+        var fullscreen = localStorage.getItem("FULLSCREEN") || "N";
+        if (fullscreen === "Y") {
+            document.documentElement.classList.add("fullscreen");
+        }
+    })();
+  </script>
 {% endblock %}
 {% block content %}
 {% if not config.extra.is_current_version %}

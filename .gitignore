@@ -4,6 +4,8 @@ venv
 .env
 site.zip
 deploy
+out
+.local
 
 # temporary
 rodi

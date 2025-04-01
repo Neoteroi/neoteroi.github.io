@@ -14,6 +14,7 @@ This page describes:
 | APP_ENV                  | Settings | This environment variable is read to determine the environment of the application. For more information, refer to [_Defining application environment_](/blacksheep/settings/#defining-application-environment). |
 | APP_SHOW_ERROR_DETAILS   | Settings | If "1" or "true", configures the application to display web pages with error details in case of HTTP 500 Internal Server Error.                                                                                 |
 | APP_MOUNT_AUTO_EVENTS    | Settings | If "1" or "true", automatically binds lifecycle events of mounted apps between children and parents BlackSheep applications.                                                                                    |
+| APP_ROUTE_PREFIX         | Settings | Allows configuring a global prefix for all routes handled by the application. For more information, refer to: [Behind proxies](/blacksheep/behind-proxies/).                                                    |
 | APP_SECRET_<i>i</i>      | Secrets  | Allows configuring the secrets used by the application to protect data.                                                                                                                                         |
 | BLACKSHEEP_SECRET_PREFIX | Secrets  | Allows specifying the prefix of environment variables used to configure application secrets, defaults to "APP_SECRET" if not specified.                                                                         |
 
