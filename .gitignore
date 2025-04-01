@@ -1,7 +1,13 @@
 site
-
 venv
-
 .build
-
 .env
+site.zip
+deploy
+out
+.local
+
+# temporary
+rodi
+shared-assets
+copy-shared.sh

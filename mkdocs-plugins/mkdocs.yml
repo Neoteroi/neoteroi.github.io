@@ -1,0 +1,88 @@
+site_name: MkDocs Plugins
+site_author: Roberto Prevato
+site_description: The documentation of Neoteroi MkDocs Plugins.
+site_url: https://www.neoteroi.dev/mkdocs-plugins/
+repo_name: Neoteroi/mkdocs-plugins
+repo_url: https://github.com/Neoteroi/mkdocs-plugins
+edit_uri: ""
+
+nav:
+  - Overview: index.md
+  - Introduction: intro.md
+  - Plugins:
+      - Cards: cards.md
+      - Timeline: timeline.md
+      - Gantt: gantt.md
+      - OpenAPI Docs: ./web/oad.md
+      - Spantable: spantable.md
+      - Contribs: contribs.md
+  - Info:
+      - Credits: credits.md
+      - About: about.md
+  - Neoteroi docs home: "/"
+
+theme:
+  palette:
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+  name: "material"
+  custom_dir: overrides/
+  highlightjs: true
+  favicon: img/neoteroi.ico
+  logo: img/neoteroi-w.svg
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - css/extra.css
+  - css/neoteroi.css
+
+plugins:
+  - search
+  - neoteroi.contribs:
+      contributors:
+        - email: roberto.prevato@gmail.com
+          image: https://avatars.githubusercontent.com/u/2576032?s=400&u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&v=4
+
+markdown_extensions:
+  - admonition
+  - neoteroi.spantable
+  - neoteroi.timeline
+  - neoteroi.cards
+  - neoteroi.projects
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - footnotes

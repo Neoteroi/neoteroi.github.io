@@ -1,0 +1,46 @@
+html {
+    overflow-y: scroll;
+}
+
+:root,
+[data-md-color-scheme=default],
+[data-md-color-scheme=slate] {
+    --md-primary-fg-color: #00435c;
+    --md-footer-bg-color: #00435c;
+}
+
+[data-md-color-scheme=slate] a {
+    --md-primary-fg-color: #76e4af;
+    --md-typeset-a-color: #76e4af;
+}
+
+[data-md-color-scheme=slate] a:hover {
+    --md-accent-fg-color: #fe5252;
+}
+
+[data-md-color-scheme=slate] a:hover {
+    --md-accent-fg-color: #5cd9b6;
+}
+
+
+.epic-timeline .nt-timeline-dot .icon {
+    color: white;
+    background: white;
+    border-radius: 50%;
+}
+
+#icons-credits>div {
+    max-width: 59rem;
+    margin: auto;
+    padding: .3rem;
+}
+
+.credits-note {
+    font-style: italic;
+    font-size: 0.7rem;
+}
+
+.nt-card-image[style*="oad.png"],
+.nt-card-image[style*="spantable.png"] {
+    background-position: top !important;
+}

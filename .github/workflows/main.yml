@@ -2,12 +2,17 @@ name: Main
 
 on:
   workflow_dispatch:
+    inputs:
+      publish_artifacts:
+        description: "Publish artifacts (Y|N)"
+        required: true
+        default: "N"
   release:
     types: [published]
   push:
     branches:
       - main
-      - v1
+      - dev
     paths-ignore:
       - README.md
   pull_request:
@@ -22,7 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.11"]
+        python-version: ["3.13"]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -41,71 +46,49 @@ jobs:
           pip install -U pip
           pip install -r requirements.txt
 
-      - name: Build documentation
+      - name: Build and pack docs
         run: |
-          mkdocs build
-
-      - name: Fix links
-        run: |
-          chmod +x ./fixlinks.sh
-          ./fixlinks.sh
-
-      - name: Zip built files
-        run: |
-          mkdir -p .build/blacksheep
-          mv site/* .build/blacksheep
-          cd .build
-          7z a -r site.zip blacksheep
+          ./pack.sh
 
       - name: Upload distribution package
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
-          name: dist
-          path: .build/site.zip
+          name: site
+          path: site.zip
 
   publish:
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.publish_artifacts == 'Y')
+    needs: build
     runs-on: ubuntu-latest
-    needs: [build]
-    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+
     steps:
-      - name: Download a distribution artifact
-        uses: actions/download-artifact@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          name: dist
-          path: dist
+          ref: gh-pages
+          path: neoteroi
 
-      - name: Unzip artifacts
-        run: |
-          7z x -o"site" dist/site.zip
-
-      - name: Use Python 3.10
-        uses: actions/setup-python@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          python-version: "3.10"
+          name: site
+          path: site
 
-      - name: Install tools
+      - name: Unzip artifact
         run: |
-          pip install pyazblob
+          unzip site/site.zip -d site
 
-      - name: Publish distribution 📦 to DEV
+      - name: Deploy to gh-pages branch
         run: |
-          pyazblob upload --path site/ --account-name "$ACCOUNT_NAME" -cn "\$web" -r -f
-        env:
-          ACCOUNT_NAME: ${{ secrets.DEV_EUW_ACCOUNT_NAME }}
-          PYAZ_ACCOUNT_KEY: ${{ secrets.DEV_EUW_ACCOUNT_KEY }}
+          find neoteroi -mindepth 1 ! -name '.git' ! -name 'CNAME' ! -name 'README.md' ! -path 'neoteroi/.git/*' -exec rm -rf {} +
+          cp -r site/site/* neoteroi/
 
-      - name: Publish distribution 📦 to PROD EUW
-        if: github.ref == 'refs/heads/main'
-        run: |
-          pyazblob upload --path site/ --account-name "$ACCOUNT_NAME" -cn "\$web" -r -f
-        env:
-          ACCOUNT_NAME: ${{ secrets.PROD_EUW_ACCOUNT_NAME }}
-          PYAZ_ACCOUNT_KEY: ${{ secrets.PROD_EUW_ACCOUNT_KEY }}
+          cd neoteroi
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
-      - name: Publish distribution 📦 to PROD USE
-        if: github.ref == 'refs/heads/main'
-        run: |
-          pyazblob upload --path site/ --account-name "$ACCOUNT_NAME" -cn "\$web" -r -f
-        env:
-          ACCOUNT_NAME: ${{ secrets.PROD_USE_ACCOUNT_NAME }}
-          PYAZ_ACCOUNT_KEY: ${{ secrets.PROD_USE_ACCOUNT_KEY }}
+          git add .
+          git commit -m "Deploy documentation on $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+          git push origin gh-pages
+          echo "Published to gh-pages"
