@@ -15,13 +15,14 @@
         <link rel="canonical" href="https://www.neoteroi.dev/blacksheep/responses/">
       
       
-        <link rel="prev" href="/blacksheep/requests/">
+        <link rel="prev" href="../requests/">
       
       
-        <link rel="next" href="/blacksheep/testing/">
+        <link rel="next" href="../testing/">
       
-      <link rel="icon" href="/blacksheep/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+      
+      <link rel="icon" href="../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
     
     
       
@@ -29,14 +30,17 @@
       
     
     
-      <link rel="stylesheet" href="/blacksheep/assets/stylesheets/main.26e3688c.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4af4bdda.min.css">
       
         
-        <link rel="stylesheet" href="/blacksheep/assets/stylesheets/palette.ecc896b0.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
+
     
+    
+      
     
     
       
@@ -48,11 +52,11 @@
       
     
     
-      <link rel="stylesheet" href="/blacksheep/css/neoteroi.css">
+      <link rel="stylesheet" href="../css/neoteroi.css">
     
-      <link rel="stylesheet" href="/blacksheep/css/extra.css?v=20221120">
+      <link rel="stylesheet" href="../css/extra.css?v=20221120">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-T65MX5XNF2"></script>
 <script>
@@ -84,6 +88,14 @@
   <meta name="twitter:title" content="BlackSheep - Responses">
   <meta name="twitter:description" content="The official documentation website of BlackSheep, a fast ASGI web framework for Python asyncio.">
   <meta name="twitter:image" content="https://www.neoteroi.dev/blacksheep/img/banner.png">
+  <script>
+    (function () {
+        var fullscreen = localStorage.getItem("FULLSCREEN") || "N";
+        if (fullscreen === "Y") {
+            document.documentElement.classList.add("fullscreen");
+        }
+    })();
+  </script>
 
   </head>
   
@@ -97,9 +109,6 @@
     
     <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -127,13 +136,14 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/blacksheep/" title="BlackSheep" class="md-header__button md-logo" aria-label="BlackSheep" data-md-component="logo">
+    <a href=".." title="BlackSheep" class="md-header__button md-logo" aria-label="BlackSheep" data-md-component="logo">
       
-  <img src="/blacksheep/img/logow.svg" alt="logo">
+  <img src="../img/logow.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -151,37 +161,51 @@
         </div>
       </div>
     </div>
+    <form id="fullscreen-form" class="md-header__option" data-md-component="fullscreen">
+      <input class="md-option" aria-label="Enter full screen" type="radio" name="__fullscreen" id="__fullscreen">
+      <label title="Full screen" class="md-header__button md-icon" id="full-screen" for="__fullscreen">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zm9 0h5v5h-2V7h-3zm3 9h2v5h-5v-2h3zm-7 3v2H5v-5h2v3z"/></svg>
+      </label>
+      <input class="md-option" aria-label="Exit full screen" type="radio" name="__fullscreen" id="__fullscreen_no">
+      <label title="Exit full screen" class="md-header__button md-icon" id="full-screen-exit" for="__fullscreen_no">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 14h5v2h-3v3h-2zm-9 0h5v5H8v-3H5zm3-9h2v5H5V8h3zm11 3v2h-5V5h2v3z"/></svg>
+      </label>
+    </form>
     
       
         <form class="md-header__option" data-md-component="palette">
-          
-            
-            
-            
-            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
-            
-              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
-              </label>
-            
-          
-            
-            
-            
-            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
-            
-              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-              </label>
-            
-          
-        </form>
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
       
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -189,19 +213,22 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -218,7 +245,7 @@
         <a href="https://github.com/Neoteroi/BlackSheep" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
   </div>
   <div class="md-source__repository">
     Neoteroi/BlackSheep
@@ -248,11 +275,12 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/blacksheep/" title="BlackSheep" class="md-nav__button md-logo" aria-label="BlackSheep" data-md-component="logo">
+    <a href=".." title="BlackSheep" class="md-nav__button md-logo" aria-label="BlackSheep" data-md-component="logo">
       
-  <img src="/blacksheep/img/logow.svg" alt="logo">
+  <img src="../img/logow.svg" alt="logo">
 
     </a>
     BlackSheep
@@ -262,7 +290,7 @@
       <a href="https://github.com/Neoteroi/BlackSheep" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
   </div>
   <div class="md-source__repository">
     Neoteroi/BlackSheep
@@ -274,14 +302,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/" class="md-nav__link">
-        Overview
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -289,14 +323,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/getting-started/" class="md-nav__link">
-        Getting started: basics
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting started: basics
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -304,14 +344,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/mvc-project-template/" class="md-nav__link">
-        Getting started: MVC
+      <a href="../mvc-project-template/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting started: MVC
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -319,14 +365,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/dependency-injection/" class="md-nav__link">
-        Dependency injection
+      <a href="../dependency-injection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dependency injection
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -334,14 +386,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/openapi/" class="md-nav__link">
-        OpenAPI Docs
+      <a href="../openapi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenAPI Docs
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -349,14 +407,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/application/" class="md-nav__link">
-        Application
+      <a href="../application/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -364,14 +428,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/routing/" class="md-nav__link">
-        Routing
+      <a href="../routing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Routing
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -379,14 +449,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/request-handlers/" class="md-nav__link">
-        Request handlers
+      <a href="../request-handlers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Request handlers
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -394,14 +470,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/requests/" class="md-nav__link">
-        Requests
+      <a href="../requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Requests
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -409,11 +491,10 @@
     
       
       
-      
-
   
   
     
+  
   
   
     <li class="md-nav__item md-nav__item--active">
@@ -425,12 +506,26 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Responses
+          
+  
+  <span class="md-ellipsis">
+    Responses
+    
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Responses
+        
+  
+  <span class="md-ellipsis">
+    Responses
+    
+  </span>
+  
+
       </a>
       
         
@@ -450,28 +545,36 @@
       
         <li class="md-nav__item">
   <a href="#the-response-class" class="md-nav__link">
-    The Response class
+    <span class="md-ellipsis">
+      The Response class
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#functions-in-blacksheepserverresponses" class="md-nav__link">
-    Functions in blacksheep.server.responses
+    <span class="md-ellipsis">
+      Functions in blacksheep.server.responses
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#response-headers" class="md-nav__link">
-    Response headers
+    <span class="md-ellipsis">
+      Response headers
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#setting-cookies" class="md-nav__link">
-    Setting cookies
+    <span class="md-ellipsis">
+      Setting cookies
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Setting cookies">
@@ -479,14 +582,18 @@
         
           <li class="md-nav__item">
   <a href="#cookiesamesitemode-enum" class="md-nav__link">
-    CookieSameSiteMode enum
+    <span class="md-ellipsis">
+      CookieSameSiteMode enum
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#setting-many-cookies" class="md-nav__link">
-    Setting many cookies
+    <span class="md-ellipsis">
+      Setting many cookies
+    </span>
   </a>
   
 </li>
@@ -498,28 +605,36 @@
       
         <li class="md-nav__item">
   <a href="#unsetting-cookies" class="md-nav__link">
-    Unsetting cookies
+    <span class="md-ellipsis">
+      Unsetting cookies
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#removing-cookies" class="md-nav__link">
-    Removing cookies
+    <span class="md-ellipsis">
+      Removing cookies
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#response-streaming" class="md-nav__link">
-    Response streaming
+    <span class="md-ellipsis">
+      Response streaming
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#chunked-encoding" class="md-nav__link">
-    Chunked encoding
+    <span class="md-ellipsis">
+      Chunked encoding
+    </span>
   </a>
   
 </li>
@@ -534,14 +649,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/testing/" class="md-nav__link">
-        Testing
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -549,14 +670,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/templating/" class="md-nav__link">
-        Templating
+      <a href="../templating/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Templating
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -564,14 +691,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/controllers/" class="md-nav__link">
-        Controllers
+      <a href="../controllers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Controllers
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -579,14 +712,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/middlewares/" class="md-nav__link">
-        Middlewares
+      <a href="../middlewares/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Middlewares
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -594,14 +733,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/static-files/" class="md-nav__link">
-        Serving static files
+      <a href="../static-files/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Serving static files
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -609,14 +754,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/websocket/" class="md-nav__link">
-        WebSocket
+      <a href="../websocket/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WebSocket
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -624,14 +775,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/server-sent-events/" class="md-nav__link">
-        Server-sent events
+      <a href="../server-sent-events/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Server-sent events
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -639,14 +796,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/authentication/" class="md-nav__link">
-        Authentication
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -654,14 +817,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/authorization/" class="md-nav__link">
-        Authorization
+      <a href="../authorization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authorization
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -669,14 +838,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/openid-connect/" class="md-nav__link">
-        OpenID Connect
+      <a href="../openid-connect/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenID Connect
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -684,14 +859,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/sessions/" class="md-nav__link">
-        Sessions
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sessions
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -699,231 +880,390 @@
     
       
       
-      
-
+  
   
   
   
     
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
-          Security
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_22">
-          <span class="md-nav__icon md-icon"></span>
-          Security
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="/blacksheep/cors/" class="md-nav__link">
-        CORS
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="/blacksheep/anti-request-forgery/" class="md-nav__link">
-        Anti-Forgery
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="/blacksheep/dataprotection/" class="md-nav__link">
-        Data protection
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="/blacksheep/hsts/" class="md-nav__link">
-        HSTS
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="/blacksheep/remotes/" class="md-nav__link">
-        Remotes
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
     
-      
-      
-      
-
-  
-  
-  
+    
     
     <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="0">
-          Response features
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_23">
-          <span class="md-nav__icon md-icon"></span>
-          Response features
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
+        
           
+          <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_22">
+            <span class="md-nav__icon md-icon"></span>
+            Security
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/cache-control/" class="md-nav__link">
-        Cache control
+      <a href="../cors/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CORS
+    
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/compression/" class="md-nav__link">
-        Compression
+      <a href="../anti-request-forgery/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Anti-Forgery
+    
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dataprotection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data protection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hsts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HSTS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remotes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remotes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
   
   
   
+  
+    
+    
+    
     
     <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="0">
-          Examples
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_24">
-          <span class="md-nav__icon md-icon"></span>
-          Examples
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
           
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Response features
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            Response features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/examples/marshmallow/" class="md-nav__link">
-        Using Marshmallow
+      <a href="../cache-control/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cache control
+    
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compression/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compression
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
           
-        </ul>
-      </nav>
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/marshmallow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using Marshmallow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
       
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Production deployments
+    
+  </span>
+  
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            Production deployments
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/settings/" class="md-nav__link">
-        Settings
+      <a href="../behind-proxies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Behind proxies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Settings
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -931,14 +1271,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/binders/" class="md-nav__link">
-        Binders
+      <a href="../binders/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binders
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -946,14 +1292,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/background-tasks/" class="md-nav__link">
-        Background tasks
+      <a href="../background-tasks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Background tasks
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -961,14 +1313,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/mounting/" class="md-nav__link">
-        Mounting apps
+      <a href="../mounting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mounting apps
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -976,14 +1334,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/client/" class="md-nav__link">
-        HTTP Client
+      <a href="../client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HTTP Client
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -991,14 +1355,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/cli/" class="md-nav__link">
-        More about the CLI
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    More about the CLI
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -1006,14 +1376,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/versions/migrating-to-v2/" class="md-nav__link">
-        From V1 to V2
+      <a href="../versions/migrating-to-v2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From V1 to V2
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -1021,14 +1397,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/develop-with-https/" class="md-nav__link">
-        Develop using HTTPS
+      <a href="../develop-with-https/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Develop using HTTPS
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -1036,14 +1418,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/asgi/" class="md-nav__link">
-        ASGI
+      <a href="../asgi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ASGI
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -1051,14 +1439,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/extensions/" class="md-nav__link">
-        Extensions
+      <a href="../extensions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extensions
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -1066,14 +1460,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/contributing/" class="md-nav__link">
-        Contributing
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -1081,14 +1481,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
-      <a href="/blacksheep/about/" class="md-nav__link">
-        About
+      <a href="../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -1096,14 +1502,20 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="/" class="md-nav__link">
-        Neoteroi docs home
+        
+  
+  <span class="md-ellipsis">
+    Neoteroi docs home
+    
+  </span>
+  
+
       </a>
     </li>
   
@@ -1137,28 +1549,36 @@
       
         <li class="md-nav__item">
   <a href="#the-response-class" class="md-nav__link">
-    The Response class
+    <span class="md-ellipsis">
+      The Response class
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#functions-in-blacksheepserverresponses" class="md-nav__link">
-    Functions in blacksheep.server.responses
+    <span class="md-ellipsis">
+      Functions in blacksheep.server.responses
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#response-headers" class="md-nav__link">
-    Response headers
+    <span class="md-ellipsis">
+      Response headers
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#setting-cookies" class="md-nav__link">
-    Setting cookies
+    <span class="md-ellipsis">
+      Setting cookies
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Setting cookies">
@@ -1166,14 +1586,18 @@
         
           <li class="md-nav__item">
   <a href="#cookiesamesitemode-enum" class="md-nav__link">
-    CookieSameSiteMode enum
+    <span class="md-ellipsis">
+      CookieSameSiteMode enum
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#setting-many-cookies" class="md-nav__link">
-    Setting many cookies
+    <span class="md-ellipsis">
+      Setting many cookies
+    </span>
   </a>
   
 </li>
@@ -1185,28 +1609,36 @@
       
         <li class="md-nav__item">
   <a href="#unsetting-cookies" class="md-nav__link">
-    Unsetting cookies
+    <span class="md-ellipsis">
+      Unsetting cookies
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#removing-cookies" class="md-nav__link">
-    Removing cookies
+    <span class="md-ellipsis">
+      Removing cookies
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#response-streaming" class="md-nav__link">
-    Response streaming
+    <span class="md-ellipsis">
+      Response streaming
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#chunked-encoding" class="md-nav__link">
-    Chunked encoding
+    <span class="md-ellipsis">
+      Chunked encoding
+    </span>
   </a>
   
 </li>
@@ -1242,13 +1674,13 @@ request handlers that return different kinds of objects. In such cases they are
 normalized at application start-up to return instances of <code>Response</code>.</p>
 <p>The following example shows how to use the low-level objects to create a
 response with status 200 and body "Hello, World":</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">Content</span><span class="p">,</span> <span class="n">get</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">Content</span><span class="p">,</span> <span class="n">get</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
 
 
 <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">Content</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;text/plain&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;Hello, World!&quot;</span><span class="p">))</span>
 </code></pre></div>
 <p><code>BlackSheep</code> uses these exact types to benefit from static typing and
@@ -1258,13 +1690,13 @@ number of helper functions are provided to create <code>Response</code> objects 
 simpler code API.</p>
 <p>For example, the <code>json</code> function in <code>blacksheep.server.responses</code> produces
 a response object having a JSON body.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
 
 
 <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">})</span>
 </code></pre></div>
 <p>Produces the following response body:</p>
@@ -1272,13 +1704,13 @@ a response object having a JSON body.</p>
 </code></pre></div>
 <hr />
 <p>The framework also allows to define a request handler this way:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
 
 
 <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">}</span>
 </code></pre></div>
 <p>Note that, when a request handler doesn't specify a <code>Response</code> return type with
@@ -1387,7 +1819,7 @@ if necessary.</p>
 </table>
 <p>For information on how to use these methods, refer to the type annotations
 provided in the code.</p>
-<p><img alt="Type hints" src="/blacksheep/img/type-hints-functions.png" /></p>
+<p><img alt="Type hints" src="../img/type-hints-functions.png" /></p>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p>Using an IDE like JetBrains PyCharm, or Visual Studio Code (as in
@@ -1397,7 +1829,7 @@ annotations.</p>
 <h2 id="response-headers">Response headers<a class="headerlink" href="#response-headers" title="Permanent link">&para;</a></h2>
 <p>To specify response headers use one of the following methods:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">})</span>
 
     <span class="n">response</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Example&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;Value&quot;</span><span class="p">)</span>
@@ -1418,14 +1850,14 @@ not strings.</p>
 </div>
 <h2 id="setting-cookies">Setting cookies<a class="headerlink" href="#setting-cookies" title="Permanent link">&para;</a></h2>
 <p>To set a cookie, use the <code>set_cookie</code> method of the <code>Response</code> class:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
-<span class="kn">from</span> <span class="nn">blacksheep.cookies</span> <span class="kn">import</span> <span class="n">Cookie</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.cookies</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cookie</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
 
 
 <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">})</span>
 
     <span class="n">response</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="n">Cookie</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">))</span>
@@ -1438,16 +1870,16 @@ header</a>.</p>
 <hr />
 <p>The following example shows how to set a cookie with <code>HttpOnly</code> and lasting
 15 minutes.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
-<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
-<span class="kn">from</span> <span class="nn">blacksheep.cookies</span> <span class="kn">import</span> <span class="n">Cookie</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.cookies</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cookie</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
 
 
 <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">})</span>
 
     <span class="n">response</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span>
@@ -1560,7 +1992,7 @@ header</a>.</p>
 <h3 id="setting-many-cookies">Setting many cookies<a class="headerlink" href="#setting-many-cookies" title="Permanent link">&para;</a></h3>
 <p>Use the <code>Response.set_cookies</code> method to set several cookies at the same time.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">})</span>
 
     <span class="n">response</span><span class="o">.</span><span class="n">set_cookies</span><span class="p">(</span>
@@ -1576,7 +2008,7 @@ header</a>.</p>
 <p>Use the <code>Response.unset_cookie</code> method to delete a cookie that was previously
 sent to a client.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">})</span>
 
     <span class="n">response</span><span class="o">.</span><span class="n">unset_cookie</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
@@ -1600,15 +2032,15 @@ the generator will return the correct amount of bytes).</p>
 <h2 id="chunked-encoding">Chunked encoding<a class="headerlink" href="#chunked-encoding" title="Permanent link">&para;</a></h2>
 <p>The following example shows how response streaming can be used in responses,
 using a <code>StreamedContent</code> object bound to a generator yielding bytes.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">StreamedContent</span><span class="p">,</span> <span class="n">get</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">StreamedContent</span><span class="p">,</span> <span class="n">get</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
 
 
 <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/chunked-text&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">get_chunked_text</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">provider</span><span class="p">():</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_chunked_text</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">provider</span><span class="p">():</span>
         <span class="k">yield</span> <span class="sa">b</span><span class="s2">&quot;Lorem &quot;</span>
         <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
         <span class="k">yield</span> <span class="sa">b</span><span class="s2">&quot;ipsum&quot;</span>
@@ -1621,15 +2053,15 @@ using a <code>StreamedContent</code> object bound to a generator yielding bytes.
 </code></pre></div>
 <p>Alternatively, it is possible to use the <code>file</code> function from
 <code>blacksheep.server.responses</code> or directly from <code>blacksheep</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">blacksheep</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">ContentDispositionType</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">get</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">ContentDispositionType</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">get</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/chunked-text&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">get_chunked_text</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">provider</span><span class="p">():</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_chunked_text</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">provider</span><span class="p">():</span>
         <span class="k">yield</span> <span class="sa">b</span><span class="s2">&quot;Lorem &quot;</span>
         <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
         <span class="k">yield</span> <span class="sa">b</span><span class="s2">&quot;ipsum&quot;</span>
@@ -1646,7 +2078,7 @@ using a <code>StreamedContent</code> object bound to a generator yielding bytes.
 <p class="admonition-title">Info</p>
 <p>BlackSheep uses chunked encoding by default when serving static files.</p>
 </div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2024-01-16 08:33:38</p><div class="nt-contributors"><div class="nt-contributor image nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (6)" style="background-image: url('https://avatars.githubusercontent.com/u/2576032?s=400&amp;u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&amp;v=4')"><span class="nt-initials" /></div><div class="nt-contributor nt-group-1" title="Elliot Waite &lt;elliot@elliotwaite.com&gt; (1)"><span class="nt-initials">EW</span></div><div class="nt-contributor nt-group-2" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-01 23:22:49</p><div class="nt-contributors"><div class="nt-contributor image nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)" style="background-image: url('https://avatars.githubusercontent.com/u/2576032?s=400&amp;u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&amp;v=4')"><span class="nt-initials" /></div></div></div>
 
 
 
@@ -1706,6 +2138,7 @@ using a <code>StreamedContent</code> object bound to a generator yielding bytes.
             </div>
           
           
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
       </main>
@@ -1717,9 +2150,10 @@ using a <code>StreamedContent</code> object bound to a generator yielding bytes.
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="/blacksheep/requests/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Requests" rel="prev">
+          <a href="../requests/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Requests">
             <div class="md-footer__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
             </div>
             <div class="md-footer__title">
               <span class="md-footer__direction">
@@ -1733,7 +2167,7 @@ using a <code>StreamedContent</code> object bound to a generator yielding bytes.
         
         
           
-          <a href="/blacksheep/testing/" class="md-footer__link md-footer__link--next" aria-label="Next: Testing" rel="next">
+          <a href="../testing/" class="md-footer__link md-footer__link--next" aria-label="Next: Testing">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
@@ -1743,7 +2177,8 @@ using a <code>StreamedContent</code> object bound to a generator yielding bytes.
               </div>
             </div>
             <div class="md-footer__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
             </div>
           </a>
         
@@ -1771,10 +2206,13 @@ using a <code>StreamedContent</code> object bound to a generator yielding bytes.
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer", "content.code.copy", "content.action.view"], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": 2}</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer", "content.code.copy", "content.action.view"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": 2}</script>
     
     
-      <script src="/blacksheep/assets/javascripts/bundle.220ee61c.min.js"></script>
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+        <script src="../js/fullscreen.js"></script>
       
     
   </body>
