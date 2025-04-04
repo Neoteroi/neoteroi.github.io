@@ -5,4 +5,4 @@
 ## The project's home
 The project source code is in [GitHub](https://github.com/Neoteroi/mkdocs-plugins).
 
-The documentation source code is in [GitHub](https://github.com/Neoteroi/mkdocs-plugins-docs).
+The documentation source code is here in [GitHub](https://github.com/Neoteroi/neoteroi.github.io).

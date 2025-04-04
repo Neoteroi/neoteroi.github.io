@@ -108,7 +108,7 @@ sequenceDiagram
     Proxy-->>User: HTTP 404 Not Found
 ```
 
-/// details | The example of API Gateway
+/// details | The example of API Gateways
     type: info
 
 API Gateways like [AWS API Gateway](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/api-routing-path.html)
@@ -132,13 +132,13 @@ implementing interactive sign-in.
   (applying URL rewrite).
 - The second approach involves configuring a prefix in the application router
   to globally change the prefix of all request handlers. The global prefix can
-  also be set using the environment variable `APP_ROUTE_PREFIX`. This method
-  assumes that modifying the path handled by the web server is desirable to
-  align it with the path handled by the HTTP proxy server, and it is ideal
-  when using URL rewrite is not easy.
+  be set when instantiating the `Router` or using the environment variable
+  `APP_ROUTE_PREFIX`. This method assumes that modifying the path handled by
+  the web server is desirable to align it with the path handled by the HTTP
+  proxy server, and it is ideal when applying URL rewrite is not easy.
 
 For both options, `BlackSheep` handles the information provided by `root_path`
-or the application router prefix in some specific ways.
+and the application router prefix in some specific ways.
 For example, the `get_absolute_url_to_path` defined in `blacksheep.messages`
 will handle the information and return an absolute URL to the server
 according to both scenarios.

@@ -4,16 +4,17 @@ BlackSheep includes an implementation of HTTP Client for HTTP 1.1.
 
 ## Client features
 
-- HTTP connection pooling
-- User-friendly handling of SSL contexts (safe by default)
-- Support for client side middlewares
+- HTTP connection pooling.
+- User-friendly handling of SSL contexts (safe by default).
+- Support for client side middlewares.
 - Automatic handling of redirects (can be disabled, validates circular
   redirects and maximum number of redirects - redirects to URN are simply
-  returned to code using the client)
+  returned to code using the client).
 - Automatic handling of cookies (can be disabled, `Set-Cookie` and `Cookie`
-  headers)
+  headers).
 
 **Example:**
+
 ```python
 import asyncio
 from blacksheep.client import ClientSession
@@ -30,7 +31,6 @@ async def client_example(loop):
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(client_example(loop))
-
 ```
 
 ## HTTP Connection pooling
@@ -59,7 +59,6 @@ design pattern, and this is supported in BlackSheep.
 
 ```python
 async def client_example_middleware(request, next_handler):
-
     # do something before the request is sent
     response = await next_handler(request)
 
@@ -87,7 +86,6 @@ It is recommended to instantiate a single instance of HTTP client and
 register it as a service of the application, using the `@app.lifespan` method:
 
 ```python
-```python
 from blacksheep import Application
 from blacksheep.client.session import ClientSession
 
@@ -111,5 +109,5 @@ async def home(http_client: ClientSession):
 ```
 
 When following this approach, the HTTP client can be automatically injected
-into request handlers, and services that need it, and is automatically disposed
+into request handlers and services that need it, and is automatically disposed
 of when the application is stopped.
