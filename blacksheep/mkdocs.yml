@@ -90,10 +90,7 @@ extra_javascript:
 
 plugins:
   - search
-  - neoteroi.contribs:
-      contributors:
-        - email: roberto.prevato@gmail.com
-          image: https://avatars.githubusercontent.com/u/2576032?s=400&u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&v=4
+  - neoteroi.contribs
 
 markdown_extensions:
   - admonition
