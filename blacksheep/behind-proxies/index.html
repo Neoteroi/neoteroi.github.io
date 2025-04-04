@@ -1595,7 +1595,7 @@ is not handled properly.</p>
     User-&gt;&gt;Proxy: HTTP GET https://example.com/sign-in
     Proxy--&gt;&gt;User: HTTP 404 Not Found</code></pre>
 <details class="info">
-<summary>The example of API Gateway</summary>
+<summary>The example of API Gateways</summary>
 <p>API Gateways like <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/api-routing-path.html">AWS API Gateway</a>
 and <a href="https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts">Azure API Management</a>
 use path based routing to expose many APIs behind the same domain name.
@@ -1614,13 +1614,13 @@ implementing interactive sign-in.</p>
   (applying URL rewrite).</li>
 <li>The second approach involves configuring a prefix in the application router
   to globally change the prefix of all request handlers. The global prefix can
-  also be set using the environment variable <code>APP_ROUTE_PREFIX</code>. This method
-  assumes that modifying the path handled by the web server is desirable to
-  align it with the path handled by the HTTP proxy server, and it is ideal
-  when using URL rewrite is not easy.</li>
+  be set when instantiating the <code>Router</code> or using the environment variable
+  <code>APP_ROUTE_PREFIX</code>. This method assumes that modifying the path handled by
+  the web server is desirable to align it with the path handled by the HTTP
+  proxy server, and it is ideal when applying URL rewrite is not easy.</li>
 </ul>
 <p>For both options, <code>BlackSheep</code> handles the information provided by <code>root_path</code>
-or the application router prefix in some specific ways.
+and the application router prefix in some specific ways.
 For example, the <code>get_absolute_url_to_path</code> defined in <code>blacksheep.messages</code>
 will handle the information and return an absolute URL to the server
 according to both scenarios.</p>
@@ -1652,7 +1652,7 @@ according to both scenarios.</p>
 <a href="https://github.com/Neoteroi/BlackSheep-MVC/blob/88b0672a0696d4bef4775203fae086173fd9b0fc/%7B%7Bcookiecutter.project_name%7D%7D/app/templating.py#L26">render absolute paths</a>
 in Jinja templates.</p>
 </details>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-01 23:22:49</p><div class="nt-contributors"><div class="nt-contributor image nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)" style="background-image: url('https://avatars.githubusercontent.com/u/2576032?s=400&amp;u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&amp;v=4')"><span class="nt-initials" /></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-04 22:03:27</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

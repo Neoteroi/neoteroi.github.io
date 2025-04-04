@@ -1562,16 +1562,16 @@
 <p>BlackSheep includes an implementation of HTTP Client for HTTP 1.1.</p>
 <h2 id="client-features">Client features<a class="headerlink" href="#client-features" title="Permanent link">&para;</a></h2>
 <ul>
-<li>HTTP connection pooling</li>
-<li>User-friendly handling of SSL contexts (safe by default)</li>
-<li>Support for client side middlewares</li>
+<li>HTTP connection pooling.</li>
+<li>User-friendly handling of SSL contexts (safe by default).</li>
+<li>Support for client side middlewares.</li>
 <li>Automatic handling of redirects (can be disabled, validates circular
   redirects and maximum number of redirects - redirects to URN are simply
-  returned to code using the client)</li>
+  returned to code using the client).</li>
 <li>Automatic handling of cookies (can be disabled, <code>Set-Cookie</code> and <code>Cookie</code>
-  headers)</li>
+  headers).</li>
 </ul>
-<p><strong>Example:</strong>
+<p><strong>Example:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientSession</span>
 
@@ -1587,7 +1587,7 @@
 
 <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
 <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">client_example</span><span class="p">(</span><span class="n">loop</span><span class="p">))</span>
-</code></pre></div></p>
+</code></pre></div>
 <h2 id="http-connection-pooling">HTTP Connection pooling<a class="headerlink" href="#http-connection-pooling" title="Permanent link">&para;</a></h2>
 <p>The HTTP client in BlackSheep implements connection pooling. Meaning that
 connections to the same host and port are kept in memory and reused for
@@ -1606,7 +1606,6 @@ applying an authentication strategy. The HTTP client can benefit from the same
 design pattern, and this is supported in BlackSheep.</p>
 <h2 id="client-middleware-example">Client middleware example<a class="headerlink" href="#client-middleware-example" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">client_example_middleware</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">next_handler</span><span class="p">):</span>
-
     <span class="c1"># do something before the request is sent</span>
     <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">next_handler</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 
@@ -1630,8 +1629,7 @@ negative effects on the performance of the application.</p>
 </div>
 <p>It is recommended to instantiate a single instance of HTTP client and
 register it as a service of the application, using the <code>@app.lifespan</code> method:</p>
-<div class="highlight"><pre><span></span><code><span class="err">```</span><span class="n">python</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.client.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientSession</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
@@ -1653,9 +1651,9 @@ register it as a service of the application, using the <code>@app.lifespan</code
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;client_instance_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">(</span><span class="n">http_client</span><span class="p">)}</span>
 </code></pre></div>
 <p>When following this approach, the HTTP client can be automatically injected
-into request handlers, and services that need it, and is automatically disposed
+into request handlers and services that need it, and is automatically disposed
 of when the application is stopped.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-01 23:22:49</p><div class="nt-contributors"><div class="nt-contributor image nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)" style="background-image: url('https://avatars.githubusercontent.com/u/2576032?s=400&amp;u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&amp;v=4')"><span class="nt-initials" /></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-04 22:03:27</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 
