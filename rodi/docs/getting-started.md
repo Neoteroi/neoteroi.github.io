@@ -1,10 +1,9 @@
 # Getting started with Rodi
 
-This page describes the basics to start using Rodi. It provides:
+This page introduces the basics of using Rodi, including:
 
 - [X] An overview of dependency injection.
 - [X] The use cases `Rodi` is intended for.
-- [X] Examples of real-life scenarios.
 
 ## Overview of dependency injection
 
@@ -57,15 +56,14 @@ class ProductsService:
         self.email_handler = email_handler
 ```
 
-Encapsulating the code that for data access operations (`ProductsRepository`)
+Encapsulating the code that performs data access operations (`ProductsRepository`)
 and that sends emails (`EmailHandler`) into dedicated classes is the right
 approach, as the same functionality can be reused in other services (e.g.,
-_OrdersService, AccountsService_) without duplicating logic or tightly coupling
-it to other classes.
+_OrdersService, AccountsService_) without duplicating code.
 
 ---
 
-The dependencies _could also_ be instantiated by the class that needs them:
+Dependencies _could also_ be instantiated by the classes that need them:
 
 ```python
 class ProductsService:
@@ -181,9 +179,8 @@ assert isinstance(example.dependency, A)
 /// admonition | Completely non-intrusive
     type: tip
 
-Note how `rodi` is completely non-intrusive and does **not** require changing
-the source code of the types it handles. This was one of the objectives of the
-library.
+Notice that Rodi is completely non-intrusive and does **not** require any changes to the
+source code of the types it handles. This was one of the library's primary design goals.
 ///
 
 In this example, both `A` and `B` are concrete types. Rodi can resolve concrete
@@ -401,7 +398,7 @@ easily become hard to maintain. To simplify the management of dependencies and
 reduce the complexity of object instantiation, we can leverage a dependency
 injection framework like `rodi`.
 
-## The Repository pattern example
+### The Repository pattern example
 
 The three classes described above: `ProductsService`, `ProductsRepository`, and
 `SQLProductsRepository`, can be wired using `rodi` this way:
@@ -456,7 +453,7 @@ print(service.get_all_products())
 Some interesting things are happening in this code:
 
 - At line _9_, an instance of `rodi.Container` is created. This class is used
-  to register the types that must be resolved, and resolve those types.
+  to register the types that must be resolved, and to resolve those types.
 - It was not necessary to modify the source code of the classes being handled:
   `rodi` inspects the code of registered types to know how to resolve them.
 - A factory function is used to define how the instance of `sqlite3.Connection`
@@ -464,12 +461,13 @@ Some interesting things are happening in this code:
   returns an instance of that class, requires a `str`, and resolving base types
   with `DI` is not a good idea.
 - The factory has a return type annotation: `rodi` uses that type annotation
-  as the _key type_ to be resolved using the factory function.
-- Because the constructor of the `SQLProductsRepository` class did not include
-  a type annotation to describe its dependency `db_connection`, an alias is
-  configured at line _29_, to instruct `rodi` to resolve parameters having
-  name `db_connection` to obtain an instance of `sqlite3.Connection`.
-  Alternatively, we could have updated the source code of
+  as the _key type_ that is resolved using the factory function. Note that a factory
+  might declare a more **abstract** type than the one it returns (following the DIP
+  principle).
+- Since the constructor of the `SQLProductsRepository` class does not include a type
+  annotation for its `db_connection` dependency, an alias is configured at line _29_ to
+  instruct the container to resolve parameters named `db_connection` as instances of
+  `sqlite3.Connection`. Alternatively, we could have updated the source code of
   `SQLProductsRepository` to include a type annotation in its constructor.
 - At line _31_, the **abstract** type `ProductsRepository` is registered,
   instructing the container to resolve that type with the **concrete**
@@ -478,7 +476,7 @@ Some interesting things are happening in this code:
   using the abstract type as _key_.
 - At line _32_, the `ProductsService` type is also registered, because this is
   required to build the graph of dependencies.
-- At line _36_, an instance of `ProductsService` it obtained through **DI**.
+- At line _36_, an instance of `ProductsService` is obtained through **DI**.
   Since this is the first time the `Container` needs to resolve a type, it runs
   code inspections to build the tree of dependencies. These code inspections
   are executed only once, unless new types are registered in the same
@@ -487,6 +485,218 @@ Some interesting things are happening in this code:
   dependency `ProductsRepository`, used to instantiate the requested
   `ProductsService`.
 
+## Rodi's use cases
+
+Rodi is designed to simplify object instantiation and dependency management. It can
+inspect constructors (`__init__` methods) and class properties to automatically resolve
+dependencies.
+
+Support for inspecting class properties is intended to reduce code verbosity. Note how
+in the example below, it is necessary to write three times 'dependency':
+
+```python
+class A:
+    ...
+
+
+class B:
+    def __init__(self, dependency: A):
+        self.dependency = dependency
+```
+
+The same classes can be written this way:
+
+```python
+class A:
+    ...
+
+class B:
+    dependency: A
+```
+
+Rodi would automatically instantiate `B` and populate its `dependency` property
+with an instance of `A`.
+
+```mermaid
+graph TD
+    A[Rodi] --> B[Resolves __init__ methods]
+    A --> C[Resolves class properties]
+```
+
+=== "Using constructors"
+
+    ```python {linenums="1", hl_lines="7-8"}
+    from rodi import Container
+
+    class A:
+        ...
+
+    class B:
+        def __init__(self, dependency: A):
+            self.dependency = dependency
+
+    container = Container()
+
+    container.add_transient(A)
+    container.add_transient(B)
+
+    example = container.resolve(B)
+    assert isinstance(example, B)
+    assert isinstance(example.dependency, A)
+    ```
+
+=== "Using class properties"
+
+    ```python {linenums="1", hl_lines="7"}
+    from rodi import Container
+
+    class A:
+        ...
+
+    class B:
+        dependency: A
+
+    container = Container()
+
+    container.add_transient(A)
+    container.add_transient(B)
+
+    example = container.resolve(B)
+    assert isinstance(example, B)
+    assert isinstance(example.dependency, A)
+    ```
+
+### Container lifetime
+
+The primary use case of Rodi is to instantiate a single `Container` object, configure it
+with all required dependencies at application startup, and maintain it in an immutable
+state throughout the application's lifetime. It is anyway possible to work with multiple
+containers, and to modify them even after the dependency graph has been built. Modifying
+a `Container` after the dependency graph has been built is an anti-pattern and can lead
+to unexpected behaviour. More details on this subject are provided in the next page.
+
+### Sync vs Async
+
+Rodi is designed for synchronous code. It intentionally does not provide an asynchronous
+code API because object constructors should be lightweight and run synchronously.
+Supporting asynchronous type resolution would introduce performance overhead due to the
+complexity of asynchronous operations, and the extra machinery they require.
+
+Constructors (`__init__` methods) are typically designed to be lightweight and avoid
+CPU intensive blocking operations or performing I/O operations.
+
+### Type annotations
+
+Rodi can use both type annotations and naming conventions to build graphs of
+dependencies.
+
+Type annotations is the recommended way to keep the code clean and explicit.
+
+=== "Using type annotations (recommended)"
+
+    ```python {linenums="1", hl_lines="7"}
+    from rodi import Container
+
+    class A:
+        ...
+
+    class B:
+        dependency: A
+
+    container = Container()
+
+    container.add_transient(A)
+    container.add_transient(B)
+
+    example = container.resolve(B)
+    assert isinstance(example, B)
+    assert isinstance(example.dependency, A)
+    ```
+
+=== "Using naming conventions"
+
+    ```python {linenums="1", hl_lines="7-8 12-13"}
+    from rodi import Container
+
+    class A:
+        ...
+
+    class B:
+        def __init__(self, dependency):  # <-- no type annotation
+            self.dependency = dependency
+
+    container = Container()
+
+    container.add_transient(A)
+    container.add_alias("dependency", A)  # <-- required to resolve
+    container.add_transient(B)
+
+    example = container.resolve(B)
+    assert isinstance(example, B)
+    assert isinstance(example.dependency, A)
+    ```
+
+### Automatic aliases
+
+Rodi also supports automatic aliases. When a type is registered, the container creates a
+set of aliases based on the class name. Consider the following example:
+
+```python {linenums="1", hl_lines="4 8-9"}
+from rodi import Container
+
+
+class CatsRepository: ...
+
+
+class B:
+    def __init__(self, cats_repository):
+        self.cats_repository = cats_repository
+
+
+container = Container()
+
+container.add_transient(CatsRepository)
+container.add_transient(B)
+
+example = container.resolve(B)
+assert isinstance(example, B)
+assert isinstance(example.cats_repository, CatsRepository)
+```
+
+Aliases are only used when type annotations are missing. They serve solely as a
+*fallback* and always refer to a type that can be resolved.
+
+This design decision is based on the assumption that classes *usually* have names that
+are distinct enough to be unambiguously identified, even across namespaces.
+
+In the example above, the following set of aliases is created for the registered types:
+
+```python
+{
+  'CatsRepository': {<class '__main__.CatsRepository'>},
+  'catsrepository': {<class '__main__.CatsRepository'>},
+  'cats_repository': {<class '__main__.CatsRepository'>},
+  'B': {<class '__main__.B'>},
+  'b': {<class '__main__.B'>}
+}
+```
+
+/// admonition | Disabling automatic aliases
+    type: tip
+
+Some programmers might dislike the automatic aliasing feature, as it can lead to
+unexpected behavior if naming conventions are not followed consistently. To disable this
+feature, set the `strict` parameter to `True` when creating the container:
+
+```python
+container = Container(strict=True)
+```
+///
+
 ## Summary
 
-...
+This page covered the ABCs of Dependency Injection and Rodi. The general concepts
+presented here apply to others DI frameworks as well.
+
+The next page will start diving into Rodi's details, starting with explaining
+[services' lifetime](./services-lifetime.md).

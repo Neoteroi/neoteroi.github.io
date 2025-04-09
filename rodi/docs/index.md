@@ -17,13 +17,11 @@ pip install rodi
 - A strategy to better organize source code, reduce code repetition, and
   improve development experience.
 - Simplified dependency management with automatic resolution and injection of
-  dependencies, by type annotation in constructors or type properties.
-- A fast implementation that performs code inspections only once, rather than
+  dependencies, by type annotation in constructors or class properties.
+- A fast implementation that performs code inspections only when necessary, rather than
   at each type resolution.
 - A generic code API that can be used with any kind of Python applications.
 
 ## Getting started
 
-To get started with Rodi, read the _Getting Started_ page:
-
-- [Basics](./getting-started.md)
+To get started with Rodi, read the [_Getting Started_](./getting-started.md) guide.

@@ -8,7 +8,8 @@ edit_uri: ""
 
 nav:
   - Overview: index.md
-  - "Getting started": getting-started.md
+  - Getting started: getting-started.md
+  - Types lifetime: types-lifetime.md
   - Neoteroi docs home: "/"
 
 theme:
@@ -34,7 +35,7 @@ theme:
     repo: fontawesome/brands/github
 
 extra:
-    header_bg_color: "teal"  # "#51003c"
+  header_bg_color: "teal" # "#51003c"
 
 extra_css:
   - css/neoteroi.css
@@ -48,9 +49,9 @@ plugins:
   - neoteroi.contribs
 
 markdown_extensions:
-#  - markdown.extensions.codehilite:
-#      linenums: true
-#      guess_lang: false
+  #  - markdown.extensions.codehilite:
+  #      linenums: true
+  #      guess_lang: false
   - pymdownx.highlight:
       use_pygments: true
       guess_lang: false
