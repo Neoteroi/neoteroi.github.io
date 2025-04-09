@@ -3,7 +3,7 @@
 }
 
 [data-md-color-scheme=default] {
-    --md-code-hl-comment-color: #ab0404;
+    --md-code-hl-comment-color: #b91414; /* #ab0404; */
 }
 
 html {
