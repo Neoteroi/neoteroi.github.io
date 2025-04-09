@@ -101,7 +101,7 @@ The `Container` class offers three methods to register types with singleton life
 
 === "add_singleton_by_factory"
 
-    ```python {linenums="1", hl_lines="9-10"}
+    ```python {linenums="1", hl_lines="9-10 12"}
     from rodi import Container
 
     class Cat:
