@@ -8,6 +8,5 @@ out
 .local
 
 # temporary
-rodi
 shared-assets
 copy-shared.sh
