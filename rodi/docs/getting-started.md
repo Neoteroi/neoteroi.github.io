@@ -3,7 +3,7 @@
 This page introduces the basics of using Rodi, including:
 
 - [X] An overview of dependency injection.
-- [X] The use cases `Rodi` is intended for.
+- [X] The use cases Rodi is intended for.
 
 ## Overview of dependency injection
 
@@ -142,7 +142,7 @@ into the class from the outside. This makes the class more flexible, easier to
 test, and less dependent on specific implementations.
 
 If we consider again the classes `A` and `B` described earlier, they can be
-registered and resolved using `rodi` this way:
+registered and resolved using Rodi this way:
 
 ```python
 # example1.py
@@ -396,12 +396,12 @@ print(service.get_all_products())
 As the number of dependencies grow, the code that instantiates objects can
 easily become hard to maintain. To simplify the management of dependencies and
 reduce the complexity of object instantiation, we can leverage a dependency
-injection framework like `rodi`.
+injection framework like Rodi.
 
 ### The Repository pattern example
 
 The three classes described above: `ProductsService`, `ProductsRepository`, and
-`SQLProductsRepository`, can be wired using `rodi` this way:
+`SQLProductsRepository`, can be wired using Rodi this way:
 
 ```python {linenums="1"}
 import sqlite3
@@ -455,12 +455,12 @@ Some interesting things are happening in this code:
 - At line _9_, an instance of `rodi.Container` is created. This class is used
   to register the types that must be resolved, and to resolve those types.
 - It was not necessary to modify the source code of the classes being handled:
-  `rodi` inspects the code of registered types to know how to resolve them.
+  Rodi inspects the code of registered types to know how to resolve them.
 - A factory function is used to define how the instance of `sqlite3.Connection`
   is to be created. This is convenient because the `connect` method, which
   returns an instance of that class, requires a `str`, and resolving base types
   with `DI` is not a good idea.
-- The factory has a return type annotation: `rodi` uses that type annotation
+- The factory has a return type annotation: Rodi uses that type annotation
   as the _key type_ that is resolved using the factory function. Note that a factory
   might declare a more **abstract** type than the one it returns (following the DIP
   principle).
@@ -472,7 +472,7 @@ Some interesting things are happening in this code:
 - At line _31_, the **abstract** type `ProductsRepository` is registered,
   instructing the container to resolve that type with the **concrete**
   implementation `SQLProductsRepository`. According to the **DIP** principle,
-  when registering an abstract type and its implementation, `rodi` requires
+  when registering an abstract type and its implementation, Rodi requires
   using the abstract type as _key_.
 - At line _32_, the `ProductsService` type is also registered, because this is
   required to build the graph of dependencies.
@@ -699,4 +699,4 @@ This page covered the ABCs of Dependency Injection and Rodi. The general concept
 presented here apply to others DI frameworks as well.
 
 The next page will start diving into Rodi's details, starting with explaining
-[services' lifetime](./services-lifetime.md).
+[types' lifetime](./types-lifetime.md).

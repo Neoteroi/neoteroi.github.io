@@ -10,6 +10,8 @@ nav:
   - Overview: index.md
   - Getting started: getting-started.md
   - Types lifetime: types-lifetime.md
+  - Dependecy inversion: dependency-inversion.md
+  - Working with async: async.md
   - Neoteroi docs home: "/"
 
 theme:
