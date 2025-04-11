@@ -360,4 +360,4 @@ support different implementations, you would need to decide on a common interfac
 
 All examples on this page show how to register and resolve _concrete_ classes.
 The next page describes how to apply the [_Dependency Inversion Principle_](./dependency-inversion.md),
-and how to work with _abstract_ classes and protocols.
+and how to work with _abstract_ classes and protocols, and more details about factories.

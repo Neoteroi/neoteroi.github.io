@@ -9,8 +9,9 @@ edit_uri: ""
 nav:
   - Overview: index.md
   - Getting started: getting-started.md
-  - Types lifetime: types-lifetime.md
+  - Registering types: registering-types.md
   - Dependecy inversion: dependency-inversion.md
+  - Types and collections: types.md
   - Working with async: async.md
   - Neoteroi docs home: "/"
 

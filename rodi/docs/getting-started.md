@@ -698,5 +698,5 @@ container = Container(strict=True)
 This page covered the ABCs of Dependency Injection and Rodi. The general concepts
 presented here apply to others DI frameworks as well.
 
-The next page will start diving into Rodi's details, starting with explaining
-[types' lifetime](./types-lifetime.md).
+The next page will start diving into Rodi's details, starting with explaining how to
+register types and [types' lifetime](./types-lifetime.md).

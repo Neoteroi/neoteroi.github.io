@@ -204,6 +204,55 @@ assert a1 is not a2
 **add_transient_by_factory**, **add_singleton_by_factory**, and **add_scoped_by_factory**
 accept a function that returns an instance of the type to register.
 
+Valid function signatures include:
+
+- `def factory():`
+- `def factory(context: rodi.ActivationScope):`
+- `def factory(context: rodi.ActivationScope, activating_type: type):`
+
+The context is the current activation scope, and grants access to the set of scoped
+services and to the `ServiceProvider` object under construction.
+The `activating_type` is the type that is being activated and required resolving the
+service. This can be useful in some scenarios, when the returned object must vary
+depending on the type that required it.
+
+```python {linenums="1", hl_lines="13-14 18"}
+from rodi import ActivationScope, Container
+
+
+class C: ...
+
+
+class A: ...
+
+
+class B:
+    friend: A
+
+
+container = Container()
+
+
+def factory(context, activating_type) -> A:
+    assert isinstance(context, ActivationScope)
+    assert activating_type is B
+
+    # You can obtain other types using `context.provider.get`
+    # (if they can be resolved)
+    c = context.provider.get(C)
+    assert isinstance(c, C)
+
+    return A()
+
+
+container.add_transient(C)
+container.add_transient_by_factory(factory)
+container.add_transient(B)
+
+b = container.resolve(B)
+assert isinstance(b.friend, A)
+```
+
 /// admonition | Note about key types.
     type: danger
 
@@ -234,58 +283,6 @@ container.add_transient_by_factory(my_factory)  # <-- MyClass is used as Key.
 
 ///
 
-## DI likes custom classes
-
-Dependency Injection likes custom classes.
-Consider this real-life example:
-
-```python
-# domain/emails.py
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-
-
-@dataclass
-class Email:
-    recipient: str
-    sender: str
-    sender_name: str
-    subject: str
-    body: str
-    cc: list[str] = None
-    bcc: list[str] = None
-
-
-class EmailHandler(ABC):
-    @abstractmethod
-    async def send(self, email: Email) -> None:
-        pass
-```
-
-```python {linenums="1", hl_lines="10 12 14"}
-# data/sendgrid.py
-from domain.emails import Email, EmailHandler
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-
-
-class SendGridEmailHandler(EmailHandler):
-    def __init__(self, api_key: str) -> None:
-        self.client = SendGridAPIClient(api_key)
-
-    async def send(self, email: Email) -> None:
-        message = Mail(
-            from_email=email.sender,
-            to_emails=email.recipient,
-            subject=email.subject,
-            html_content=email.body,
-        )
-        await self.client.send(message)
-```
-
-There is an issue with the code above. Can you spot it?
-
-
 ## Checking if a type is registered
 
 To check if a type is registered in the container, use the `__contains__` interface:
@@ -308,3 +305,5 @@ assert B not in container  # True
 This can be useful to support alternative ways to register types. For example, tests
 code can register a mock type for a class, and the code under test can check if any
 interface is already registered in the container, and skip the registration if it is.
+
+The next page explains how to work with [types and collections](./types.md).
