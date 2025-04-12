@@ -25,3 +25,4 @@ pip install rodi
 ## Getting started
 
 To get started with Rodi, read the [_Getting Started_](./getting-started.md) guide.
+To dive straight into instructions on using DI with Rodi, see [_Registering types_](./registering-types.md).

@@ -170,7 +170,7 @@ assert isinstance(example, B)
 assert isinstance(example.dependency, A)
 ```
 
-/// admonition | Completely non-intrusive
+/// admonition | Completely non-intrusive.
     type: tip
 
 Notice that Rodi is completely non-intrusive and does **not** require any changes to the
@@ -676,7 +676,7 @@ In the example above, the following set of aliases is created for the registered
 }
 ```
 
-/// admonition | Disabling automatic aliases
+/// admonition | Disabling automatic aliases.
     type: tip
 
 Some programmers might dislike the automatic aliasing feature, as it can lead to

@@ -10,6 +10,10 @@ html {
     overflow-y: scroll;
 }
 
+.md-typeset__table tr td code {
+    white-space: nowrap;
+}
+
 @media screen and (min-width: 1000px) {
     html.fullscreen {
         .md-grid {

@@ -11,6 +11,9 @@ This page describes:
 - [X] Examples of dependency injection.
 - [X] How to use alternatives to `rodi`.
 
+!!! info "Rodi documentation"
+    Detailed documentation for Rodi can be found at: [_Rodi_](/rodi/).
+
 ## Introduction
 
 The `Application` object exposes a `services` property that can be used to

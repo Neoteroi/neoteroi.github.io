@@ -175,7 +175,7 @@ types with singleton lifetime:
     assert example.name == "Tom"
     ```
 
-/// admonition | Container lifecycle
+/// admonition | Container lifecycle.
     type: danger
 
 If you modify the `Container` after the dependency tree has been created, for example
@@ -488,7 +488,7 @@ not define methods for registering types with different lifetimes. The protocol 
 defines unopinionated methods to `register` and `resolve` types, and to check if a type
 is configured.
 
-/// admonition | Interoperability
+/// admonition | Interoperability.
     type: tip
 
 If you author code that relies on a Dependency Injection container and you want to

@@ -12,6 +12,9 @@ nav:
   - Registering types: registering-types.md
   - Dependecy inversion: dependency-inversion.md
   - Working with async: async.md
+  - Context managers: context-managers.md
+  - Union types: union-types.md
+  - Errors: errors.md
   - Neoteroi docs home: "/"
 
 theme:

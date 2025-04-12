@@ -158,7 +158,7 @@ The following examples work:
 Rodi raises an exception if we try registering a normal class as interface, with a
 concrete class that does not inherit it.
 
-/// admonition | Protocols validation
+/// admonition | Protocols validation.
     type: warning
 
 Rodi does **not** validate implementations of Protocols. This means that if you register
@@ -317,4 +317,4 @@ This can be useful to support alternative ways to register types. For example, t
 code can register a mock type for a class, and the code under test can check if any
 interface is already registered in the container, and skip the registration if it is.
 
-The next page explains how to work with [types and collections](./types.md).
+The next page explains how to work with [async](./async.md).

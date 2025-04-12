@@ -193,3 +193,5 @@ HTTP client disposed
 - Dependency Injection likes custom classes to describe _settings_ for types,
   because registering simple types (`str`, `int`, `float`, etc.) in the container does
   not scale and should be avoided.
+
+The next page explains how Rodi handles [context managers](./context-managers.md).
