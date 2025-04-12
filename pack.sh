@@ -1,6 +1,7 @@
 #! /bin/bash
 folders=(
     blacksheep
+    rodi
     mkdocs-plugins
 )
 

@@ -11,6 +11,12 @@ the documentation of some of the projects.
   image: ./img/blacksheep.png
   url: /blacksheep/
 
+- title: Rodi
+  content: |
+    Non-intrusive Dependency Injection for Python.
+  image: ./img/rodi.png
+  url: /rodi/
+
 - title: MkDocs-Plugins
   content: |
     Plugins for Python Markdown designed for MkDocs and Material for MkDocs.
