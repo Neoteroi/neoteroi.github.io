@@ -15,6 +15,7 @@ nav:
   - Context managers: context-managers.md
   - Union types: union-types.md
   - Errors: errors.md
+  - About Rodi: about.md
   - Neoteroi docs home: "/"
 
 theme:
