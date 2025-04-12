@@ -195,7 +195,7 @@ Principle.
 Consider the following example, of `ProductsService`, `ProductsRepository`,
 and `SQLProductsRepository`.
 
-```python
+```python  {linenums="1", hl_lines="14-15 34-35"}
 # domain/products.py
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -253,7 +253,7 @@ class ProductsService:
 
 ```
 
-```python
+```python  {linenums="1", hl_lines="5-6"}
 # data/sql/products.py
 from domain.products import Product, ProductsRepository
 
@@ -353,7 +353,7 @@ The benefits of DIP are:
 To better understand the concept, consider the following example that shows how
 those classes can be imported and instantiated:
 
-```python
+```python  {linenums="1", hl_lines="19-20 22-23"}
 import sqlite3
 
 from data.sql.products import SQLProductsRepository
