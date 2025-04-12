@@ -11,7 +11,7 @@ This page describes:
 - [X] Examples of dependency injection.
 - [X] How to use alternatives to `rodi`.
 
-!!! info "Rodi documentation"
+!!! info "Rodi's documentation"
     Detailed documentation for Rodi can be found at: [_Rodi_](/rodi/).
 
 ## Introduction
