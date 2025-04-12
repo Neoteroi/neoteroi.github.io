@@ -1,8 +1,9 @@
-This page describes how to apply the _Dependency Inversion Principle_, working with
-_abstract_ classes and protocols.
+This page describes how to apply the [_Dependency Inversion Principle_](./getting-started.md#dependency-inversion-principle), working with _abstract_ classes, protocols,
+and generics.
 
 - [X] Working with interfaces.
 - [X] Using abstract classes and protocols.
+- [X] Working with generics.
 
 ## Working with interfaces
 
@@ -169,10 +170,10 @@ Protocol.
 
 ---
 
-## Using factories
+## Note about factories
 
-When using factories to define how types are created, specify the interface by using the
-factory's return type annotation.
+When using factories to define how abstract types are created, ensure the
+factory's return type annotation specifies the _interface_.
 
 ```python {linenums="1", hl_lines="13-14 18"}
 from abc import ABC, abstractmethod
@@ -199,58 +200,6 @@ a2 = container.resolve(A)
 assert isinstance(a1, A)
 assert isinstance(a2, A)
 assert a1 is not a2
-```
-
-**add_transient_by_factory**, **add_singleton_by_factory**, and **add_scoped_by_factory**
-accept a function that returns an instance of the type to register.
-
-Valid function signatures include:
-
-- `def factory():`
-- `def factory(context: rodi.ActivationScope):`
-- `def factory(context: rodi.ActivationScope, activating_type: type):`
-
-The context is the current activation scope, and grants access to the set of scoped
-services and to the `ServiceProvider` object under construction.
-The `activating_type` is the type that is being activated and required resolving the
-service. This can be useful in some scenarios, when the returned object must vary
-depending on the type that required it.
-
-```python {linenums="1", hl_lines="13-14 18"}
-from rodi import ActivationScope, Container
-
-
-class C: ...
-
-
-class A: ...
-
-
-class B:
-    friend: A
-
-
-container = Container()
-
-
-def factory(context, activating_type) -> A:
-    assert isinstance(context, ActivationScope)
-    assert activating_type is B
-
-    # You can obtain other types using `context.provider.get`
-    # (if they can be resolved)
-    c = context.provider.get(C)
-    assert isinstance(c, C)
-
-    return A()
-
-
-container.add_transient(C)
-container.add_transient_by_factory(factory)
-container.add_transient(B)
-
-b = container.resolve(B)
-assert isinstance(b.friend, A)
 ```
 
 /// admonition | Note about key types.
@@ -282,6 +231,68 @@ container.add_transient_by_factory(my_factory)  # <-- MyClass is used as Key.
 ```
 
 ///
+
+## Working with generics
+
+Generic types are supported.
+
+```python {linenums="1", hl_lines="1 6 9 29 34 40-41 44-45"}
+from typing import Generic, TypeVar
+
+from rodi import Container
+
+
+T = TypeVar("T")
+
+
+class LoggedVar(Generic[T]):
+    def __init__(self, value: T, name: str):
+        self.name = name
+        self.value = value
+
+    def set(self, new: T):
+        self.log("Set " + repr(self.value))
+        self.value = new
+
+    def get(self) -> T:
+        self.log("Get " + repr(self.value))
+        return self.value
+
+    def log(self, message: str):
+        print(self.name, message)
+
+
+container = Container()
+
+
+class A(LoggedVar[int]):
+    def __init__(self):
+        super().__init__(10, "example")
+
+
+class B(LoggedVar[str]):
+    def __init__(self):
+        super().__init__("Foo", "example")
+
+
+class C:
+    a: LoggedVar[int]
+    b: LoggedVar[str]
+
+
+container.add_scoped(LoggedVar[int], A)
+container.add_scoped(LoggedVar[str], B)
+container.add_scoped(C)
+
+instance = container.resolve(C)
+
+assert isinstance(instance.a, A)
+assert isinstance(instance.b, B)
+```
+
+As described above, use the *most* abstract class as the key to resolve more
+*concrete* types, in accordance with the Dependency Inversion Principle (DIP). Generics are the **most** abstract
+type, so use them as keys like in the example above at lines _44-45_.
 
 ## Checking if a type is registered
 

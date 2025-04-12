@@ -116,14 +116,8 @@ as it leads to:
   because tests cannot easily isolate or mock dependencies. Each test might
   inadvertently affect or be affected by the global state, leading to flaky
   tests.
-- **Lack of Flexibility**: If you need to use different implementations of a
-  dependency (e.g., for testing, staging, or production environments), global
-  variables make it more cumbersome to switch implementations dynamically.
 
-Now that we have arguments for _not_ instantiating dependencies inside the
-classes that need them and for not instantiating them as global variables,
-let's see how dependency injection can help addressing the problems listed
-above.
+Dependency injection can help addressing the problems listed above.
 
 ### Inversion of Control
 
@@ -403,7 +397,7 @@ injection framework like Rodi.
 The three classes described above: `ProductsService`, `ProductsRepository`, and
 `SQLProductsRepository`, can be wired using Rodi this way:
 
-```python {linenums="1"}
+```python {linenums="1", hl_lines="9 12 28-29 31 36"}
 import sqlite3
 
 from rodi import Container
@@ -487,7 +481,7 @@ Some interesting things are happening in this code:
 
 ## Rodi's use cases
 
-Rodi is designed to simplify object instantiation and dependency management. It can
+Rodi is designed to simplify objects instantiation and dependency management. It can
 inspect constructors (`__init__` methods) and class properties to automatically resolve
 dependencies.
 
@@ -601,7 +595,8 @@ Type annotations is the recommended way to keep the code clean and explicit.
         ...
 
     class B:
-        dependency: A
+        def __init__(self, dependency: A):  # <-- with type annotation
+            self.dependency = dependency
 
     container = Container()
 
@@ -638,7 +633,7 @@ Type annotations is the recommended way to keep the code clean and explicit.
 
 ### Automatic aliases
 
-Rodi also supports automatic aliases. When a type is registered, the container creates a
+Rodi supports automatic aliases. When a type is registered, the container creates a
 set of aliases based on the class name. Consider the following example:
 
 ```python {linenums="1", hl_lines="4 8-9"}
@@ -699,4 +694,4 @@ This page covered the ABCs of Dependency Injection and Rodi. The general concept
 presented here apply to others DI frameworks as well.
 
 The next page will start diving into Rodi's details, starting with explaining how to
-register types and [types' lifetime](./types-lifetime.md).
+[register types](./registering-types.md).

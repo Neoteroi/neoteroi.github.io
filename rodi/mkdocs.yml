@@ -11,7 +11,6 @@ nav:
   - Getting started: getting-started.md
   - Registering types: registering-types.md
   - Dependecy inversion: dependency-inversion.md
-  - Types and collections: types.md
   - Working with async: async.md
   - Neoteroi docs home: "/"
 
