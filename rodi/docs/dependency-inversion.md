@@ -234,8 +234,8 @@ container.add_transient_by_factory(my_factory)  # <-- MyClass is used as Key.
 
 ## Working with generics
 
-Generic types are supported. The following example provides a meaningful
-demonstration of generics with `TypeVar` in a real-world scenario.
+Generic types are supported. The following example provides a demonstration of
+generics with `TypeVar` in a real-world scenario.
 
 ```python {linenums="1", hl_lines="9 43-44 47-48"}
 from dataclasses import dataclass
@@ -246,7 +246,7 @@ from rodi import Container
 T = TypeVar("T")
 
 
-class Repository(Generic[T]):  # interface
+class Repository(Generic[T]):
     """A generic repository for managing entities of type T."""
 
     def __init__(self):
@@ -309,8 +309,9 @@ The above prints to screen:
     type: warning
 
 Note how the generics `Repository[Product]` and `Repository[Customer]` are both
-configured to be resolved using `Repository` as concrete type. `GenericAlias`
-in Python is not considered an actual class. The following wouldn't work:
+configured to be resolved using `Repository` as concrete type. Instances of
+`GenericAlias` are not considered as actual classes. The following wouldn't
+work:
 
 ```python
 container.add_scoped(Repository[Product])  # No. 💥
