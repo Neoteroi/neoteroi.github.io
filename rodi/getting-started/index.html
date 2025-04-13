@@ -873,9 +873,7 @@ approach, as the same functionality can be reused in other services (e.g.,
 <ul>
 <li><strong>Scalability Issues</strong>: As the application grows, managing dependencies
   manually within classes becomes cumbersome. It can lead to duplicated code
-  and make the system harder to maintain. As dependencies are likely to require
-  their own set of parameters passed to their constructors, the parent
-  constructor would become more and more complex.</li>
+  and make the system harder to maintain.</li>
 <li><strong>Tight Coupling</strong>: The <code>ProductsService</code> class is tightly coupled to
   <em>concrete</em> implementations of its dependencies. This makes it less convenient
   to replace <code>ProductsRepository</code> and <code>EmailHandler</code> with different
@@ -951,7 +949,7 @@ registered and resolved using Rodi this way:</p>
 <a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="c1"># resolve B</span>
 <a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="n">example</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
 <a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="c1"># the container automatically resolves</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="c1"># the container automatically resolves dependencies</span>
 <a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
 <a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">dependency</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
 </code></pre></div>
@@ -1179,7 +1177,7 @@ and <code>SQLProductsRepository</code>.</p>
 <li>The <strong>high-level class (<code>ProductsService</code>)</strong> implements business logic and
   depends on the <code>ProductsRepository</code> abstraction.</li>
 <li><code>ProductsService</code> does not depend on the details of how data is stored or
-  retrieved.</li>
+  retrieved, and it is not <em>concerned</em> with those details.</li>
 <li>The low-level class (<code>SQLProductsRepository</code>) implements the
   <code>ProductsRepository</code> interface using an SQL database.</li>
 <li>It can be swapped out for another implementation (e.g.,
@@ -1674,7 +1672,7 @@ feature, set the <code>strict</code> parameter to <code>True</code> when creatin
 presented here apply to others DI frameworks as well.</p>
 <p>The next page will start diving into Rodi's details, starting with explaining how to
 <a href="../registering-types/">register types</a>.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-12 11:00:06</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-13 14:25:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 
