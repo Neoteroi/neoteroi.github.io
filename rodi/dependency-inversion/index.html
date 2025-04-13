@@ -1030,8 +1030,8 @@ on abstractions.</p>
 </code></pre></div></td></tr></table></div>
 </div>
 <h2 id="working-with-generics">Working with generics<a class="headerlink" href="#working-with-generics" title="Permanent link">&para;</a></h2>
-<p>Generic types are supported. The following example provides a meaningful
-demonstration of generics with <code>TypeVar</code> in a real-world scenario.</p>
+<p>Generic types are supported. The following example provides a demonstration of
+generics with <code>TypeVar</code> in a real-world scenario.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
@@ -1097,7 +1097,7 @@ demonstration of generics with <code>TypeVar</code> in a real-world scenario.</p
 <a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
 <a id="__codelineno-7-7" name="__codelineno-7-7"></a>
 <a id="__codelineno-7-8" name="__codelineno-7-8"></a>
-<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">Repository</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>  <span class="c1"># interface</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">Repository</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
 </span><a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic repository for managing entities of type T.&quot;&quot;&quot;</span>
 <a id="__codelineno-7-11" name="__codelineno-7-11"></a>
 <a id="__codelineno-7-12" name="__codelineno-7-12"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1155,8 +1155,9 @@ demonstration of generics with <code>TypeVar</code> in a real-world scenario.</p
 <div class="admonition warning">
 <p class="admonition-title">GenericAlias in Python is not considered a class.</p>
 <p>Note how the generics <code>Repository[Product]</code> and <code>Repository[Customer]</code> are both
-configured to be resolved using <code>Repository</code> as concrete type. <code>GenericAlias</code>
-in Python is not considered an actual class. The following wouldn't work:</p>
+configured to be resolved using <code>Repository</code> as concrete type. Instances of
+<code>GenericAlias</code> are not considered as actual classes. The following wouldn't
+work:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">Product</span><span class="p">])</span>  <span class="c1"># No. 💥</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">Customer</span><span class="p">])</span>  <span class="c1"># No. 💥</span>
 </code></pre></div>
@@ -1373,7 +1374,7 @@ example, test code can register a mock type for a class, and the code under
 test can check whether an interface is already registered in the container,
 skipping the registration if it is.</p>
 <p>The next page explains how to work with <a href="../async/">async</a>.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-13 14:25:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-13 19:51:51</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 
