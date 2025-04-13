@@ -78,9 +78,7 @@ However, this approach has several limitations.
 
 - **Scalability Issues**: As the application grows, managing dependencies
   manually within classes becomes cumbersome. It can lead to duplicated code
-  and make the system harder to maintain. As dependencies are likely to require
-  their own set of parameters passed to their constructors, the parent
-  constructor would become more and more complex.
+  and make the system harder to maintain.
 - **Tight Coupling**: The `ProductsService` class is tightly coupled to
   _concrete_ implementations of its dependencies. This makes it less convenient
   to replace `ProductsRepository` and `EmailHandler` with different
@@ -165,7 +163,7 @@ container.add_transient(B)
 # resolve B
 example = container.resolve(B)
 
-# the container automatically resolves
+# the container automatically resolves dependencies
 assert isinstance(example, B)
 assert isinstance(example.dependency, A)
 ```
@@ -309,7 +307,7 @@ class SQLProductsRepository(ProductsRepository):
 - The **high-level class (`ProductsService`)** implements business logic and
   depends on the `ProductsRepository` abstraction.
 - `ProductsService` does not depend on the details of how data is stored or
-  retrieved.
+  retrieved, and it is not _concerned_ with those details.
 - The low-level class (`SQLProductsRepository`) implements the
   `ProductsRepository` interface using an SQL database.
 - It can be swapped out for another implementation (e.g.,

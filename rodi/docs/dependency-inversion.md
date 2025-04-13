@@ -234,69 +234,206 @@ container.add_transient_by_factory(my_factory)  # <-- MyClass is used as Key.
 
 ## Working with generics
 
-Generic types are supported.
+Generic types are supported. The following example provides a meaningful
+demonstration of generics with `TypeVar` in a real-world scenario.
 
-```python {linenums="1", hl_lines="1 6 9 29 34 40-41 44-45"}
-from typing import Generic, TypeVar
+```python {linenums="1", hl_lines="9 43-44 47-48"}
+from dataclasses import dataclass
+from typing import Generic, List, TypeVar
 
 from rodi import Container
-
 
 T = TypeVar("T")
 
 
-class LoggedVar(Generic[T]):
-    def __init__(self, value: T, name: str):
-        self.name = name
-        self.value = value
+class Repository(Generic[T]):  # interface
+    """A generic repository for managing entities of type T."""
 
-    def set(self, new: T):
-        self.log("Set " + repr(self.value))
-        self.value = new
+    def __init__(self):
+        self._items: List[T] = []
 
-    def get(self) -> T:
-        self.log("Get " + repr(self.value))
-        return self.value
+    def add(self, item: T):
+        """Add an item to the repository."""
+        self._items.append(item)
 
-    def log(self, message: str):
-        print(self.name, message)
+    def get_all(self) -> List[T]:
+        """Retrieve all items from the repository."""
+        return self._items
+
+
+# Define specific entity classes
+@dataclass
+class Product:
+    id: int
+    name: str
+
+
+@dataclass
+class Customer:
+    id: int
+    email: str
+    first_name: str
+    last_name: str
+
+
+# Set up the container
+container = Container()
+
+# Register repositories
+container.add_scoped(Repository[Product], Repository)
+container.add_scoped(Repository[Customer], Repository)
+
+# Resolve and use the repositories
+product_repo = container.resolve(Repository[Product])
+customer_repo = container.resolve(Repository[Customer])
+
+# Add and retrieve products
+product_repo.add(Product(1, "Laptop"))
+product_repo.add(Product(2, "Smartphone"))
+print(product_repo.get_all())
+
+# Add and retrieve customers
+customer_repo.add(Customer(1, "alice@wonderland.it", "Alice", "WhiteRabbit"))
+customer_repo.add(Customer(1, "bob@foopower.it", "Bob", "TheHamster"))
+print(customer_repo.get_all())
+```
+
+The above prints to screen:
+
+```bash
+[Product(id=1, name='Laptop'), Product(id=2, name='Smartphone')]
+[Customer(id=1, email='alice@wonderland.it', first_name='Alice', last_name='WhiteRabbit'), Customer(id=1, email='bob@foopower.it', first_name='Bob', last_name='TheHamster')]
+```
+
+/// admonition | GenericAlias in Python is not considered a class.
+    type: warning
+
+Note how the generics `Repository[Product]` and `Repository[Customer]` are both
+configured to be resolved using `Repository` as concrete type. `GenericAlias`
+in Python is not considered an actual class. The following wouldn't work:
+
+```python
+container.add_scoped(Repository[Product])  # No. 💥
+container.add_scoped(Repository[Customer])  # No. 💥
+```
+///
+
+### Nested generics
+
+When working with nested generics, ensure that the *same type* used to describe
+a dependency is registered in the container.
+
+```python {linenums="1", hl_lines="12 16-17 26 33"}
+from dataclasses import dataclass
+from typing import Generic, List, TypeVar
+
+from rodi import Container
+
+T = TypeVar("T")
+
+
+class DBConnection: ...
+
+
+class Repository(Generic[T]):
+    db_connection: DBConnection
+
+
+class Service(Generic[T]):
+    repository: Repository[T]
+
+
+@dataclass
+class Product:
+    id: int
+    name: str
+
+
+class ProductsService(Service[Product]):
+    ...
 
 
 container = Container()
 
+container.add_scoped(DBConnection)
+container.add_scoped(Repository[T], Repository)
+container.add_scoped(ProductsService)
 
-class A(LoggedVar[int]):
-    def __init__(self):
-        super().__init__(10, "example")
-
-
-class B(LoggedVar[str]):
-    def __init__(self):
-        super().__init__("Foo", "example")
-
-
-class C:
-    a: LoggedVar[int]
-    b: LoggedVar[str]
-
-
-container.add_scoped(LoggedVar[int], A)
-container.add_scoped(LoggedVar[str], B)
-container.add_scoped(C)
-
-instance = container.resolve(C)
-
-assert isinstance(instance.a, A)
-assert isinstance(instance.b, B)
+service = container.resolve(ProductsService)
+assert isinstance(service.repository, Repository)
+assert isinstance(service.repository.db_connection, DBConnection)
 ```
 
-As described above, use the *most* abstract class as the key to resolve more
-*concrete* types, in accordance with the Dependency Inversion Principle (DIP). Generics are the **most** abstract
-type, so use them as keys like in the example above at lines _44-45_.
+---
+
+The following wouldn't work, because the `Container` will look exactly for the
+key `Repository[T]` when instantiating the `ProductsService`, not for
+`Repository[Product]`:
+
+```python
+container.add_scoped(Repository[Product], Repository)  # No. 💥
+```
+
+Note that, in practice, this does not cause any issues at runtime, because of
+**type erasure**. For more information, refer to [_Instantiating generic classes and type erasure_](https://typing.python.org/en/latest/spec/generics.html#instantiating-generic-classes-and-type-erasure).
+
+If you need to define a more specialized class for `Repository[Product]`,
+because for example you need to define products-specific methods, you can:
+
+- Define a `ProductsRepository(Repository[Product])`.
+- Override the annotation for `repository` in `ProductsService`.
+- Register `ProductsRepository` in the container.
+
+```python {linenums="1", hl_lines="26 29-30 37"}
+from dataclasses import dataclass
+from typing import Generic, TypeVar
+
+from rodi import Container
+
+T = TypeVar("T")
+
+
+class DBConnection: ...
+
+
+class Repository(Generic[T]):
+    db_connection: DBConnection
+
+
+class Service(Generic[T]):
+    repository: Repository[T]
+
+
+@dataclass
+class Product:
+    id: int
+    name: str
+
+
+class ProductsRepository(Repository[Product]): ...
+
+
+class ProductsService(Service[Product]):
+    repository: ProductsRepository
+
+
+container = Container()
+
+container.add_scoped(DBConnection)
+container.add_scoped(Repository[T], Repository)
+container.add_scoped(ProductsRepository)
+container.add_scoped(ProductsService)
+
+service = container.resolve(ProductsService)
+assert isinstance(service.repository, Repository)
+assert isinstance(service.repository, ProductsRepository)
+assert isinstance(service.repository.db_connection, DBConnection)
+```
 
 ## Checking if a type is registered
 
-To check if a type is registered in the container, use the `__contains__` interface:
+To check if a type is registered in the container, use the `__contains__`
+interface:
 
 ```python {linenums="1", hl_lines="11-12"}
 from rodi import Container
@@ -313,8 +450,9 @@ assert A in container  # True
 assert B not in container  # True
 ```
 
-This can be useful to support alternative ways to register types. For example, tests
-code can register a mock type for a class, and the code under test can check if any
-interface is already registered in the container, and skip the registration if it is.
+This can be useful for supporting alternative ways to register types. For
+example, test code can register a mock type for a class, and the code under
+test can check whether an interface is already registered in the container,
+skipping the registration if it is.
 
 The next page explains how to work with [async](./async.md).
