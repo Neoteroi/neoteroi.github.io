@@ -305,7 +305,7 @@ The above prints to screen:
 [Customer(id=1, email='alice@wonderland.it', first_name='Alice', last_name='WhiteRabbit'), Customer(id=1, email='bob@foopower.it', first_name='Bob', last_name='TheHamster')]
 ```
 
-/// admonition | GenericAlias in Python is not considered a class.
+/// admonition | How to use instances of GenericAlias.
     type: warning
 
 Note how the generics `Repository[Product]` and `Repository[Customer]` are both
