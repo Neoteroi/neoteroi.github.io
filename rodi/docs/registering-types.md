@@ -282,9 +282,9 @@ with scoped lifetime:
 /// details | Nested scopes.
     type: warning
 
-Rodi was not designed having _nested_ scopes in mind. Scopes are primarily
-designed to identify a resolution call for a single even, such as DI resolution
-for a single HTTP request.
+Rodi was not designed having _nested_ scopes in mind. Scopes are designed to
+identify a resolution call for a single event, such as DI resolution for a
+single HTTP request.
 
 Since version `2.0.7`, Rodi offers the possibility to specify the
 `ActivationScope` class used by the container, when instantiating the
