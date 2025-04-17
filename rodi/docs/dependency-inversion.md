@@ -309,9 +309,9 @@ The above prints to screen:
     type: warning
 
 Note how the generics `Repository[Product]` and `Repository[Customer]` are both
-configured to be resolved using `Repository` as concrete type. Instances of
-`GenericAlias` are not considered as actual classes. The following wouldn't
-work:
+configured to be resolved using `Repository` as concrete type. In Python,
+instances of `GenericAlias` are not considered as actual classes. The following
+wouldn't work:
 
 ```python
 container.add_scoped(Repository[Product])  # No. 💥
@@ -375,7 +375,7 @@ key `Repository[T]` when instantiating the `ProductsService`, not for
 container.add_scoped(Repository[Product], Repository)  # No. 💥
 ```
 
-Note that, in practice, this does not cause any issues at runtime, because of
+Note that, in practice, this does not cause issues at runtime, because of
 **type erasure**. For more information, refer to [_Instantiating generic classes and type erasure_](https://typing.python.org/en/latest/spec/generics.html#instantiating-generic-classes-and-type-erasure).
 
 If you need to define a more specialized class for `Repository[Product]`,
