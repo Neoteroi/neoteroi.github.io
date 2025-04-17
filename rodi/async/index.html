@@ -626,13 +626,14 @@ simplify constructing objects based on constructors and class properties.
 Support for async resolution is intentionally out of the scope of the library because
 constructing objects should be lightweight.</p>
 <p>This page provides guidelines for working with objects that require asynchronous
-initialization.</p>
+initialization or disposal.</p>
 <h2 id="a-common-example">A common example<a class="headerlink" href="#a-common-example" title="Permanent link">&para;</a></h2>
-<p>A common example of this situation are objects that handle TCP/IP connection pooling,
-such as <code>HTTP</code> clients and database clients. These objects are usually implemented as
-<em>context managers</em> in Python because they need to implement connection pooling and
-gracefully close TCP connections when disposed.</p>
-<p>Python supports <a href="https://peps.python.org/pep-0492/#asynchronous-context-managers-and-async-with"><code>asynchronous</code> context managers</a> for this kind of scenario.</p>
+<p>A common example of objects requiring asynchronous disposal are objects that
+handle TCP/IP connection pooling, such as <code>HTTP</code> clients and database clients.
+These objects are typically implemented as <em>context managers</em> in Python because
+they need to manage connection pooling and gracefully close TCP connections
+upon disposal.</p>
+<p>Python provides <a href="https://peps.python.org/pep-0492/#asynchronous-context-managers-and-async-with"><code>asynchronous</code> context managers</a> for this kind of scenario.</p>
 <p>Consider the following example, of a <code>SendGrid</code> API client to send emails using the
 SendGrid API, with asynchronous code and using <a href="https://www.python-httpx.org/async/"><code>httpx</code></a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
@@ -770,7 +771,7 @@ SendGrid API, with asynchronous code and using <a href="https://www.python-httpx
 <a id="__codelineno-1-37" name="__codelineno-1-37"></a>            <span class="p">},</span>
 <a id="__codelineno-1-38" name="__codelineno-1-38"></a>            <span class="n">json</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_body</span><span class="p">(</span><span class="n">email</span><span class="p">),</span>
 <a id="__codelineno-1-39" name="__codelineno-1-39"></a>        <span class="p">)</span>
-<a id="__codelineno-1-40" name="__codelineno-1-40"></a>        <span class="c1"># Note: in case of error, inspect response.text</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40"></a>        <span class="c1"># TODO: in case of error, log response.text</span>
 <a id="__codelineno-1-41" name="__codelineno-1-41"></a>        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raise an error for bad responses</span>
 <a id="__codelineno-1-42" name="__codelineno-1-42"></a>
 <a id="__codelineno-1-43" name="__codelineno-1-43"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_body</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="n">Email</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -795,7 +796,7 @@ The SendGrid REST API is very well documented and comfortable to use! Use a clas
 the one shown on this page to send emails using SendGrid in async code.</p>
 </details>
 <p>The <strong>SendGridClient</strong> depends on an instance of <code>SendGridClientSettings</code> (providing a
-SendGrid API Key), and on an instance of <code>httpx.AsyncClient</code> able to make HTTP requests.</p>
+SendGrid API Key), and on an instance of <code>httpx.AsyncClient</code> to make async HTTP requests.</p>
 <p>The code below shows how to register the object that requires asynchronous
 initialization and use it across the lifetime of your application.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
@@ -911,9 +912,10 @@ initialization and use it across the lifetime of your application.</p>
 </code></pre></div>
 <h2 id="considerations">Considerations<a class="headerlink" href="#considerations" title="Permanent link">&para;</a></h2>
 <ul>
-<li>It is not Rodi's responsibility to administer the lifecycle of the application. It is
-  the responsibility of the code that bootstrap the application, to handle objects that
-  require asynchronous initialization and disposal.</li>
+<li>It is not Rodi's responsibility to administer the lifecycle of the
+  application. It is the responsibility of the code that bootstraps the
+  application, to handle objects that require asynchronous initialization and
+  disposal.</li>
 <li>Python's <code>asynccontextmanager</code> is convenient for these scenarios.</li>
 <li>In the example above, the HTTP Client is configured as singleton to benefit from TCP
   connection pooling. It would also be possible to configure it as transient or scoped
@@ -924,7 +926,7 @@ initialization and use it across the lifetime of your application.</p>
   not scale and should be avoided.</li>
 </ul>
 <p>The next page explains how Rodi handles <a href="../context-managers/">context managers</a>.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-13 20:47:26</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

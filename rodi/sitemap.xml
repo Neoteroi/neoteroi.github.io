@@ -2,38 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://www.neoteroi.dev/rodi/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
     <url>
          <loc>https://www.neoteroi.dev/rodi/about/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
     <url>
          <loc>https://www.neoteroi.dev/rodi/async/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
     <url>
          <loc>https://www.neoteroi.dev/rodi/context-managers/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
     <url>
          <loc>https://www.neoteroi.dev/rodi/dependency-inversion/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
     <url>
          <loc>https://www.neoteroi.dev/rodi/errors/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
     <url>
          <loc>https://www.neoteroi.dev/rodi/getting-started/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
     <url>
          <loc>https://www.neoteroi.dev/rodi/registering-types/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
     <url>
          <loc>https://www.neoteroi.dev/rodi/union-types/</loc>
-         <lastmod>2025-04-13</lastmod>
+         <lastmod>2025-04-17</lastmod>
     </url>
 </urlset>

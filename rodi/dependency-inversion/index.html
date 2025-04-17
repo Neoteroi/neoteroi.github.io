@@ -1155,9 +1155,9 @@ generics with <code>TypeVar</code> in a real-world scenario.</p>
 <div class="admonition warning">
 <p class="admonition-title">How to use instances of GenericAlias.</p>
 <p>Note how the generics <code>Repository[Product]</code> and <code>Repository[Customer]</code> are both
-configured to be resolved using <code>Repository</code> as concrete type. Instances of
-<code>GenericAlias</code> are not considered as actual classes. The following wouldn't
-work:</p>
+configured to be resolved using <code>Repository</code> as concrete type. In Python,
+instances of <code>GenericAlias</code> are not considered as actual classes. The following
+wouldn't work:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">Product</span><span class="p">])</span>  <span class="c1"># No. 💥</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">Customer</span><span class="p">])</span>  <span class="c1"># No. 💥</span>
 </code></pre></div>
@@ -1247,7 +1247,7 @@ key <code>Repository[T]</code> when instantiating the <code>ProductsService</cod
 <code>Repository[Product]</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">Product</span><span class="p">],</span> <span class="n">Repository</span><span class="p">)</span>  <span class="c1"># No. 💥</span>
 </code></pre></div>
-<p>Note that, in practice, this does not cause any issues at runtime, because of
+<p>Note that, in practice, this does not cause issues at runtime, because of
 <strong>type erasure</strong>. For more information, refer to <a href="https://typing.python.org/en/latest/spec/generics.html#instantiating-generic-classes-and-type-erasure"><em>Instantiating generic classes and type erasure</em></a>.</p>
 <p>If you need to define a more specialized class for <code>Repository[Product]</code>,
 because for example you need to define products-specific methods, you can:</p>
@@ -1374,7 +1374,7 @@ example, test code can register a mock type for a class, and the code under
 test can check whether an interface is already registered in the container,
 skipping the registration if it is.</p>
 <p>The next page explains how to work with <a href="../async/">async</a>.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-13 20:47:26</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

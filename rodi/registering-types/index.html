@@ -1214,20 +1214,16 @@ with scoped lifetime:</p>
 </div>
 </div>
 </div>
-<h2 id="using-factories">Using factories<a class="headerlink" href="#using-factories" title="Permanent link">&para;</a></h2>
-<p><strong>add_transient_by_factory</strong>, <strong>add_singleton_by_factory</strong>, and <strong>add_scoped_by_factory</strong>
-accept a function that returns an instance of the type to register.</p>
-<p>Valid function signatures include:</p>
-<ul>
-<li><code>def factory():</code></li>
-<li><code>def factory(context: rodi.ActivationScope):</code></li>
-<li><code>def factory(context: rodi.ActivationScope, activating_type: type):</code></li>
-</ul>
-<p>The context is the current activation scope, and grants access to the set of
-scoped services and to the <code>ServiceProvider</code> object under construction. The
-<code>activating_type</code> is the type that is being activated and required resolving
-the service. This can be useful in some scenarios, when the returned object
-must vary depending on the type that required it.</p>
+<details class="warning">
+<summary>Nested scopes.</summary>
+<p>Rodi was not designed having <em>nested</em> scopes in mind. Scopes are designed to
+identify a resolution call for a single event, such as DI resolution for a
+single HTTP request.</p>
+<p>Since version <code>2.0.7</code>, Rodi offers the possibility to specify the
+<code>ActivationScope</code> class used by the container, when instantiating the
+<code>Container</code> object. This class will be used when creating new scopes. Version
+<code>2.0.7</code> also added an <strong>experimental</strong> class, <code>TrackingActivationScope</code> to
+support nested scopes transparently, using <code>contextvars.ContextVar</code>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
@@ -1254,76 +1250,152 @@ must vary depending on the type that required it.</p>
 <span class="normal"><a href="#__codelineno-9-24">24</a></span>
 <span class="normal"><a href="#__codelineno-9-25">25</a></span>
 <span class="normal"><a href="#__codelineno-9-26">26</a></span>
-<span class="normal"><a href="#__codelineno-9-27">27</a></span>
-<span class="normal"><a href="#__codelineno-9-28">28</a></span>
-<span class="normal"><a href="#__codelineno-9-29">29</a></span>
-<span class="normal"><a href="#__codelineno-9-30">30</a></span>
-<span class="normal"><a href="#__codelineno-9-31">31</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rodi</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActivationScope</span><span class="p">,</span> <span class="n">Container</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2"></a>
-<a id="__codelineno-9-3" name="__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
+<span class="normal"><a href="#__codelineno-9-27">27</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_nested_scope_1</span><span class="p">():</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="hll">    <span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">(</span><span class="n">scope_cls</span><span class="o">=</span><span class="n">TrackingActivationScope</span><span class="p">)</span>
+</span><a id="__codelineno-9-3" name="__codelineno-9-3"></a>    <span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Ok</span><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a>    <span class="n">provider</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">build_provider</span><span class="p">()</span>
 <a id="__codelineno-9-5" name="__codelineno-9-5"></a>
-<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">B</span><span class="p">:</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7"></a>    <span class="n">friend</span><span class="p">:</span> <span class="n">A</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a>    <span class="k">with</span> <span class="n">provider</span><span class="o">.</span><span class="n">create_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">context_1</span><span class="p">:</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a>        <span class="n">a</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Ok</span><span class="p">,</span> <span class="n">context_1</span><span class="p">)</span>
 <a id="__codelineno-9-8" name="__codelineno-9-8"></a>
-<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">C</span><span class="p">:</span> <span class="o">...</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10"></a>
-<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">()</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12"></a>
-<a id="__codelineno-9-13" name="__codelineno-9-13"></a>
-<a id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="k">def</span><span class="w"> </span><span class="nf">a_factory</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">activating_type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span>
-<a id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="hll">    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">ActivationScope</span><span class="p">)</span>
-</span><a id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="hll">    <span class="k">assert</span> <span class="n">activating_type</span> <span class="ow">is</span> <span class="n">B</span>
-</span><a id="__codelineno-9-17" name="__codelineno-9-17"></a>
-<a id="__codelineno-9-18" name="__codelineno-9-18"></a>    <span class="c1"># You can obtain other types using `context.provider.get`</span>
-<a id="__codelineno-9-19" name="__codelineno-9-19"></a>    <span class="c1"># (if they can be resolved)</span>
-<a id="__codelineno-9-20" name="__codelineno-9-20"></a>    <span class="n">c</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-<a id="__codelineno-9-21" name="__codelineno-9-21"></a>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
-<a id="__codelineno-9-22" name="__codelineno-9-22"></a>
-<a id="__codelineno-9-23" name="__codelineno-9-23"></a>    <span class="k">return</span> <span class="n">A</span><span class="p">()</span>
-<a id="__codelineno-9-24" name="__codelineno-9-24"></a>
-<a id="__codelineno-9-25" name="__codelineno-9-25"></a>
-<a id="__codelineno-9-26" name="__codelineno-9-26"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient_by_factory</span><span class="p">(</span><span class="n">a_factory</span><span class="p">)</span>
-<a id="__codelineno-9-27" name="__codelineno-9-27"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
-<a id="__codelineno-9-28" name="__codelineno-9-28"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-<a id="__codelineno-9-29" name="__codelineno-9-29"></a>
-<a id="__codelineno-9-30" name="__codelineno-9-30"></a><span class="n">b</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
-<a id="__codelineno-9-31" name="__codelineno-9-31"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friend</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a>        <span class="k">with</span> <span class="n">provider</span><span class="o">.</span><span class="n">create_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">context_2</span><span class="p">:</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a>            <span class="n">b</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Ok</span><span class="p">,</span> <span class="n">context_2</span><span class="p">)</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a>
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="hll">        <span class="k">assert</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+</span><a id="__codelineno-9-13" name="__codelineno-9-13"></a>
+<a id="__codelineno-9-14" name="__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_nested_scope_2</span><span class="p">():</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="hll">    <span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">(</span><span class="n">scope_cls</span><span class="o">=</span><span class="n">TrackingActivationScope</span><span class="p">)</span>
+</span><a id="__codelineno-9-17" name="__codelineno-9-17"></a>    <span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Ok</span><span class="p">)</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18"></a>    <span class="n">provider</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">build_provider</span><span class="p">()</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19"></a>
+<a id="__codelineno-9-20" name="__codelineno-9-20"></a>    <span class="k">with</span> <span class="n">provider</span><span class="o">.</span><span class="n">create_scope</span><span class="p">():</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21"></a>        <span class="k">with</span> <span class="n">provider</span><span class="o">.</span><span class="n">create_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">context</span><span class="p">:</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22"></a>            <span class="n">a</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Ok</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23"></a>
+<a id="__codelineno-9-24" name="__codelineno-9-24"></a>        <span class="k">with</span> <span class="n">provider</span><span class="o">.</span><span class="n">create_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">context</span><span class="p">:</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25"></a>            <span class="n">b</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Ok</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26"></a>
+<a id="__codelineno-9-27" name="__codelineno-9-27"></a><span class="hll">        <span class="k">assert</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">b</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>Note how the generics <code>Repository[Product]</code> and <code>Repository[Customer]</code> are both
+configured to be resolved using <code>Repository</code> as concrete type. Instances of
+<code>GenericAlias</code> are not considered as actual classes. The following wouldn't
+work:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">Product</span><span class="p">])</span>  <span class="c1"># No. 💥</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">container</span><span class="o">.</span><span class="n">add_scoped</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">Customer</span><span class="p">])</span>  <span class="c1"># No. 💥</span>
+</code></pre></div>
+<h2 id="using-factories">Using factories<a class="headerlink" href="#using-factories" title="Permanent link">&para;</a></h2>
+<p><strong>add_transient_by_factory</strong>, <strong>add_singleton_by_factory</strong>, and <strong>add_scoped_by_factory</strong>
+accept a function that returns an instance of the type to register.</p>
+<p>Valid function signatures include:</p>
+<ul>
+<li><code>def factory():</code></li>
+<li><code>def factory(context: rodi.ActivationScope):</code></li>
+<li><code>def factory(context: rodi.ActivationScope, activating_type: type):</code></li>
+</ul>
+<p>The context is the current activation scope, and grants access to the set of
+scoped services and to the <code>ServiceProvider</code> object under construction. The
+<code>activating_type</code> is the type that is being activated and required resolving
+the service. This can be useful in some scenarios, when the returned object
+must vary depending on the type that required it.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span>
+<span class="normal"><a href="#__codelineno-11-12">12</a></span>
+<span class="normal"><a href="#__codelineno-11-13">13</a></span>
+<span class="normal"><a href="#__codelineno-11-14">14</a></span>
+<span class="normal"><a href="#__codelineno-11-15">15</a></span>
+<span class="normal"><a href="#__codelineno-11-16">16</a></span>
+<span class="normal"><a href="#__codelineno-11-17">17</a></span>
+<span class="normal"><a href="#__codelineno-11-18">18</a></span>
+<span class="normal"><a href="#__codelineno-11-19">19</a></span>
+<span class="normal"><a href="#__codelineno-11-20">20</a></span>
+<span class="normal"><a href="#__codelineno-11-21">21</a></span>
+<span class="normal"><a href="#__codelineno-11-22">22</a></span>
+<span class="normal"><a href="#__codelineno-11-23">23</a></span>
+<span class="normal"><a href="#__codelineno-11-24">24</a></span>
+<span class="normal"><a href="#__codelineno-11-25">25</a></span>
+<span class="normal"><a href="#__codelineno-11-26">26</a></span>
+<span class="normal"><a href="#__codelineno-11-27">27</a></span>
+<span class="normal"><a href="#__codelineno-11-28">28</a></span>
+<span class="normal"><a href="#__codelineno-11-29">29</a></span>
+<span class="normal"><a href="#__codelineno-11-30">30</a></span>
+<span class="normal"><a href="#__codelineno-11-31">31</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rodi</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActivationScope</span><span class="p">,</span> <span class="n">Container</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">B</span><span class="p">:</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7"></a>    <span class="n">friend</span><span class="p">:</span> <span class="n">A</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8"></a>
+<a id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">C</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">()</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12"></a>
+<a id="__codelineno-11-13" name="__codelineno-11-13"></a>
+<a id="__codelineno-11-14" name="__codelineno-11-14"></a><span class="k">def</span><span class="w"> </span><span class="nf">a_factory</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">activating_type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15"></a><span class="hll">    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">ActivationScope</span><span class="p">)</span>
+</span><a id="__codelineno-11-16" name="__codelineno-11-16"></a><span class="hll">    <span class="k">assert</span> <span class="n">activating_type</span> <span class="ow">is</span> <span class="n">B</span>
+</span><a id="__codelineno-11-17" name="__codelineno-11-17"></a>
+<a id="__codelineno-11-18" name="__codelineno-11-18"></a>    <span class="c1"># You can obtain other types using `context.provider.get`</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19"></a>    <span class="c1"># (if they can be resolved)</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20"></a>    <span class="n">c</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21"></a>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22"></a>
+<a id="__codelineno-11-23" name="__codelineno-11-23"></a>    <span class="k">return</span> <span class="n">A</span><span class="p">()</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24"></a>
+<a id="__codelineno-11-25" name="__codelineno-11-25"></a>
+<a id="__codelineno-11-26" name="__codelineno-11-26"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient_by_factory</span><span class="p">(</span><span class="n">a_factory</span><span class="p">)</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29"></a>
+<a id="__codelineno-11-30" name="__codelineno-11-30"></a><span class="n">b</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<a id="__codelineno-11-31" name="__codelineno-11-31"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friend</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="working-with-simple-types">Working with simple types<a class="headerlink" href="#working-with-simple-types" title="Permanent link">&para;</a></h2>
 <p><strong>Dependency Injection</strong> loves custom types. Consider the following example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Example</span><span class="p">:</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">api_key</span><span class="p">:</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;API key is required&quot;</span><span class="p">)</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">api_key</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Example</span><span class="p">:</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">api_key</span><span class="p">:</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;API key is required&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">api_key</span>
 </code></pre></div>
 <p>The <code>Example</code> class depends on a <code>str</code>. We could register a <code>str</code> singleton in
 our DI container, but it wouldn't make sense. Some other class might require a
 <code>str</code> dependency, and we would be out of options to resolve them. All types
 that require a simple type passed to their constructor are best configured
 using a <em>factory</em> function.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">example_factory</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Example</span><span class="p">:</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="k">return</span> <span class="n">Example</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;API_KEY&quot;</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">example_factory</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Example</span><span class="p">:</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="k">return</span> <span class="n">Example</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;API_KEY&quot;</span><span class="p">))</span>
 </code></pre></div>
 <p>In many cases, it is advisable to define custom types to group settings
 consisting of simple types into dedicated classes.</p>
 <p>For example:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
-<span class="normal"><a href="#__codelineno-12-2">2</a></span>
-<span class="normal"><a href="#__codelineno-12-3">3</a></span>
-<span class="normal"><a href="#__codelineno-12-4">4</a></span>
-<span class="normal"><a href="#__codelineno-12-5">5</a></span>
-<span class="normal"><a href="#__codelineno-12-6">6</a></span>
-<span class="normal"><a href="#__codelineno-12-7">7</a></span>
-<span class="normal"><a href="#__codelineno-12-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">SendGridClientSettings</span><span class="p">:</span>
-</span><a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="hll">    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span>
-</span><a id="__codelineno-12-4" name="__codelineno-12-4"></a>
-<a id="__codelineno-12-5" name="__codelineno-12-5"></a>
-<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">SendGridClient</span><span class="p">(</span><span class="n">EmailHandler</span><span class="p">):</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="hll">    <span class="n">settings</span><span class="p">:</span> <span class="n">SendGridClientSettings</span>
-</span><a id="__codelineno-12-8" name="__codelineno-12-8"></a>    <span class="n">http_client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span>
+<span class="normal"><a href="#__codelineno-14-3">3</a></span>
+<span class="normal"><a href="#__codelineno-14-4">4</a></span>
+<span class="normal"><a href="#__codelineno-14-5">5</a></span>
+<span class="normal"><a href="#__codelineno-14-6">6</a></span>
+<span class="normal"><a href="#__codelineno-14-7">7</a></span>
+<span class="normal"><a href="#__codelineno-14-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">SendGridClientSettings</span><span class="p">:</span>
+</span><a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="hll">    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span>
+</span><a id="__codelineno-14-4" name="__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5"></a>
+<a id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">SendGridClient</span><span class="p">(</span><span class="n">EmailHandler</span><span class="p">):</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="hll">    <span class="n">settings</span><span class="p">:</span> <span class="n">SendGridClientSettings</span>
+</span><a id="__codelineno-14-8" name="__codelineno-14-8"></a>    <span class="n">http_client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span>
 </code></pre></div></td></tr></table></div>
 <p>This approach has the following benefits:</p>
 <ul>
@@ -1333,53 +1405,53 @@ consisting of simple types into dedicated classes.</p>
 </ul>
 <h2 id="support-for-collections">Support for collections<a class="headerlink" href="#support-for-collections" title="Permanent link">&para;</a></h2>
 <p>Rodi supports registering and resolving collections.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-13-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-13-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-13-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-13-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-13-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-13-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-13-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-13-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-13-10">10</a></span>
-<span class="normal"><a href="#__codelineno-13-11">11</a></span>
-<span class="normal"><a href="#__codelineno-13-12">12</a></span>
-<span class="normal"><a href="#__codelineno-13-13">13</a></span>
-<span class="normal"><a href="#__codelineno-13-14">14</a></span>
-<span class="normal"><a href="#__codelineno-13-15">15</a></span>
-<span class="normal"><a href="#__codelineno-13-16">16</a></span>
-<span class="normal"><a href="#__codelineno-13-17">17</a></span>
-<span class="normal"><a href="#__codelineno-13-18">18</a></span>
-<span class="normal"><a href="#__codelineno-13-19">19</a></span>
-<span class="normal"><a href="#__codelineno-13-20">20</a></span>
-<span class="normal"><a href="#__codelineno-13-21">21</a></span>
-<span class="normal"><a href="#__codelineno-13-22">22</a></span>
-<span class="normal"><a href="#__codelineno-13-23">23</a></span>
-<span class="normal"><a href="#__codelineno-13-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rodi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Container</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2"></a>
-<a id="__codelineno-13-3" name="__codelineno-13-3"></a>
-<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5"></a>
-<a id="__codelineno-13-6" name="__codelineno-13-6"></a>
-<a id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">B</span><span class="p">:</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8"></a>    <span class="n">friends</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">A</span><span class="p">]</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9"></a>
-<a id="__codelineno-13-10" name="__codelineno-13-10"></a>
-<a id="__codelineno-13-11" name="__codelineno-13-11"></a><span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">friends_factory</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">A</span><span class="p">]:</span>
-</span><a id="__codelineno-13-12" name="__codelineno-13-12"></a><span class="hll">    <span class="k">return</span> <span class="p">[</span><span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="p">()]</span>
-</span><a id="__codelineno-13-13" name="__codelineno-13-13"></a>
-<a id="__codelineno-13-14" name="__codelineno-13-14"></a>
-<a id="__codelineno-13-15" name="__codelineno-13-15"></a><span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">()</span>
-<a id="__codelineno-13-16" name="__codelineno-13-16"></a>
-<a id="__codelineno-13-17" name="__codelineno-13-17"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient_by_factory</span><span class="p">(</span><span class="n">friends_factory</span><span class="p">)</span>
-<a id="__codelineno-13-18" name="__codelineno-13-18"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
-<a id="__codelineno-13-19" name="__codelineno-13-19"></a>
-<a id="__codelineno-13-20" name="__codelineno-13-20"></a><span class="n">b</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
-<a id="__codelineno-13-21" name="__codelineno-13-21"></a><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friends</span><span class="p">)</span>
-<a id="__codelineno-13-22" name="__codelineno-13-22"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friends</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
-<a id="__codelineno-13-23" name="__codelineno-13-23"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friends</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">A</span><span class="p">)</span>
-<a id="__codelineno-13-24" name="__codelineno-13-24"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friends</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">A</span><span class="p">)</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-15-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-15-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-15-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-15-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-15-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-15-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-15-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-15-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-15-10">10</a></span>
+<span class="normal"><a href="#__codelineno-15-11">11</a></span>
+<span class="normal"><a href="#__codelineno-15-12">12</a></span>
+<span class="normal"><a href="#__codelineno-15-13">13</a></span>
+<span class="normal"><a href="#__codelineno-15-14">14</a></span>
+<span class="normal"><a href="#__codelineno-15-15">15</a></span>
+<span class="normal"><a href="#__codelineno-15-16">16</a></span>
+<span class="normal"><a href="#__codelineno-15-17">17</a></span>
+<span class="normal"><a href="#__codelineno-15-18">18</a></span>
+<span class="normal"><a href="#__codelineno-15-19">19</a></span>
+<span class="normal"><a href="#__codelineno-15-20">20</a></span>
+<span class="normal"><a href="#__codelineno-15-21">21</a></span>
+<span class="normal"><a href="#__codelineno-15-22">22</a></span>
+<span class="normal"><a href="#__codelineno-15-23">23</a></span>
+<span class="normal"><a href="#__codelineno-15-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rodi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Container</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5"></a>
+<a id="__codelineno-15-6" name="__codelineno-15-6"></a>
+<a id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">B</span><span class="p">:</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8"></a>    <span class="n">friends</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">A</span><span class="p">]</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9"></a>
+<a id="__codelineno-15-10" name="__codelineno-15-10"></a>
+<a id="__codelineno-15-11" name="__codelineno-15-11"></a><span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">friends_factory</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">A</span><span class="p">]:</span>
+</span><a id="__codelineno-15-12" name="__codelineno-15-12"></a><span class="hll">    <span class="k">return</span> <span class="p">[</span><span class="n">A</span><span class="p">(),</span> <span class="n">A</span><span class="p">()]</span>
+</span><a id="__codelineno-15-13" name="__codelineno-15-13"></a>
+<a id="__codelineno-15-14" name="__codelineno-15-14"></a>
+<a id="__codelineno-15-15" name="__codelineno-15-15"></a><span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">()</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16"></a>
+<a id="__codelineno-15-17" name="__codelineno-15-17"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient_by_factory</span><span class="p">(</span><span class="n">friends_factory</span><span class="p">)</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<a id="__codelineno-15-19" name="__codelineno-15-19"></a>
+<a id="__codelineno-15-20" name="__codelineno-15-20"></a><span class="n">b</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21"></a><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friends</span><span class="p">)</span>
+<a id="__codelineno-15-22" name="__codelineno-15-22"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friends</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+<a id="__codelineno-15-23" name="__codelineno-15-23"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friends</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">A</span><span class="p">)</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">friends</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">A</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <p>Other containers such as <code>dict</code>, <code>set</code>, <code>Iterable</code>, <code>Mapping</code>, <code>Sequence</code>,
 <code>Tuple</code> are also supported.</p>
@@ -1401,23 +1473,23 @@ class provides a method called <code>build_provider</code>, which returns a read
 interface that can be used to resolve types, but not to register new ones
 (with the exception of the <code>set</code> method, which allows adding new singletons
 without altering the existing dependency tree).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rodi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Container</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">()</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>
-<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="n">provider</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">build_provider</span><span class="p">()</span>
-<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>
-<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="n">a1</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="n">a2</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
-<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
-<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="k">assert</span> <span class="n">a1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a2</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rodi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Container</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">()</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">container</span><span class="o">.</span><span class="n">add_transient</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">provider</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">build_provider</span><span class="p">()</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="n">a1</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">a2</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="k">assert</span> <span class="n">a1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a2</span>
 </code></pre></div>
 <h3 id="the-containerprotocol">The ContainerProtocol<a class="headerlink" href="#the-containerprotocol" title="Permanent link">&para;</a></h3>
 <p>Rodi defines a protocol for the <code>Container</code> class, named <code>ContainerProtocol</code>.
@@ -1427,23 +1499,23 @@ configured in the container.</p>
 <p>The purpose of this protocol is to support replacing Rodi with alternative
 implementations of dependency injection in code that requires basic container
 functionality. The protocol is defined as follows:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ContainerProtocol</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="sd">    Generic interface of DI Container that can register and resolve services,</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="sd">    and tell if a type is configured.</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Registers a type in the container, with optional arguments.&quot;&quot;&quot;</span>
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Activates an instance of the given type, with optional arguments.&quot;&quot;&quot;</span>
-<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>
-<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="sd">        Returns a value indicating whether a given type is configured in this</span>
-<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="sd">        container.</span>
-<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="sd">        &quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ContainerProtocol</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="sd">    Generic interface of DI Container that can register and resolve services,</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="sd">    and tell if a type is configured.</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Registers a type in the container, with optional arguments.&quot;&quot;&quot;</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Activates an instance of the given type, with optional arguments.&quot;&quot;&quot;</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="sd">        Returns a value indicating whether a given type is configured in this</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="sd">        container.</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="sd">        &quot;&quot;&quot;</span>
 </code></pre></div>
 <p>Since some features, like <em>Service Lifetime</em> are specific to Rodi (some alternative
 implementations only support <em>transient</em> and <em>singleton</em> lifetimes), the protocol does
@@ -1461,7 +1533,7 @@ support different implementations, you would need to decide on a common interfac
 <p>All examples on this page show how to register and resolve <em>concrete</em> classes.
 The next page describes how to apply the <a href="../dependency-inversion/"><em>Dependency Inversion Principle</em></a>,
 how to work with <em>abstract</em> classes, protocols, and generics.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-13 20:47:26</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 
