@@ -279,6 +279,60 @@ with scoped lifetime:
     assert c1.context is not c2.context
     ```
 
+/// details | Nested scopes.
+    type: warning
+
+Rodi was not designed having _nested_ scopes in mind. Scopes are designed to
+identify a resolution call for a single event, such as DI resolution for a
+single HTTP request.
+
+Since version `2.0.7`, Rodi offers the possibility to specify the
+`ActivationScope` class used by the container, when instantiating the
+`Container` object. This class will be used when creating new scopes. Version
+`2.0.7` also added an **experimental** class, `TrackingActivationScope` to
+support nested scopes transparently, using `contextvars.ContextVar`.
+
+```python {linenums="1" hl_lines="2 12 16 27"}
+def test_nested_scope_1():
+    container = Container(scope_cls=TrackingActivationScope)
+    container.add_scoped(Ok)
+    provider = container.build_provider()
+
+    with provider.create_scope() as context_1:
+        a = provider.get(Ok, context_1)
+
+        with provider.create_scope() as context_2:
+            b = provider.get(Ok, context_2)
+
+        assert a is b
+
+
+def test_nested_scope_2():
+    container = Container(scope_cls=TrackingActivationScope)
+    container.add_scoped(Ok)
+    provider = container.build_provider()
+
+    with provider.create_scope():
+        with provider.create_scope() as context:
+            a = provider.get(Ok, context)
+
+        with provider.create_scope() as context:
+            b = provider.get(Ok, context)
+
+        assert a is not b
+```
+
+///
+
+Note how the generics `Repository[Product]` and `Repository[Customer]` are both
+configured to be resolved using `Repository` as concrete type. Instances of
+`GenericAlias` are not considered as actual classes. The following wouldn't
+work:
+
+```python
+container.add_scoped(Repository[Product])  # No. 💥
+container.add_scoped(Repository[Customer])  # No. 💥
+```
 
 ## Using factories
 

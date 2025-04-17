@@ -34,7 +34,6 @@ theme:
         name: Switch to dark mode
   name: "material"
   custom_dir: overrides/
-  # highlightjs: true # ?
   favicon: img/neoteroi.ico
   logo: img/neoteroi-w.svg
   icon:
@@ -55,9 +54,6 @@ plugins:
   - neoteroi.contribs
 
 markdown_extensions:
-  #  - markdown.extensions.codehilite:
-  #      linenums: true
-  #      guess_lang: false
   - pymdownx.highlight:
       use_pygments: true
       guess_lang: false

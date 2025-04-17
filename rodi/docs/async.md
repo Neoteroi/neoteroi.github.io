@@ -4,16 +4,17 @@ Support for async resolution is intentionally out of the scope of the library be
 constructing objects should be lightweight.
 
 This page provides guidelines for working with objects that require asynchronous
-initialization.
+initialization or disposal.
 
 ## A common example
 
-A common example of this situation are objects that handle TCP/IP connection pooling,
-such as `HTTP` clients and database clients. These objects are usually implemented as
-*context managers* in Python because they need to implement connection pooling and
-gracefully close TCP connections when disposed.
+A common example of objects requiring asynchronous disposal are objects that
+handle TCP/IP connection pooling, such as `HTTP` clients and database clients.
+These objects are typically implemented as *context managers* in Python because
+they need to manage connection pooling and gracefully close TCP connections
+upon disposal.
 
-Python supports [`asynchronous` context managers](https://peps.python.org/pep-0492/#asynchronous-context-managers-and-async-with) for this kind of scenario.
+Python provides [`asynchronous` context managers](https://peps.python.org/pep-0492/#asynchronous-context-managers-and-async-with) for this kind of scenario.
 
 Consider the following example, of a `SendGrid` API client to send emails using the
 SendGrid API, with asynchronous code and using [`httpx`](https://www.python-httpx.org/async/).
@@ -82,7 +83,7 @@ class SendGridClient(EmailHandler):
             },
             json=self.get_body(email),
         )
-        # Note: in case of error, inspect response.text
+        # TODO: in case of error, log response.text
         response.raise_for_status()  # Raise an error for bad responses
 
     def get_body(self, email: Email) -> dict:
@@ -110,7 +111,7 @@ the one shown on this page to send emails using SendGrid in async code.
 ///
 
 The **SendGridClient** depends on an instance of `SendGridClientSettings` (providing a
-SendGrid API Key), and on an instance of `httpx.AsyncClient` able to make HTTP requests.
+SendGrid API Key), and on an instance of `httpx.AsyncClient` to make async HTTP requests.
 
 The code below shows how to register the object that requires asynchronous
 initialization and use it across the lifetime of your application.
@@ -182,9 +183,10 @@ HTTP client disposed
 
 ## Considerations
 
-- It is not Rodi's responsibility to administer the lifecycle of the application. It is
-  the responsibility of the code that bootstrap the application, to handle objects that
-  require asynchronous initialization and disposal.
+- It is not Rodi's responsibility to administer the lifecycle of the
+  application. It is the responsibility of the code that bootstraps the
+  application, to handle objects that require asynchronous initialization and
+  disposal.
 - Python's `asynccontextmanager` is convenient for these scenarios.
 - In the example above, the HTTP Client is configured as singleton to benefit from TCP
   connection pooling. It would also be possible to configure it as transient or scoped
