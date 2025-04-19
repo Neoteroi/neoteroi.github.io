@@ -1,33 +1,32 @@
 # Dependency injection in BlackSheep
-The getting started tutorials show how route and query string parameters can be
-injected directly in request handlers, by function signature. BlackSheep
-also supports dependency injection of services configured for the application.
-This page describes:
 
-- [X] An introduction to dependency injection in BlackSheep, with a focus on `rodi`.
+The getting started tutorials demonstrate how route and query string parameters
+can be directly injected into request handlers through function signatures.
+Additionally, BlackSheep supports the dependency injection of services
+configured for the application. This page covers:
+
+- [X] An introduction to dependency injection in BlackSheep, with a focus on Rodi.
 - [X] Service resolution.
 - [X] Service lifetime.
 - [X] Options to create services.
 - [X] Examples of dependency injection.
-- [X] How to use alternatives to `rodi`.
+- [X] How to use alternatives to Rodi.
 
-!!! info "Rodi's documentation"
-    Detailed documentation for Rodi can be found at: [_Rodi_](/rodi/).
+/// admonition | Rodi's documentation
+Detailed documentation for Rodi can be found at: [_Rodi_](/rodi/).
+///
 
 ## Introduction
 
-The `Application` object exposes a `services` property that can be used to
-configure services. When the function signature of a request handler references
-a type that is registered as a service, an instance of that type is
-automatically injected when the request handler is called.
+The `Application` object exposes a `services` property that can be used to configure services. When the function signature of a request handler references a type that is registered as a service, an instance of that type is automatically injected when the request handler is called.
 
 Consider this example:
 
-* some context is necessary to handle certain web requests (for example, a
-  database connection pool)
-* a class that contains this context can be configured in application services
-  before the application starts
-* request handlers have this context automatically injected
+* Some context is necessary to handle certain web requests (for example, a
+  database connection pool).
+* A class that contains this context can be configured in application services
+  before the application starts.
+* Request handlers have this context automatically injected.
 
 ### Demo
 
@@ -38,13 +37,13 @@ contents, inside a `domain` folder:
 ```
 .
 ├── domain
-│   ├── foo.py
-│   └── __init__.py
+│   ├── __init__.py
+│   └── foo.py
 └── server.py
 ```
 
-**domain/foo.py**:
 ```python
+# domain/foo.py
 class Foo:
 
     def __init__(self) -> None:
@@ -54,8 +53,8 @@ class Foo:
 Import the new class in `server.py`, and register the type in `app.services`
 as in this example:
 
-**server.py**:
-```python
+```python {hl_lines="9 13"}
+# server.py
 from blacksheep import Application, get
 
 from domain.foo import Foo
@@ -69,41 +68,37 @@ app.services.add_scoped(Foo)  # <-- register Foo type as a service
 @get("/")
 def home(foo: Foo):  # <-- foo is referenced in type annotation
     return f"Hello, {foo.foo}!"
-
 ```
 
 An instance of `Foo` is injected automatically for every web request to "/".
 
-Dependency injection is implemented in a dedicated library from the same author:
-[`rodi`](https://github.com/RobertoPrevato/rodi). `rodi` implements dependency
-injection in an unobtrusive way: it works by inspecting `__init__` methods and
-doesn't require altering the source code of classes registered as services.
-`rodi` can also resolve dependencies by inspecting class annotations, if an
-`__init__` method is not specified for the class to activate.
+Dependency injection is implemented in a dedicated library:
+[Rodi](https://github.com/neoteroi/rodi). Rodi implements dependency injection
+in an unobtrusive way: it works by inspecting code and doesn't require altering
+the source code of the types it resolves.
 
 ## Service resolution
 
-`rodi` automatically resolves graphs of services, when a type that is resolved
-requires other types. In the following example, instances of `A` are created
-automatically when resolving `Foo` because the `__init__` method in `Foo`
-requires an instance of `A`:
+Rodi automatically resolves dependency graphs when a resolved type depends on
+other types. In the following example, instances of `A` are automatically
+created when resolving `Foo` because the `__init__` method in `Foo` requires an
+instance of `A`:
 
-**foo.py**:
-```python
+```python {hl_lines="2 7"}
+# domain/foo.py
 class A:
-    def __init__(self) -> None:
-        pass
+    pass
 
 
 class Foo:
-    def __init__(self, a: A) -> None:
-        self.a = a
+    def __init__(self, dependency: A) -> None:
+        self.dependency = dependency
 ```
 
-Note that both types need to be registered in `app.services`:
+Both types must be registered in `app.services`:
 
-**server.py**:
-```python
+```python {hl_lines="9-10"}
+# server.py
 from blacksheep import Application, get, text
 
 from domain.foo import A, Foo
@@ -119,10 +114,9 @@ app.services.add_scoped(Foo)
 def home(foo: Foo):
     return text(
         f"""
-        A: {id(foo.a)}
+        A: {id(foo.dependency)}
         """
     )
-
 ```
 
 Produces a response like the following at "/":
@@ -133,44 +127,40 @@ Produces a response like the following at "/":
 
 ## Using class annotations
 
-An alternative to defining `__init__` methods is to use class annotations, like
-in the example below:
+It is possible to use class properties, like in the example below:
 
-```python
+```python {hl_lines="6"}
 class A:
     pass
 
 
 class Foo:
-    a: A
+    dependency: A
 ```
 
 ## Understanding service lifetimes
 
-`rodi` supports services having one of these lifetimes:
+`rodi` supports types having one of these lifetimes:
 
-* __singleton__ - instantiated only once per service provider
-* __transient__ - services are instantiated every time they are required
-* __scoped__ - instantiated once per web request
+* __singleton__ - instantiated only once.
+* __transient__ - services are instantiated every time they are required.
+* __scoped__ - instantiated once per web request.
 
 Consider the following example, where a type `A` is registered as transient,
 `B` as scoped, `C` as singleton:
 
-**foo.py**:
 ```python
+# domain/foo.py
 class A:
-    def __init__(self) -> None:
-        pass
+    ...
 
 
 class B:
-    def __init__(self) -> None:
-        pass
+    ...
 
 
 class C:
-    def __init__(self) -> None:
-        pass
+    ...
 
 
 class Foo:
@@ -184,8 +174,8 @@ class Foo:
 
 ```
 
-**server.py**:
 ```python
+# server.py
 from blacksheep import Application, get, text
 
 from domain.foo import A, B, C, Foo
@@ -222,50 +212,51 @@ def home(foo: Foo):
 
 Produces responses like the following at "/":
 
-**Request 1**:
-```
-        A1: 139976289977296
+=== "Request 1"
+    ```
+            A1: 139976289977296
 
-        A2: 139976289977680
+            A2: 139976289977680
 
-        B1: 139976289977584
+            B1: 139976289977584
 
-        B2: 139976289977584
+            B2: 139976289977584
 
-        C1: 139976289978736
+            C1: 139976289978736
 
-        C2: 139976289978736
-```
+            C2: 139976289978736
+    ```
 
-**Request 2**:
-```
-        A1: 139976289979888
+=== "Request 2"
+    ```
+            A1: 139976289979888
 
-        A2: 139976289979936
+            A2: 139976289979936
 
-        B1: 139976289979988
+            B1: 139976289979988
 
-        B2: 139976289979988
+            B2: 139976289979988
 
-        C1: 139976289978736
+            C1: 139976289978736
 
-        C2: 139976289978736
-```
+            C2: 139976289978736
+    ```
 
-Note how:
-
-- transient services are always instantiated whenever they are activated (A)
-- scoped services are instantiated once per web request (B)
-- a singleton service is activated only once (C)
+- Transient services are created every time they are needed (A).
+- Scoped services are created once per web request (B).
+- Singleton services are instantiated only once and reused across the application (C).
 
 ## Options to create services
 
-`rodi` provides several ways to define and instantiate services.
+Rodi provides several ways to define and instantiate services.
 
 1. registering an exact instance as a singleton
 2. registering a concrete class by its type
 3. registering an abstract class and one of its concrete implementations
 4. registering a service using a factory function
+
+For detailed information on this subject, refer to the Rodi documentation:
+[_Registering types_](https://www.neoteroi.dev/rodi/registering-types/).
 
 #### Singleton example
 
@@ -280,7 +271,9 @@ class ServiceSettings:
         self.oauth_application_id = oauth_application_id
         self.oauth_application_secret = oauth_application_secret
 
-app.services.add_instance(ServiceSettings("00000000001", "APP_SECRET_EXAMPLE"))
+app.services.add_instance(
+    ServiceSettings("00000000001", os.environ["OAUTH_APP_SECRET"])
+)
 
 ```
 
@@ -290,15 +283,11 @@ app.services.add_instance(ServiceSettings("00000000001", "APP_SECRET_EXAMPLE"))
 
 class HelloHandler:
 
-    def __init__(self):
-        pass
-
     def greetings() -> str:
         return "Hello"
 
 
 app.services.add_transient(HelloHandler)
-
 ```
 
 #### Registering an abstract class
@@ -352,7 +341,6 @@ async def get_cat(cat_id: str, repo: CatsRepository):
         return not_found()
 
     return json(cat)
-
 ```
 
 #### Using a factory function
@@ -371,6 +359,7 @@ app.services.add_transient_by_factory(something_factory)
 ```
 
 #### Example: implement a request context
+
 A good example of a scoped service is one used to assign each web request with
 a trace id that can be used to identify requests for logging purposes.
 
@@ -398,20 +387,75 @@ app.services.add_scoped(OperationContext)
 
 @get("/")
 def home(context: OperationContext):
-    return text(
-        f"""
-        Request ID: {context.trace_id}
-        """
-    )
-
+    return text(f"Request ID: {context.trace_id}")
 ```
 
 ## Services that require asynchronous initialization
 
-Services that require asynchronous initialization can be configured inside
-`on_start` callbacks, like in the following example:
+Services that require asynchronous initialization can be configured using
+application events. The recommended way is using the `lifespan` context
+manager, like described in the example below.
 
-```python
+```python {linenums="1" hl_lines="9 15-16 18 22"}
+import asyncio
+from blacksheep import Application
+from blacksheep.client.pool import ClientConnectionPools
+from blacksheep.client.session import ClientSession
+
+app = Application()
+
+
+@app.lifespan
+async def register_http_client():
+    async with ClientSession(
+        pools=ClientConnectionPools(asyncio.get_running_loop())
+    ) as client:
+        print("HTTP client created and registered as singleton")
+        app.services.register(ClientSession, instance=client)
+        yield
+
+    print("HTTP client disposed of")
+
+
+@router.get("/")
+async def home(http_client: ClientSession):
+    print(http_client)
+    return {"ok": True, "client_instance_id": id(http_client)}
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=44777, log_level="debug", lifespan="on")
+```
+
+Here are the key points describing the logic of using the `lifespan` decorator:
+
+- **Purpose**: The `@app.lifespan` decorator is used to define asynchronous
+  setup and teardown logic for an application, such as initializing and
+  disposing of resources.
+- **Setup Phase**: Code before the `yield` statement is executed when the
+  application starts. This is typically used to initialize resources (e.g.,
+  creating an HTTP client, database connections, or other services).
+- **Resource Registration**: During the setup phase, resources can be
+  registered as services in the application's dependency injection container,
+  making them available for injection into request handlers.
+- **Teardown Phase**: Code after the `yield` statement is executed when the
+  application stops. This is used to clean up or dispose of resources (e.g.,
+  closing connections or releasing memory).
+- **Singleton Resource Management**: The `@lifespan` decorator is particularly
+  useful for managing singleton resources that need to persist for the
+  application's lifetime.
+- **Example Use Case**: In the provided example, an `HTTP client` is created
+  and registered as a singleton during the setup phase, and it is disposed of
+  during the teardown phase.
+
+---
+
+Otherwise, it is possible to use the `on_start` callback, like in the following
+example, to register a service that requires asynchronous initialization:
+
+```python {hl_lines="13-19"}
 import asyncio
 from blacksheep import Application, get, text
 
@@ -439,16 +483,10 @@ async def home(service: Example):
 
 ```
 
-Services configured this way are automatically injected in request handlers
-when a parameter name or type annotation matches a key inside `app.services`.
+Services that require disposal can be disposed of in the `on_stop` callback:
 
-Services that require disposing of should be disposed of in `on_stop` callback:
-
-```python
+```python {hl_lines="3 6"}
 async def dispose_example(app: Application):
-    # Note: after the application is started, services are read from
-    # app.service_provider:
-
     service = app.service_provider[Example]
     await service.dispose()
 
@@ -462,9 +500,10 @@ Since version 2, BlackSheep supports alternatives to `rodi` for dependency
 injection. The `services` property of the `Application` class needs to conform
 to the following container protocol:
 
-- `register` method to register types
-- `resolve` method to resolve instances of types
-- `__contains__` method to describe whether a type is defined inside the container
+- The `register` method to register types.
+- The `resolve` method to resolve instances of types.
+- The `__contains__` method to describe whether a type is defined inside the
+  container.
 
 ```python
 class ContainerProtocol:
@@ -485,12 +524,11 @@ class ContainerProtocol:
         """
 ```
 
-The following example shows how to use
-[`punq`](https://github.com/bobthemighty/punq) for dependency injection instead
-of `rodi`, and how a transient service can be resolved at "/" and a singleton
-service resolved at "/home":
+The following example demonstrates how to use
+[`punq`](https://github.com/bobthemighty/punq) for dependency injection as an
+alternative to `rodi`.
 
-```python
+```python {hl_lines="17 36-37 39"}
 from typing import Type, TypeVar, Union, cast
 
 import punq
@@ -581,8 +619,12 @@ def default_container_factory():
 di_settings.use(default_container_factory)
 ```
 
-!!! danger "Dependency injection libraries vary"
-    Some features might not be supported when using a different kind of container,
-    because not all libraries for dependency injection implement the notion of
-    `singleton`, `scoped`, and `transient` (most only implement `singleton` and
-    `transient`).
+/// admonition | Dependency injection libraries vary.
+    type: danger
+
+Some features might not be supported when using a different kind of container,
+because not all libraries for dependency injection implement the notion of
+`singleton`, `scoped`, and `transient` (most only implement `singleton` and
+`transient`).
+
+///

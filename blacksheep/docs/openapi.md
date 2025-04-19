@@ -1,4 +1,5 @@
 # OpenAPI Documentation
+
 BlackSheep implements automatic generation of OpenAPI Documentation for most
 common scenarios, and provides methods to enrich the documentation with
 details. This page describes the following:
@@ -12,6 +13,7 @@ details. This page describes the following:
 - [X] How to implement a custom `UIProvider`.
 
 ## Introduction to OpenAPI Documentation
+
 Citing from the [Swagger website](https://swagger.io/specification/), at the
 time of this writing:
 
@@ -23,15 +25,15 @@ time of this writing:
 > display the API, code generation tools to generate servers and clients in
 > various programming languages, testing tools, and many other use cases.
 
-Since a web application knows by definition the paths it is handling, and since
-a certain amount of metadata can be inferred from the source code, BlackSheep
-implements automatic generation of OpenAPI Documentation, and offers an API
-to enrich the documentation with information that cannot be inferred from the
+Since a web application inherently knows the paths it handles, and a certain
+amount of metadata can be inferred from the source code, BlackSheep provides
+automatic generation of OpenAPI documentation. It also offers an API to enhance
+the documentation with additional information that cannot be inferred from the
 source code.
 
 If you followed the [Getting started: MVC](mvc-project-template.md) tutorial,
-its project template is configured to include an example of OpenAPI
-Documentation and to expose a Swagger UI at `/docs` path.
+the project template is preconfigured to include an example of OpenAPI
+documentation and to expose a Swagger UI at the `/docs` path.
 
 ![OpenAPI Docs](./img/openapi-docs.png)
 
@@ -40,7 +42,7 @@ Documentation and to expose a Swagger UI at `/docs` path.
 The following piece of code describes a minimal set-up to enable generation of
 OpenAPI Documentation and exposing a Swagger UI in BlackSheep:
 
-```python
+```python {hl_lines="9-10"}
 from dataclasses import dataclass
 
 from blacksheep import Application, get
@@ -49,13 +51,14 @@ from openapidocs.v3 import Info
 
 app = Application()
 
-docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 docs.bind_app(app)
+
 
 
 @dataclass
 class Foo:
     foo: str
+
 
 
 @get("/foo")
@@ -76,13 +79,14 @@ at `/openapi.json` path:
 ```json
 {
     "openapi": "3.0.3",
-    "info": {
         "title": "Example API",
+
         "version": "0.0.1"
     },
     "paths": {
         "/foo": {
             "get": {
+
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -119,21 +123,22 @@ at `/openapi.json` path:
 }
 ```
 
-Note how the `Foo` component schema is automatically documented. `BlackSheep`
+Notice how the `Foo` component schema is automatically documented. BlackSheep
 supports both `@dataclass` and `Pydantic` models for the automatic generation
-of documentation.
+of documentation, however support for `Pydantic` is limited.
 
 And also YAML format at `/openapi.yaml` path:
 
 ```yaml
 openapi: 3.0.3
-info:
     title: Example API
-    version: 0.0.1
+
+version: 0.0.1
 paths:
     /foo:
         get:
             responses:
+
                 '200':
                     description: Success response
                     content:
@@ -169,13 +174,14 @@ After this change, the specification file includes the new information:
 
 ```yaml
 openapi: 3.0.3
-info:
     title: Example API
-    version: 0.0.1
+
+version: 0.0.1
 paths:
     /:
         get:
             responses:
+
                 '200':
                     description: Returns a text saying OpenAPI Example
             operationId: home
@@ -183,6 +189,7 @@ components: {}
 ```
 
 ### Adding description and summary
+
 An endpoint description can be specified either using a `docstring`:
 
 ```python
@@ -213,13 +220,14 @@ and the whole docstring as the description.
 
 ![OpenAPI description and summary](./img/openapi-description-summary.png)
 
-!!! info
     Most of the BlackSheep code base is typed using the `typing` module,
+
     thus IDEs and text editors like Visual Studio Code and PyCharm can provide
     user's friendly hints for code completion (see the screenshot below).
     ![Type hints](./img/openapi-docs-type-hints.png)
 
 ### Ignoring endpoints
+
 
 To exclude certain endpoints from the API documentation, use `@docs.ignore()`:
 
@@ -236,13 +244,14 @@ To document only certain routes, use an include function like in the example bel
 For example, to include only those routes that start with "/api":
 
 ```python
-docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
+
 
 # include only endpoints whose path starts with "/api/"
 docs.include = lambda path, _: path.startswith("/api/")
 ```
 
 ### Documenting response examples
+
 
 The following example shows how to describe examples for responses:
 
@@ -258,13 +267,14 @@ from openapidocs.v3 import Info
 
 app = Application()
 
-docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 docs.bind_app(app)
+
 
 
 @dataclass
 class Cat:
     id: UUID
+
     name: str
     creation_time: datetime
 
@@ -369,13 +379,14 @@ class MyOpenAPIHandler(OpenAPIHandler):
         ]
 
 
-docs = MyOpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 docs.bind_app(app)
+
 ```
 
 ### Handling common responses
 
 APIs often implement a common way to handle failures, to provide clients with
+
 details for web requests that cannot be completed successfully. For example, an
 API might return a response body like the following, in case of a bad request
 for a certain endpoint:
@@ -396,7 +407,7 @@ class ErrorInfo:
     code: int
 ```
 
-`blacksheep` offers the following way to document common responses:
+Common responses can be documented this way:
 
 ```python
 from openapidocs.v3 import MediaType, Response as ResponseDoc, Schema
@@ -432,22 +443,19 @@ docs.common_responses = {
 }
 ```
 
-Common responses are configured for all endpoints.
-
-
 ### Support for generics
 
-The generation of OpenAPI Documentation supports the handling of [generic
+The generation of OpenAPI Documentation supports [generic
 types](https://docs.python.org/3/library/typing.html#typing.Generic). Consider
 the following example:
 
-1. a common task is to implement an API that returns a paginated subset of
-   elements, usually given some filters (e.g. textual search)
-2. clients need to know the count of items that match the filters, to display
-   the total number of items and the number of pages that are necessary to
-   display all results (depending on page size)
-3. for such a scenario, using a `Generic` type is a good solution, because many
-   kinds of objects can be paginated
+1. A common use case is implementing an API that returns a paginated subset of
+   elements, often based on filters (e.g., textual search).
+1. Clients need to know the total count of items matching the filters to
+   display the total number of items and calculate the number of pages required
+   to show all results (depending on the page size).
+1. In such scenarios, using a `Generic` type is an effective solution, as many
+   kinds of objects can be paginated.
 
 _Example of generic class definition_
 
@@ -465,9 +473,9 @@ class PaginatedSet(Generic[T]):
     total: int
 ```
 
-_Full example illustrating OpenAPI Documentation for generics_
+_Full example illustrating OpenAPI Documentation for generics:_
 
-```python
+```python {linenums="1" hl_lines="11 14-17 36 40"}
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Generic, List, TypeVar
@@ -498,8 +506,8 @@ app = Application()
 
 
 # enable OpenAPI Documentation
-docs = OpenAPIHandler(info=Info(title="Example", version="0.0.1"))
 docs.bind_app(app)
+
 
 
 @router.get("/api/orders")
@@ -517,11 +525,11 @@ async def get_orders(
 In the example below, the generic type is handled properly and produces the
 following OpenAPI Documentation:
 
-```yaml
+```yaml {linenums="1" hl_lines="9 11-14 40-41 61 71"}
 openapi: 3.0.3
-info:
     title: Example
-    version: 0.0.1
+
+version: 0.0.1
 paths:
     /api/orders:
         get:
@@ -595,17 +603,20 @@ components:
                     nullable: false
 ```
 
-!!! info
-    Generic types, expressed in Python using `GenericType[T]`, are
-    represented with `GenericTypeOfT` to respect OpenAPI specification, saying
-    that `$ref values must be RFC3986-compliant percent-encoded URIs`.
-    A generic type with more arguments, like `Foo[T, U, X]` gets represented with
-    `FooOfTAndUAndX`.
+/// admonition | Generic types names.
+    type: info
+
+Generic types, expressed in Python using `GenericType[T]`, are
+represented with `GenericTypeOfT` to respect OpenAPI specification, saying
+that `$ref values must be RFC3986-compliant percent-encoded URIs`.
+A generic type with more arguments, like `Foo[T, U, X]` gets represented with
+`FooOfTAndUAndX`.
+
+///
 
 ### Describing parameters
 
-It is possible to describe parameters explicitly, using docstrings, or
-leveraging `Pydantic`.
+It is possible to describe parameters explicitly using docstrings.
 
 #### Documenting parameters explicitly
 
@@ -620,13 +631,14 @@ app = Application()
 
 
 # enable OpenAPI Documentation
-docs = OpenAPIHandler(info=Info(title="Example", version="0.0.1"))
 docs.bind_app(app)
+
 
 
 @router.get("/api/orders")
 @docs(
     parameters={
+
         "page": ParameterInfo(description="Page number"),
         "page_size": ParameterInfo(
             description="The number of items to display per page"
@@ -728,12 +740,13 @@ from blacksheep.server.openapi.v3 import OpenAPIHandler
 from openapidocs.v3 import Info
 
 docs = OpenAPIHandler(
-    info=Info(title="Example API", version="0.0.1"), anonymous_access=True
 )
+
 
 # include only endpoints whose path starts with "/api/"
 docs.include = lambda path, _: path.startswith("/api/")
 ```
+
 
 ### Support for ReDoc UI
 
@@ -748,13 +761,14 @@ from blacksheep.server.openapi.ui import ReDocUIProvider
 from openapidocs.v3 import Info
 
 docs = OpenAPIHandler(
-    info=Info(title="Example API", version="0.0.1"),
 )
+
 
 docs.ui_providers.append(ReDocUIProvider())
 
 # include only endpoints whose path starts with "/api/"
 docs.include = lambda path, _: path.startswith("/api/")
+
 ```
 
 ### How to implement a custom UIProvider
@@ -792,13 +806,14 @@ class CustomUIProvider(SwaggerUIProvider):
         return _template.replace("{options.spec_url}", options.spec_url)
 
 
-docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 # Set the UI provider as desired:
+
 docs.ui_providers = [CustomUIProvider()]
 docs.bind_app(app)
 
 
 @dataclass
+
 class Foo:
     foo: str
 
@@ -855,13 +870,14 @@ app = Application()
 +        return _template.replace("{options.spec_url}", options.spec_url)
 
 
-docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 # Set the UI provider as desired:
+
 +docs.ui_providers = [CustomUIProvider()]
 docs.bind_app(app)
 ```
 
 ### Changing operations ids
+
 When OpenAPI Documentation is generated, operation ids are obtained from the
 name of the Python function definitions.
 

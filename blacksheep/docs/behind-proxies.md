@@ -122,7 +122,7 @@ implementing interactive sign-in.
 
 ---
 
-`BlackSheep` offers two ways to deal with this scenario:
+BlackSheep offers two ways to deal with this scenario:
 
 - One approach, defined by the `ASGI` specification, involves specifying a
   `root_path` in the `ASGI` server. This information is passed in the scope of
@@ -137,7 +137,7 @@ implementing interactive sign-in.
   the web server is desirable to align it with the path handled by the HTTP
   proxy server, and it is ideal when applying URL rewrite is not easy.
 
-For both options, `BlackSheep` handles the information provided by `root_path`
+For both options, BlackSheep handles the information provided by `root_path`
 and the application router prefix in some specific ways.
 For example, the `get_absolute_url_to_path` defined in `blacksheep.messages`
 will handle the information and return an absolute URL to the server

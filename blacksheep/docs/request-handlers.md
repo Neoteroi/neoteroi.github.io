@@ -120,7 +120,7 @@ used.
 
 All examples so far showed how to use implicit binding of request parameters.
 In the `get_cats` example above, all parameters are _implicitly_ bound from the
-request query string. To enable more scenarios, `BlackSheep` also provides
+request query string. To enable more scenarios, BlackSheep also provides
 explicit bindings that allow specifying the source of the parameter (e.g.
 request headers, cookies, route, query, body, application services). In the
 example below, `cat_input` is read automatically from the request payload as

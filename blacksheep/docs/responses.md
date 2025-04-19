@@ -26,7 +26,7 @@ def home() -> Response:
 
 ```
 
-`BlackSheep` uses these exact types to benefit from static typing and
+BlackSheep uses these exact types to benefit from static typing and
 compilation of [`Cython` extensions](https://cython.org). However, handling
 responses this way is not comfortable for regular use. For this reason, a
 number of helper functions are provided to create `Response` objects with a
@@ -133,7 +133,7 @@ def home():
     return response
 ```
 
-Note that `BlackSheep` enforces specifying header names and values as `bytes`,
+Note that BlackSheep enforces specifying header names and values as `bytes`,
 not strings.
 
 !!! warning

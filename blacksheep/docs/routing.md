@@ -2,7 +2,7 @@
 
 Server side routing refers to the ability of a web application to handle web
 requests using different functions, depending on the URL path and HTTP method.
-Each `BlackSheep` application is bound to a router, which provides several ways
+Each BlackSheep application is bound to a router, which provides several ways
 to define routes. A function that is bound to a route is called a "request
 handler", since its responsibility is to handle web requests and produce
 responses.
