@@ -29,7 +29,7 @@ implements automatic generation of OpenAPI Documentation, and offers an API
 to enrich the documentation with information that cannot be inferred from the
 source code.
 
-If you followed the [Getting started: MVC](./mvc-project-template) tutorial,
+If you followed the [Getting started: MVC](mvc-project-template.md) tutorial,
 its project template is configured to include an example of OpenAPI
 Documentation and to expose a Swagger UI at `/docs` path.
 

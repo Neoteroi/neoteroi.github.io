@@ -4,7 +4,7 @@ Web applications often need to protect data, so that it can be stored in
 cookies or other types of storage. BlackSheep uses [`itsdangerous`](https://pypi.org/project/itsdangerous/) to sign and encrypt
 information, for example when storing `claims` obtained from `id_token`s when
 using an integration with an identity provider using [OpenID
-Connect](../authentication/#oidc), or when handling [session cookies](../sessions/).
+Connect](authentication.md#oidc), or when handling [session cookies](sessions.md).
 
 This page documents:
 

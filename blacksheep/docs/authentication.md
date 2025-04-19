@@ -93,7 +93,7 @@ Where:
 | CALLBACK_PATH  | The path that is enabled for `reply_uri` in your app settings, for example if you enabled for localhost: `http://localhost:5000/authorization-callback`, the value should be `/authorization-callback` |
 
 For more information and examples, refer to the dedicated page about
-[OpenID Connect authentication](../openid-connect).
+[OpenID Connect authentication](openid-connect.md).
 
 ## JWT Bearer
 
@@ -238,7 +238,7 @@ on the request, to enable automatic injection of `user` by dependency injection.
 ### Testing the example
 
 To test the example above, start a web server as explained in the [getting
-started guide](../getting-started), then navigate to its root. A web request to
+started guide](getting-started.md), then navigate to its root. A web request to
 the root of the application without an `Authorization` header will produce a
 response with the following body:
 
@@ -298,5 +298,5 @@ The example below shows how a user's identity can be read from the web request:
 ## Next
 While authentication deals with identifying users, authorization deals with
 determining whether the user is authorized to do the action of the web request.
-The next page describes the built-in [authorization strategy](../authorization)
+The next page describes the built-in [authorization strategy](authorization.md)
 in BlackSheep.

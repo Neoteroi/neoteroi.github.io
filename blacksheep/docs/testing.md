@@ -90,7 +90,7 @@ it, step by step.
 ### Requirements
 
 * The requirements described for the [getting
-started tutorial](../getting-started/)
+started tutorial](getting-started.md)
 * Familiarity with test frameworks and common concepts like `fixtures`; if you
   are not familiar with this subject, read `pytest` documentation for an
   overview (e.g. [pytest home](https://docs.pytest.org/), [what are
@@ -101,7 +101,7 @@ started tutorial](../getting-started/)
 
 ### Preparing the project structure
 Prepare a Python virtual environment, as described in the [getting started
-tutorial](../getting-started). In addition to `blacksheep` and `uvicorn`,
+tutorial](getting-started.md). In addition to `blacksheep` and `uvicorn`,
 install the following packages in the virtual environment:
 
 ```bash

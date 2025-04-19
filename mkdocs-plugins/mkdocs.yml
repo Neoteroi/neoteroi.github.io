@@ -22,6 +22,10 @@ nav:
   - Neoteroi docs home: "/"
 
 theme:
+  features:
+    - navigation.footer
+    - content.code.copy
+    - content.action.view
   palette:
     - scheme: slate
       toggle:
@@ -33,7 +37,6 @@ theme:
         name: Switch to dark mode
   name: "material"
   custom_dir: overrides/
-  highlightjs: true
   favicon: img/neoteroi.ico
   logo: img/neoteroi-w.svg
   font:
@@ -46,9 +49,18 @@ extra_css:
   - css/extra.css
   - css/neoteroi.css
 
+validation:
+  links:
+    absolute_links: ignore
+
+watch:
+  - docs
+  - overrides
+
 plugins:
   - search
-  - neoteroi.contribs
+  - neoteroi.contribs:
+      enabled_by_env: "GIT_CONTRIBS_ON"
 
 markdown_extensions:
   - admonition
@@ -63,6 +75,8 @@ markdown_extensions:
   - pymdownx.arithmatex
   - pymdownx.betterem:
       smart_enable: all
+  - pymdownx.blocks.admonition
+  - pymdownx.blocks.details
   - pymdownx.caret
   - pymdownx.critic
   - pymdownx.details
@@ -78,6 +92,10 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      use_pygments: true
+      guess_lang: false
+      anchor_linenums: true
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tabbed:

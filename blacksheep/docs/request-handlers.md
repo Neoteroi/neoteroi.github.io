@@ -147,12 +147,12 @@ async def create_cat(
     ...
 ```
 
-More details about bindings are described in _[Binders](../binders/)_.
+More details about bindings are described in _[Binders](binders.md)_.
 
 ### Normalization and OpenAPI Documentation
 
 Request handler normalization also enables a more accurate generation of
-[OpenAPI Documentation](../openapi/), since the web framework knows that request
+[OpenAPI Documentation](openapi.md), since the web framework knows that request
 handlers need input from query strings, routes, headers, cookies, etc.; and
 produce responses of a certain type.
 
@@ -197,5 +197,5 @@ to reduce RAM consumption and not block the event loop of the web application.
     requests to external APIs, connecting to a database) should also be `async`.
 
 ## Next
-The next pages describe [requests](../requests/) and [responses](../responses/)
+The next pages describe [requests](requests.md) and [responses](responses.md)
 in detail.

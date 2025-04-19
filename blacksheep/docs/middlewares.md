@@ -15,7 +15,7 @@ request in a specific order.
 
 !!! info
     When a function should be called only for certain routes, use
-    instead a [decorator function](../middlewares/#wrapping-request-handlers).
+    instead a [decorator function](middlewares.md#wrapping-request-handlers).
 
 Middlewares are called in order: each receives the `Request` object as the
 first parameter, and the next handler to be called as the second parameter. Any
@@ -193,4 +193,4 @@ def headers(additional_headers: Tuple[Tuple[str, str], ...]):
 !!! warning
     The `ensure_response` function is necessary to support scenarios
     when the request handlers defined by the user doesn't return an instance of
-    Response class (see _[request handlers normalization](../request-handlers/)_).
+    Response class (see _[request handlers normalization](request-handlers.md)_).

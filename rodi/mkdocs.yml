@@ -39,6 +39,14 @@ theme:
   icon:
     repo: fontawesome/brands/github
 
+validation:
+  links:
+    absolute_links: ignore
+
+watch:
+  - docs
+  - overrides
+
 extra:
   header_bg_color: "teal" # "#51003c"
 
@@ -51,7 +59,8 @@ extra_javascript:
 
 plugins:
   - search
-  - neoteroi.contribs
+  - neoteroi.contribs:
+      enabled_by_env: "GIT_CONTRIBS_ON" # Use the name you wish here
 
 markdown_extensions:
   - pymdownx.highlight:

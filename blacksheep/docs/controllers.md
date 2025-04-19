@@ -11,7 +11,7 @@ This page describes:
 - [X] Controller methods.
 - [X] API Controllers.
 
-It is recommended to follow the [MVC tutorial](../mvc-project-template/) before
+It is recommended to follow the [MVC tutorial](mvc-project-template.md) before
 reading this page.
 
 !!! tip "For Flask users..."
@@ -22,7 +22,7 @@ reading this page.
 ## The Controller class
 
 Controllers implement several methods to simplify returning responses. These
-are the same described in [Responses](../responses/), but they can be overridden
+are the same described in [Responses](responses.md), but they can be overridden
 in subclasses of `Controller` and they remove the need to import functions.
 
 | Method                 | Description                                                                                                                                                                                                       |
@@ -35,7 +35,7 @@ in subclasses of `Controller` and they remove the need to import functions.
 | **json**               | Returns a response with application/json content, and the given status (default HTTP 200 OK).                                                                                                                     |
 | **pretty_json**        | Returns a response with indented application/json content, and the given status (default HTTP 200 OK).                                                                                                            |
 | **text**               | Returns a response with text/plain content, and the given status (default HTTP 200 OK).                                                                                                                           |
-| **html**               | Returns a response with text/html content, and the given status (default HTTP 200 OK).                                                                                                                         |
+| **html**               | Returns a response with text/html content, and the given status (default HTTP 200 OK).                                                                                                                            |
 | **moved_permanently**  | Returns an HTTP 301 Moved Permanently response, to the given location.                                                                                                                                            |
 | **redirect**           | Returns an HTTP 302 Found response (commonly called redirect), to the given location.                                                                                                                             |
 | **see_other**          | Returns an HTTP 303 See Other response, to the given location.                                                                                                                                                    |
@@ -79,9 +79,9 @@ Using controllers involves a performance fee compared to using functions because
 a controller must be instantiated at each web request, but has the following
 benefits:
 
-* Controllers support [dependency injection](../dependency-injection/) to
+* Controllers support [dependency injection](dependency-injection.md) to
   receive services for their constructors, in addition to [dependency
-  injection](../dependency-injection) for every single request handler
+  injection](dependency-injection.md) for every single request handler
 * Controllers support defining an `on_request(request: Request)` method, that
   gets called at every web request, `on_response(response: Response)` method,
   and a base `route` (defined as class method) for all handlers defined in the

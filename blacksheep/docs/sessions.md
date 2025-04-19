@@ -51,7 +51,7 @@ The `use_sessions` method accepts the following parameters:
 The built-in sessions middleware uses
 [`itsdangerous`](https://itsdangerous.palletsprojects.com/en/1.1.x/) to sign,
 encrypt, and verify session cookies. Refer to [data
-protection](../dataprotection/) for more information on how tokens are signed
+protection](dataprotection.md) for more information on how tokens are signed
 and encrypted.
 
 ## Using sessions

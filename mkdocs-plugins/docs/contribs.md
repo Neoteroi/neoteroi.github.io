@@ -39,16 +39,35 @@ commits count.
 
 ## Options
 
-| Name                  | Description                                                               | Type                            | Default             |
-| --------------------- | ------------------------------------------------------------------------- | ------------------------------- | ------------------- |
-| `contributors_label`  | The label text for contributors list.                                     | `str`                           | "Contributors"      |
-| `last_modified_label` | The label text for last modified time.                                    | `str`                           | "Last modified on"  |
-| `last_modified_time`  | Whether to display the last modified time for each page.                  | `bool`                          | `True`              |
-| `time_format`         | Format to be used for dates.                                              | `str`                           | "%Y-%m-%d %H:%M:%S" |
-| `contributors`        | Information about contributors, use to configure images for contributors. | `list` of `contributor` objects | `[]`                |
+| Name                  | Description                                                                                                                                 | Type                            | Default             |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------------- |
+| `contributors_label`  | The label text for contributors list.                                                                                                       | `str`                           | "Contributors"      |
+| `contributors`        | Information about contributors, use to configure images for contributors.                                                                   | `list` of `contributor` objects | `[]`                |
+| `enabled_by_env`      | When specified, the Git contributors plugin is only enabled if such variable exists and its value is in `{"1", "true"}` (case insensitive). | `str`                           | `""`                |
+| `last_modified_label` | The label text for last modified time.                                                                                                      | `str`                           | "Last modified on"  |
+| `last_modified_time`  | Whether to display the last modified time for each page.                                                                                    | `bool`                          | `True`              |
+| `time_format`         | Format to be used for dates.                                                                                                                | `str`                           | "%Y-%m-%d %H:%M:%S" |
 
 The plugin by default displays dots with the first two initials of each committer's name,
 displaying pictures requires explicit configuration, described below.
+
+/// admonition | Keep disabled during local development.
+    type: warning
+
+This plugin has a significant impact on the performance of `mkdocs serve` and
+`mkdocs build`. It is recommended to keep it disabled during local development
+and enable it only in the build job that generates the artifacts for publishing.
+
+```yaml  {hl_lines="2"}
+  - neoteroi.contribs:
+      enabled_by_env: "GIT_CONTRIBS_ON"
+```
+
+```bash
+GIT_CONTRIBS_ON=True mkdocs build
+```
+
+///
 
 ### Contributor object
 
@@ -70,7 +89,6 @@ following example:
       contributors:
         - email: roberto.prevato@gmail.com
           image: https://avatars.githubusercontent.com/u/2576032?s=400&u=d8d880e8ed05bb170877dd3d561d8301c4beeeed&v=4
-
 ```
 
 Contributors are matched by email address, and the image is used if configured.

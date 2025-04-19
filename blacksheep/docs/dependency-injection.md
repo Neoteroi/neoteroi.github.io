@@ -32,7 +32,7 @@ Consider this example:
 ### Demo
 
 Starting from a minimal environment as described in the [getting started
-tutorial](../getting-started/), create a `foo.py` file with the following
+tutorial](getting-started.md), create a `foo.py` file with the following
 contents, inside a `domain` folder:
 
 ```

@@ -341,4 +341,4 @@ are fired, and the state of the application when they are executed.
 
 ## Next
 
-Read about the details of [routing in BlackSheep](../routing).
+Read about the details of [routing in BlackSheep](routing.md).

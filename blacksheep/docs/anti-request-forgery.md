@@ -141,7 +141,7 @@ change the state and should execute read-only operations.
 !!! danger "Important note about token generation"
     Tokens are signed using symmetric encryption. For your production
     environments, configure application secrets using environment variables
-    as described in [data protection](../dataprotection/).
+    as described in [data protection](dataprotection.md).
 
 ## How to send the anti-forgery token
 

@@ -7,7 +7,7 @@ This page describes:
 - [X] How to use the built-in authorization strategy.
 - [X] How to apply authorization rules to request handlers.
 
-It is recommended to read about [authentication](../authentication) before
+It is recommended to read about [authentication](authentication.md) before
 reading this page.
 
 ## How to use built-in authorization
@@ -22,7 +22,7 @@ Examples of common strategies to authorize users in web applications include:
 
 The example below shows how to configure an authorization handler that
 requires an authenticated user. It is modified from the example in the
-[authentication](../authentication) page:
+[authentication](authentication.md) page:
 
 ```python
 from typing import Optional
