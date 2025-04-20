@@ -1,15 +1,17 @@
 # Request handlers
 
-The previous pages describe that a request handler in BlackSheep is a function
-associated with a route,  having the responsibility of handling web requests.
-This page describes `request handlers` in detail, covering the following:
+The previous pages explain that a request handler in BlackSheep is a function
+associated with a route, responsible for handling web requests. This page
+provides a detailed explanation of request handlers, covering the following
+topics:
 
 - [X] Request handler normalization.
 - [X] Using asynchronous and synchronous code.
 
 ## Request handler normalization.
-A normal request handler in BlackSheep is defined as an asynchronous function
-having the following signature:
+
+A standard request handler in BlackSheep is defined as an asynchronous function
+with the following signature:
 
 ```python
 from blacksheep import Request, Response
@@ -19,7 +21,7 @@ async def normal_handler(request: Request) -> Response:
 
 ```
 
-To be a request handler, a function must be associated with a route:
+For a function to act as a request handler, it must be associated with a route:
 
 ```python
 from blacksheep import Application, Request, Response, get, text
@@ -37,11 +39,10 @@ A request handler defined this way is called directly to generate a response
 when a web request matches the route associated with the function (in this
 case, HTTP GET at the root of the website "/").
 
-However, to improve the developer's experience and development speed,
-BlackSheep implements automatic normalization of request handlers. For example,
-it is possible to define a request handler as a synchronous function, the
-framework automatically wraps the synchronous function into an asynchronous
-wrapper:
+To enhance the developer experience and improve development speed, BlackSheep
+implements automatic normalization of request handlers. For instance, a request
+handler can be defined as a synchronous function, and the framework will
+automatically wrap it in an asynchronous wrapper:
 
 ```python
 
@@ -51,13 +52,15 @@ def sync_handler(request: Request) -> Response:
 
 ```
 
-!!! danger "Avoid blocking code in synchronous methods!"
-    When a request handler is defined as a synchronous method, BlackSheep
-    assumes that the author of the code knows what they are doing and about
-    asynchronous programming, and that the response should be returned
-    immediately without I/O or CPU-intensive operations that would block the
-    event loop. BlackSheep does nothing to prevent blocking the event loop, if
-    you add blocking operations in your code.
+/// admonition | Avoid blocking code in synchronous methods!
+    type: danger
+
+When a request handler is defined as a synchronous function, BlackSheep assumes
+that the developer understands asynchronous programming and intends for the
+response to be returned immediately without performing I/O or CPU-intensive
+operations that could block the event loop.
+
+///
 
 Similarly, request handlers are normalized when their function signature is
 different than the normal one. For example, a request handler can be defined
@@ -112,8 +115,8 @@ def get_cats(page: int = 1, page_size: int = 30, search: str = "") -> Response:
 
 ```
 
-In the `get_cats` example above, function parameters are read automatically
-from the query string and parsed, if present, otherwise default values are
+In the `get_cats` example above, function parameters are automatically read
+from the query string and parsed if present; otherwise, default values are
 used.
 
 ### Explicit and implicit binding
@@ -181,21 +184,26 @@ def redirect_example() -> Response:
 
 ```
 
-Request handlers that do I/O bound operations or CPU-intensive operations
-should instead be `async`, to not hinder the performance of the web server. For
+Request handlers that perform I/O-bound or CPU-intensive operations should be
+defined as `async` to avoid hindering the performance of the web server. For
 example, if information is fetched from a database or a remote API when
-handling a web request handler, it is correct to use asynchronous code
-to reduce RAM consumption and not block the event loop of the web application.
+handling a web request handler, it is correct to use asynchronous code to
+reduce RAM consumption and not block the event loop of the web application.
 
-!!! warning
-    If an operation is CPU-intensive (e.g. involving file operations,
-    resizing a picture), the request handlers that initiate such operation should
-    be async, and use a [thread or process
-    pool](https://docs.python.org/3/library/asyncio-eventloop.html#executing-code-in-thread-or-process-pools)
-    to not block the web app's event loop.
-    Similarly, request handlers that initiate I/O bound operations (e.g. web
-    requests to external APIs, connecting to a database) should also be `async`.
+/// admonition | CPU and I/O intensive operations.
+    type: warning
+
+If an operation is CPU-intensive (e.g. file operations or image resizing), the
+request handlers that initiate such operation should be async, and use a
+[thread or process
+pool](https://docs.python.org/3/library/asyncio-eventloop.html#executing-code-in-thread-or-process-pools)
+to not block the web app's event loop. Similarly, request handlers that
+initiate I/O bound operations (e.g. web requests to external APIs, connecting
+to a database) should also be `async`.
+
+///
 
 ## Next
+
 The next pages describe [requests](requests.md) and [responses](responses.md)
 in detail.

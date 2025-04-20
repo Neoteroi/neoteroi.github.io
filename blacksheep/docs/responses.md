@@ -1,4 +1,5 @@
 # Responses
+
 This page describes:
 
 - [X] How responses are handled.
@@ -6,7 +7,8 @@ This page describes:
 - [X] Responses using asynchronous generators.
 
 ## The Response class
-A normal request handler in BlackSheep is expected to return an instance of
+
+A standard request handler in BlackSheep is expected to return an instance of
 the `blacksheep.Response` class. Users of the framework can define
 request handlers that return different kinds of objects. In such cases they are
 normalized at application start-up to return instances of `Response`.
@@ -30,12 +32,12 @@ BlackSheep uses these exact types to benefit from static typing and
 compilation of [`Cython` extensions](https://cython.org). However, handling
 responses this way is not comfortable for regular use. For this reason, a
 number of helper functions are provided to create `Response` objects with a
-simpler code API.
+more user-friendly code API.
 
 For example, the `json` function in `blacksheep.server.responses` produces
 a response object having a JSON body.
 
-```python
+```python {hl_lines="8"}
 from blacksheep import Application, get, json
 
 app = Application()
@@ -67,15 +69,12 @@ def home():
     return {"message": "Hello, World!"}
 ```
 
-Note that, when a request handler doesn't specify a `Response` return type with
-type annotations, the framework checks the function's return type at each call
-(causing a small performance fee!), and automatically prepares a `Response`
-if necessary.
+When a request handler doesn't specify a `Response` return type with type
+annotations, the framework must check the function's return type at each call
+(causing a small performance fee!), and automatically prepares a `Response` if
+necessary.
 
 ## Functions in `blacksheep.server.responses`
-
-!!! info
-    Note that you can import these functions from the `blacksheep` package itself.
 
 The table below describes the built-in functions to produce responses:
 
@@ -103,6 +102,9 @@ The table below describes the built-in functions to produce responses:
 | **view_async**         | Returns a view rendered asynchronously.                                                                                                                                                                           |
 | **file**               | Returns a binary file response with the given content type and optional file name, for download (attachment) (default HTTP 200 OK). This method supports being called with bytes, or a generator yielding chunks. |
 
+!!! info
+    These functions can be imported directly from the `blacksheep` namespace.
+
 For information on how to use these methods, refer to the type annotations
 provided in the code.
 
@@ -119,7 +121,7 @@ To specify response headers use one of the following methods:
 
 ```python
 @get("/")
-def home():
+def home() -> Response:
     response = json({"message": "Hello, World!"})
 
     response.add_header(b"Example", b"Value")
@@ -133,11 +135,7 @@ def home():
     return response
 ```
 
-Note that BlackSheep enforces specifying header names and values as `bytes`,
-not strings.
-
-!!! warning
-    This might change in a future version.
+BlackSheep requires specifying header names and values as `bytes`, not strings.
 
 ## Setting cookies
 
@@ -229,7 +227,7 @@ Cookie's options:
 
 ### Setting many cookies
 
-Use the `Response.set_cookies` method to set several cookies at the same time.
+Use the `Response.set_cookies` method to set several cookies at once.
 
 ```python
 
@@ -269,8 +267,9 @@ response header containing an instruction to remove a cookie by name.
 ## Removing cookies
 
 Use the `Response.remove_cookie` method to remove a cookie from the response
-object before it's sent to the client. Note that this method does not generate
-a `Set-Cookie` header.
+object before it's sent to the client. This method does **not** generate
+a `Set-Cookie` header. Use `unset_cookie` if the intention is to instruct the
+client to discard a previously sent cookie.
 
 ## Response streaming
 
@@ -284,10 +283,11 @@ the generator will return the correct amount of bytes).
 
 ## Chunked encoding
 
-The following example shows how response streaming can be used in responses,
-using a `StreamedContent` object bound to a generator yielding bytes.
+The following example illustrates how response streaming can be used in
+responses, using a `StreamedContent` object bound to a generator yielding
+bytes.
 
-```python
+```python {hl_lines="9 18"}
 import asyncio
 from blacksheep import Application, Response, StreamedContent, get
 
