@@ -1,14 +1,13 @@
 # Sessions
 
-BlackSheep provides built-in support for sessions, which are handled through
-digitally signed cookies. This page describes how to use sessions with the
-built-in classes.
+This page describes features to support sessions, handled with digitally signed
+cookies.
 
 /// admonition | Sessions are stored in cookies.
     type: danger
 
-BlackSheep's built-in session features store session data in cookies.
-Therefore, web applications using these features must implement [Anti-Forgery
+The built-in sessions store data in cookies on the client side. Therefore, web
+applications using these features must implement [Anti-Forgery
 validation](anti-request-forgery.md) to prevent Cross-Site Request Forgery
 (XSRF/CSRF).
 

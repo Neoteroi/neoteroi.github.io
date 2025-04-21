@@ -1,10 +1,10 @@
-BlackSheep offers features to configure `Cache-Control` response headers.
-This page explains:
+This page describes features to configure `Cache-Control` response headers.
+It covers:
 
-- [X] How to use the `cache_control` decorator to configure a header for specific
-  request handlers
-- [X] How to use the `CacheControlMiddleware` to configure a common header for all
-  request handlers globally
+- [X] Using the `cache_control` decorator to configure a header for specific
+  request handlers.
+- [X] Using the `CacheControlMiddleware` to configure a common header for all
+  request handlers globally.
 
 ## About Cache-Control
 
@@ -38,9 +38,13 @@ async def get_cats():
 
 ```
 
-!!! warning "Decorators order"
-    The order of decorators matters: the router decorator must be the outermost
-    decorator in this case.
+/// admonition | Decorators order.
+    type: warning
+
+The order of decorators matters: the router decorator must be the outermost
+decorator in this case.
+
+///
 
 For controllers:
 
@@ -95,8 +99,8 @@ class Home(Controller):
         return "Example"
 ```
 
-The provided `CacheControlMiddleware` can be subclassed to control what requests
-should be affected:
+The provided `CacheControlMiddleware` can be subclassed to control when
+requests should be affected:
 
 ```python
 from blacksheep import Request, Response
@@ -109,7 +113,8 @@ class MyCacheControlMiddleware(CacheControlMiddleware):
         ...
 ```
 
-For example, a middleware that disables cache-control by default can be defined in the following way:
+For instance, a middleware that disables cache-control by default can be
+defined in the following way:
 
 ```python
 class NoCacheControlMiddleware(CacheControlMiddleware):

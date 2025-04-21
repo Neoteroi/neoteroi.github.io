@@ -1,8 +1,7 @@
-BlackSheep implements built-in features to handle automatic response
-compression. This page describes:
+This page describes built-in features to handle automatic response compression.
+It covers:
 
-- [X] How to use the `GzipMiddleware` to enable gzip compression
-
+- [X] Using the `GzipMiddleware` to enable gzip compression.
 
 ## GzipMiddleware
 
@@ -33,11 +32,14 @@ app = Application()
 use_gzip_compression(app)
 ```
 
-!!! warning "Not for streamed content"
-    The `GzipMiddleware` does not compress bytes streamed using the
-    `StreamedContent` class (used by default when serving files), it only
-    compresses whole bodies like, for example, those that are generated when
-    returning `JSON` content to the client.
+/// admonition | Not for streamed content.
+
+The `GzipMiddleware` does not compress bytes streamed using the
+`StreamedContent` class (used by default when serving files), it only
+compresses whole bodies like, for example, those that are generated when
+returning `JSON` content to the client.
+
+///
 
 ### Options
 
