@@ -45,7 +45,7 @@ async def events_handler() -> AsyncIterable[ServerSentEvent]:
    and must include at least one `yield` statement like above).
 
 In this case the return type annotation on the request handler is mandatory
-because the request handler is automatically normalized by BlackSheep.
+because the request handler is normalized automatically.
 
 BlackSheep supports request handlers defined as asynchronous generators since
 version `2.0.6` especially for this use case, to support less verbose code
@@ -55,15 +55,15 @@ an asynchronous generator yielding bytes. Using `async generators` with custom
 classes require configuring the type of `Response` that is used to convert
 those classes into bytes, like described in [the responses page](/responses/#chunked-encoding).
 
-The following example shows how to define a server-sent event route controlling
-the `Response` object.
+The following example demonstrates how to define a server-sent event route
+controlling the `Response` object.
 
 ## Defining a server-sent events route controlling the Response object
 
 To define a server-sent events route and maintain control of the `Response`
 object, refer to the following example:
 
-```python
+```python {hl_lines="4 11-14 20"}
 import asyncio
 from collections.abc import AsyncIterable
 
