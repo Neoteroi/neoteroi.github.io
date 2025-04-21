@@ -1,10 +1,10 @@
 # Controllers
 
-BlackSheep has built-in features to support MVC (Model, View, Controller)
-architecture. A `Controller` is a class having at least one method registered
-as a request handler (i.e. associated to a route). A Controller is instantiated
-at each web request, when a web request is matched by a route defined in that
-type of controller.
+BlackSheep includes built-in features to support the MVC (Model, View,
+Controller) architecture. A `Controller` is a class with at least one method
+registered as a request handler (i.e., associated with a route). A Controller
+is instantiated for each web request when the request matches a route defined
+in that controller.
 
 This page describes:
 
@@ -14,10 +14,12 @@ This page describes:
 It is recommended to follow the [MVC tutorial](mvc-project-template.md) before
 reading this page.
 
-!!! tip "For Flask users..."
-    If you come from Flask, controllers in BlackSheep can be considered
-    equivalent to Flask's Blueprints, as they allow to group request handlers
-    in dedicated modules and classes.
+/// admonition | For Flask users
+    type: tip
+If you come from Flask, controllers in BlackSheep can be considered
+equivalent to Flask's Blueprints, as they allow to group request handlers
+in dedicated modules and classes.
+///
 
 ## The Controller class
 
@@ -90,7 +92,7 @@ benefits:
   base classes to personalize the behavior of the application without
   monkey-patching functions
 
-Therefore they can help avoid code repetition in some circumstances.
+Therefore they can help avoid code repetition.
 
 The following example shows how dependency injection can be used in
 controller constructors, and an implementation of the `on_request` method:
@@ -130,6 +132,15 @@ class Home(Controller):
 app.services.add_instance(Settings(value))
 ```
 
+The dependency can also be described as class property:
+
+```python {hl_lines="2"}
+class Home(Controller):
+    settings: Settings
+
+    ...
+```
+
 If route methods (e.g. `head`, `get`, `post`, `put`, `patch`) from
 `blacksheep.server.controllers` are used, then the default singleton `Router`
 instance for controllers is used. It is also possible to use a specific router,
@@ -145,12 +156,13 @@ get = app.controllers_router.get
 ```
 
 ## The APIController class
+
 The `APIController` class is a kind of `Controller` dedicated to API
-definitions. An APIController offers some properties to enable versioning of
+definitions. An APIController offers some properties to simplify versioning of
 routes and adding a common path prefix to all routes, for example, prepending
 "/v1/" fragment to all routes and the name of the controller class.
 
-```python
+```python {hl_lines="5"}
 from blacksheep import Response, FromJSON, FromQuery
 from blacksheep.server.controllers import APIController, delete, get, patch, post
 
@@ -187,14 +199,14 @@ the following paths:
 
 | HTTP Method | Path               | Request handler | Description                       |
 | ----------- | ------------------ | --------------- | --------------------------------- |
-| HTTP GET    | /api/cats          | `get_cats`      | Returns a list of paginated cats. |
-| HTTP GET    | /api/cats/{cat_id} | `get_cat`       | Gets a cat by id.                 |
-| HTTP POST   | /api/cats/{cat_id} | `create_cat`    | Creates a new cat.                |
-| HTTP PATCH  | /api/cats/{cat_id} | `update_cat`    | Updates a cat with given id.      |
-| HTTP DELETE | /api/cats/{cat_id} | `delete_cat`    | Deletes a cat by id.              |
+| GET         | /api/cats          | `get_cats`      | Returns a list of paginated cats. |
+| GET         | /api/cats/{cat_id} | `get_cat`       | Gets a cat by id.                 |
+| POST        | /api/cats/{cat_id} | `create_cat`    | Creates a new cat.                |
+| PATCH       | /api/cats/{cat_id} | `update_cat`    | Updates a cat with given id.      |
+| DELETE      | /api/cats/{cat_id} | `delete_cat`    | Deletes a cat by id.              |
 
-To include a version number in the API, implement a `version` `@classmethod` like in the
-following example:
+To include a version number in the API, implement a `version` `@classmethod`
+like in the following example:
 
 ```python
 class Cats(APIController):
