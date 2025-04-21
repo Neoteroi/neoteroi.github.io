@@ -1,39 +1,46 @@
 # Authentication in BlackSheep
-The words "authentication strategy" in the context of a web application refer
-to the ability to identify the user who is using the application. BlackSheep
-implements a built-in authentication strategy for request handlers. This page
-describes:
+
+The term 'authentication strategy' in the context of a web application refers
+to the process of identifying the user accessing the application. BlackSheep
+provides a built-in authentication strategy for request handlers. This page
+covers:
 
 - [X] How to use the built-in authentication strategy.
 - [X] How to configure a custom authentication handler.
 - [X] How to use the built-in support for JWT Bearer authentication.
 - [X] How to read the user's context in request handlers.
 
-!!! warning
-    Using JWT Bearer and OpenID integrations requires more dependencies: use
-    `pip install blacksheep[full]` to use these features
+/// admonition | Additional dependencies.
+    type: warning
+
+Using JWT Bearer and OpenID integrations requires additional dependencies.
+Install them by running: `pip install blacksheep[full]`.
+
+///
 
 ## Underlying library
-The authentication and authorization logic implemented for BlackSheep was
-packed and published into a dedicated library:
+
+The authentication and authorization logic for BlackSheep is packaged and
+published in a dedicated library:
 [`guardpost`](https://github.com/neoteroi/guardpost) ([in
 pypi](https://pypi.org/project/guardpost/)).
 
 ## How to use built-in authentication
 
-Examples of common strategies to identify users in web applications include:
+Common strategies for identifying users in web applications include:
 
-- reading an `Authorization: Bearer xxx` request header containing a [JWT](https://jwt.io/introduction/)
-  with claims that identify the user
-- reading a signed token from a cookie
+- Reading an `Authorization: Bearer xxx` request header containing a [JWT](https://jwt.io/introduction/).
+  with claims that identify the user.
+- Reading a signed token from a cookie.
 
-The next paragraphs explain first how to use the built-in support for JWT
-Bearer tokens, and how to write a custom authentication handler.
+The following sections first explain how to use the built-in support for JWT
+Bearer tokens and then describe how to write a custom authentication handler.
 
-!!! info
-    The word "user" is usually used only to refer to human users, while
-    the word "service" is used to describe non-human clients. In Java and .NET, a
-    common word to describe a generic identity is "principal".
+/// admonition | Terms: user, service, principal.
+
+The term 'user' typically refers to human users, while 'service' describes non-human clients. In Java and .NET, the term 'principal' is commonly used to describe a generic identity.
+
+///
 
 ## OIDC
 
@@ -41,19 +48,23 @@ BlackSheep implements built-in support for OpenID Connect authentication,
 meaning that it can be easily integrated with identity provider services such
 as:
 
-- [Auth0](https://auth0.com)
-- [Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id)
-- [Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview)
-- [Okta](https://www.okta.com)
+- [Auth0](https://auth0.com).
+- [Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id).
+- [Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview).
+- [Okta](https://www.okta.com).
 
-!!! tip "Examples in GitHub"
-    The [Neoteroi/BlackSheep-Examples/](https://github.com/Neoteroi/BlackSheep-Examples/)
-    repository in GitHub contains examples of JWT Bearer authentication and
-    OpenID Connect integrations.
+/// admonition | Examples in GitHub.
+    type: tip
 
-A basic example integration with any of the identity providers above, having
-implicit flow enabled for `id_token` (meaning that the code doesn't need to
-handle any secret), looks like the following:
+The [Neoteroi/BlackSheep-Examples/](https://github.com/Neoteroi/BlackSheep-Examples/)
+repository in GitHub contains examples of JWT Bearer authentication and OpenID
+Connect integrations.
+
+///
+
+A basic example of integration with any of the identity providers listed above,
+using implicit flow for `id_token` (which removes the need to handle secrets),
+is shown below:
 
 ```python
 from blacksheep import Application, get, html, pretty_json
@@ -100,13 +111,13 @@ For more information and examples, refer to the dedicated page about
 BlackSheep implements built-in support for JWT Bearer authentication, and
 validation of JWTs:
 
-* issued by identity providers implementing OpenID Connect (OIDC) discovery
-  (such as Auth0, Azure Active Directory)
-* and more in general, JWTs signed using asymmetric encryption and verified
-  using public RSA keys
+* Issued by identity providers implementing OpenID Connect (OIDC) discovery
+  (such as Auth0, Microsoft Entra ID).
+* And more in general, JWTs signed using asymmetric encryption and verified
+  using public RSA keys.
 
 The following example shows how to configure JWT Bearer authentication for an
-application registered in `Azure Active Directory`, and also how to configure
+application registered in `Microsoft Entra ID`, and also how to configure
 authorization to restrict access to certain methods, only for users who are
 successfully authenticated:
 
@@ -154,15 +165,18 @@ async def open(user: User | None):
 
 ```
 
-The built-in handler for JWT Bearer authentication does not support JWTs signed
-with symmetric keys. Support for symmetric keys might be added in the future,
-inside **[guardpost](https://github.com/Neoteroi/guardpost)** library.
+The built-in handler for JWT Bearer authentication does not currently support
+JWTs signed with symmetric keys. Support for symmetric keys might be added in
+the future.
 
-!!! info
-    💡 It is possible to configure several JWTBearerAuthentication handlers,
-    for applications that need to support more than one identity provider. For
-    example, for applications that need to support sign-in through Auth0, Azure
-    Active Directory, Azure Active Directory B2C.
+/// admonition | 💡
+
+It is possible to configure several JWTBearerAuthentication handlers,
+for applications that need to support more than one identity provider. For
+example, for applications that need to support sign-in through Auth0, Azure
+Active Directory, Azure Active Directory B2C.
+
+///
 
 ## Writing a custom authentication handler
 
@@ -224,16 +238,16 @@ async def open(user: User | None):
 ```
 
 It is possible to configure several authentication handlers to implement
-different ways to identify users. To differentiate the way the user has been
-authenticated, use the second parameter of `Identity`'s constructor:
+different ways to identify users. To distinguish how the user was
+authenticated, use the second parameter of the Identity constructor:
 
 ```python
 identity = Identity({"name": "Jan Kowalski"}, "AUTHENTICATION_MODE")
 ```
 
-The authentication context is the instance of `Request` created to handle the
-incoming web request. Authentication handlers must set the `identity` property
-on the request, to enable automatic injection of `user` by dependency injection.
+The authentication context is the `Request` instance created to handle the
+incoming web request. Authentication handlers must set the `identity` property on
+the request to enable the automatic injection of `user` via dependency injection.
 
 ### Testing the example
 
@@ -296,7 +310,8 @@ The example below shows how a user's identity can be read from the web request:
     ```
 
 ## Next
-While authentication deals with identifying users, authorization deals with
-determining whether the user is authorized to do the action of the web request.
-The next page describes the built-in [authorization strategy](authorization.md)
-in BlackSheep.
+
+While authentication focuses on *identifying* users, authorization determines
+whether a user *is permitted* to perform the requested action. The next page
+describes the built-in [authorization strategy](authorization.md) in
+BlackSheep.

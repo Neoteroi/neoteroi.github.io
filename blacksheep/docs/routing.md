@@ -341,6 +341,8 @@ filter_by_query = Router(params={"version": "1"})
 filter_by_host  = Router(host="neoteroi.xyz")
 ```
 
+### Custom filters
+
 To define a custom filter, define a type of `RouteFilter` and set it using the
 `filters` parameter:
 

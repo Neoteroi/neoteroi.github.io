@@ -1,14 +1,15 @@
 # Cross-Origin Resource Sharing
 
-BlackSheep implements a strategy to handle [Cross-Origin Resource Sharing
+BlackSheep provides a strategy to handle [Cross-Origin Resource Sharing
 (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). This page
-describes:
+covers:
 
-- [X] How to enable CORS globally.
-- [X] How to enable CORS for specific endpoints.
+- [X] Enabling CORS globally.
+- [X] Enabling CORS for specific endpoints.
 
 ## Enabling CORS globally
-The example below shows how to enable CORS globally on a BlackSheep application:
+
+The example below demonstrates how to enable CORS globally:
 
 ```python
 app.use_cors(
@@ -19,8 +20,8 @@ app.use_cors(
 )
 ```
 
-When enabled this way, the framework handles `CORS` requests, including
-preflight `OPTIONS` requests.
+When enabled this way, the framework handles `CORS` requests and preflight
+`OPTIONS` requests.
 
 It is possible to use `*` to enable any origin or any method:
 
@@ -42,10 +43,12 @@ app.use_cors(
 | expose_headers    | Controls the value of [Access-Control-Expose-Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers). 🗡️        |
 | max_age           | Controls the value of [Access-Control-Max-Age](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age), defaults to 5 seconds. |
 
-🗡️ The value can be a string of values separated by space, comma, or semi-colon, or a list.
+🗡️ The value can be a string of values separated by space, comma, or semi-colon,
+   or a list.
 
 ## Enabling CORS for specific endpoints
-The example below shows how to enable CORS only for certain endpoints:
+
+The example below demonstrates how to enable CORS only for specific endpoints:
 
 ```python
 
@@ -71,18 +74,18 @@ async def enabled():
 
 Explanation:
 
-1. the function call `app.use_cors()` activates built-in handling of CORS
-   requests and registers a global CORS rule that doesn't allow anything by
-   default
-2. the call `app.add_cors_policy(...)` registers a new set of rules for CORS,
-   associated to the key "example"
-3. the set of rules for CORS called "example" is associated to specific
-   request handlers using the `@cors` decorator
+1. The function call `app.use_cors()` activates the built-in handling of CORS
+   requests and registers a global CORS rule that denies all requests by
+   default.
+2. The call to `app.add_cors_policy(...)` registers a new set of CORS rules
+   associated with the key 'example'.
+3. The CORS rules associated with the key 'example' are applied to specific
+   request handlers using the `@cors` decorator.
 
 It is possible to register many sets of rules for CORS, each with its own key,
 and apply different rules to request handlers.
 It is also possible to define a global rule when calling `app.use_cors(...)`
-that enables certain operations for all request handlers, while defining
+that enables certain operations for all request handlers, while still defining
 specific rules.
 
 ```python

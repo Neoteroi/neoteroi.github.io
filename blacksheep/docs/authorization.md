@@ -1,30 +1,31 @@
 # Authorization in BlackSheep
-The words "authorization strategy" in the context of a web application refer to
-the ability to determine whether the user is allowed to do certain operations.
-BlackSheep implements a built-in authorization strategy for request handlers.
-This page describes:
+
+The term 'authorization strategy' in the context of a web application refers to
+the process of determining whether a user is permitted to perform certain operations.
+BlackSheep provides a built-in authorization strategy for request handlers.
+This page covers:
 
 - [X] How to use the built-in authorization strategy.
 - [X] How to apply authorization rules to request handlers.
 
-It is recommended to read about [authentication](authentication.md) before
-reading this page.
+It is recommended to review the [authentication documentation](authentication.md)
+before proceeding with this page.
 
 ## How to use built-in authorization
 
-Examples of common strategies to authorize users in web applications include:
+Common strategies for authorizing users in web applications include:
 
-* verifying that the user's context obtained from a [JWT includes certain
-  claims](https://jwt.io/introduction/) (e.g. `scope`, `role`)
-* verifying that a web request includes a certain key, like an instrumentation
-  key or a key signed by a private RSA key (owned by the user) that can be
-  verified by a public RSA key (used by the server to validate)
+* Verifying that the user's context, obtained from a [JWT](https://jwt.io/introduction/),
+  includes certain claims (e.g., `scope`, `role`)
+* Verifying that a web request contains a specific key, such as an
+  instrumentation key or a key signed by a private RSA key (owned by the user)
+  and validated by a public RSA key (used by the server).
 
-The example below shows how to configure an authorization handler that
-requires an authenticated user. It is modified from the example in the
-[authentication](authentication.md) page:
+The following example demonstrates how to configure an authorization handler
+that requires an authenticated user. It is adapted from the example on the
+[authentication's documentation](authentication.md) page:
 
-```python
+```python {hl_lines="17-24 27 32 43"}
 from typing import Optional
 
 from blacksheep import Application, Request, json, ok, get
@@ -74,28 +75,24 @@ async def only_for_authenticated_users():
 
 ```
 
-Note:
-
-* authorization is enabled using `app.use_authorization()`
-* this method returns an instance of `AuthorizationStrategy`, which handles
-  the authorization rules
-* the method `.add(Policy(Authenticated, AuthenticatedRequirement()))`
+* Authorization is enabled by calling `app.use_authorization()`. This method
+  returns an instance of `AuthorizationStrategy`, which manages the
+  authorization rules.
+* The method `.add(Policy(Authenticated, AuthenticatedRequirement()))`
   configures an authorization policy with a single requirement, to have an
-  authenticated user
-* the authorization policy is applied to request handlers using the `@auth`
+  authenticated user.
+* The authorization policy is applied to request handlers using the `@auth`
   decorator from `blacksheep.server.authorization` with an argument that
-  specifies the policy to be used
+  specifies the policy to be used.
 
 It is possible to define several authorization policies, each specifying one
 or more requirements to be satisfied in order for authorization to succeed.
-The next example explains how to configure an authorization policy that checks
-for user's roles from claims.
 
-## Defining an authorization policy that checks a user's claims
+## Defining an authorization policy that checks claims
 
-The example below shows how to configure an authorization handler that
-validates a user's claims (looking for a "role" claim that might be coming from
-a JWT).
+The following example demonstrates how to configure an authorization handler
+that validates a user's claims, such as checking for a `role` claim that may
+originate from a JWT.
 
 ```python
 from blacksheep.server.authorization import Policy
@@ -199,10 +196,10 @@ async def only_for_administrators():
 
 ## Using the default policy
 
-The method `app.use_authorization()`, when used without arguments, returns an
-instance of `AuthorizationStrategy` from the `guardpost` library. This object
-can be configured to use a default policy, for example to require an
-authenticated user by default for all request handlers.
+The `app.use_authorization()` method returns an instance of
+`AuthorizationStrategy` from the `guardpost` library. This object can be
+configured to use a default policy, such as requiring an authenticated user by
+default for all request handlers.
 
 ```python
 authorization = app.use_authorization()
@@ -233,18 +230,17 @@ async def for_anybody(user: Optional[User]):
 
 In some scenarios it is necessary to specify multiple authentication schemes
 for web applications: for example, the same application might handle
-authentication obtained through the `GitHub` OAuth app and `Azure Active
-Directory (AAD)`. In such scenarios, it might be necessary to restrict access
-to some endpoints by authentication method, too.
+authentication obtained through the `GitHub` OAuth app and `Microsoft Entra ID`.
+In such scenarios, it might be necessary to restrict access to some endpoints
+by authentication method, too.
 
 To do so:
 
-1. specify different authentication handlers, configuring schemes overriding
+1. Specify different authentication handlers, configuring schemes overriding
    the `scheme` property as in the example below.
-2. use the `authentication_schemes` parameter in the `@auth` decorator
+2. Use the `authentication_schemes` parameter in the `@auth` decorator.
 
-```python
-
+```python {hl_lines="1 3-5 11"}
 class GitHubAuthHandler(AuthenticationHandler):
 
     @property
@@ -268,7 +264,9 @@ async def only_for_user_authenticated_with_github():
 When a request fails because of authorization reasons, the web framework
 returns:
 
-- status [`401 Unauthorized`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) if authentication failed, and no valid credentials were provided
-- status [`403 Forbidden`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403) if
+- Status [`401
+  Unauthorized`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401)
+  if authentication failed and no valid credentials were provided.
+- Status [`403 Forbidden`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403) if
   authentication succeeded as valid credentials were provided, but the user is
-  not authorized to perform an action
+  not authorized to perform an action.

@@ -1,6 +1,6 @@
 # OpenID Connect
 
-BlackSheep implements built-in support for OpenID Connect authentication,
+BlackSheep provides built-in support for OpenID Connect authentication,
 meaning that it can be easily integrated with identity provider services such
 as:
 
@@ -9,18 +9,22 @@ as:
 * [Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview)
 * [Okta](https://www.okta.com)
 
-This page documents:
+This page covers:
 
-- [X] How to use OpenID Connect integration to provide sign-in and sign-up features,
+- [X] Using OpenID Connect integration to provide sign-in and sign-up features.
   and to identify users who use the application
-- [X] How to use OpenID Connect integration to obtain `access_token`s to use APIs
-  (in addition, or instead of `id_token`s)
+- [X] Using OpenID Connect integration to obtain `access_token`s to use APIs
+  (in addition, or instead of `id_token`s).
 - [X] How tokens are protected and how to configure applications to support
-  multiple instances and regions
+  multiple instances and regions.
 
-!!! warning
-    Using JWT Bearer and OpenID integrations requires more dependencies: use
-    `pip install blacksheep[full]` to use these features
+/// admonition | Additional dependencies.
+    type: warning
+
+Using JWT Bearer and OpenID integrations requires additional dependencies.
+Install them by running: `pip install blacksheep[full]`.
+
+///
 
 ## Basic example
 
@@ -125,11 +129,11 @@ looks like the following:
 
 ```python
 """
-This example shows how to configure an OpenID Connect integration with Auth0, obtaining
-an id_token, an access_token, and a refresh_token. The id_token is exchanged with the
-client using a response cookie (also used to authenticate users
-for following requests), while the access token and the refresh token are not stored
-and can only be accessed using optional events.
+This example shows how to configure an OpenID Connect integration with Auth0,
+obtaining an id_token, an access_token, and a refresh_token. The id_token is
+exchanged with the client using a response cookie (also used to authenticate
+users for following requests), while the access token and the refresh token are
+not stored and can only be accessed using optional events.
 """
 import uvicorn
 from blacksheep.server.application import Application
@@ -141,7 +145,7 @@ from common.secrets import Secrets
 
 load_dotenv()
 secrets = Secrets.from_env()
-app = Application(show_error_details=True)
+app = Application()
 
 
 # Auth0 with a custom scope
