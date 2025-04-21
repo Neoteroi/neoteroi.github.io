@@ -7,21 +7,25 @@ requests.
 Examples of such situations are:
 
 - Cookies are automatically included in web requests, so if an application uses
-  cookie-based authentication, credentials are sent automatically
+  cookie-based authentication, credentials are sent automatically.
 - After a user signs in with Basic or Digest authentication, the browser
-  automatically sends the credentials until the session ends
+  automatically sends the credentials until the session ends.
 
 If a web application uses cookie-based authentication or other features that
 cause credentials to be automatically included in web requests, it requires
 anti-forgery measures.
 
 BlackSheep implements built-in support for anti-request-forgery validation, this
-page describes how to use the built-in solution.
+page describes how to use it.
 
-!!! tip
-    Applications that store access tokens (for example JWTs) in the HTML5
-    storage and include them in `Authorization: Bearer {...}` headers, are not
-    vulnerable to CSRF and do not require anti-forgery measures.
+/// admonition | Options using HTML5 Storage.
+    type: tip
+
+Applications that store access tokens (for example JWTs) in the HTML5
+storage and include them in `Authorization: Bearer {...}` headers, are not
+vulnerable to CSRF and do not require anti-forgery measures.
+
+///
 
 ## How to use the built-in anti-forgery validation
 
@@ -37,10 +41,10 @@ app = Application(show_error_details=True)
 use_anti_forgery(app)
 ```
 
-The call to `use_anti_forgery(app)` configures a middleware that can issue and
-validate anti-forgery tokens, and extensions for Jinja2 templates to render
-anti-forgery tokens in HTML templates. It is important to configure templating
-before anti-forgery because the latter configures the extensions on the Jinja2
+The `use_anti_forgery(app)` function configures middleware to issue and
+validate anti-forgery tokens, as well as extensions for Jinja2 templates to
+render these tokens in HTML templates. It is important to configure templating
+before enabling anti-forgery, as the latter sets up extensions in the Jinja2
 environment.
 
 Consider an example having this folder structure:
@@ -61,7 +65,7 @@ from blacksheep import Application, FromForm, get, post, view
 from blacksheep.server.csrf import use_anti_forgery
 
 
-app = Application(show_error_details=True)
+app = Application()
 
 use_anti_forgery(app)
 
@@ -101,19 +105,23 @@ And `index.jinja` contains the following template:
 </html>
 ```
 
-The `{% af_input %}` custom tag is used to render an HTML input element containing an
-anti-forgery token. The built-in solution uses the Double-Token strategy: when
-an anti-forgery token is required to render HTML for a response, a corresponding
-HTTP-only cookie is configured for the response. The value of the cookie and the
-control parameter are matched in following requests for validation. Contextually,
-response headers are also set to protect the HTML view against click-jacking and to
-forbid iframes.
+The `{% af_input %}` tag renders an HTML input element containing an
+anti-forgery token. The built-in solution uses the Double-Token strategy. When
+an anti-forgery token is required to render HTML, a corresponding HTTP-only
+cookie is included in the response. The cookie's value and the control
+parameter are matched in subsequent requests for validation. Contextually,
+response headers are also set to protect the HTML view against click-jacking
+and to forbid iframes.
 
-!!! tip "Alternative tags"
-    In alternative to `{% af_input %}`, it is possible to use the tag
-    `{% csrf_input %}` (like Django). However, `af_input` is recommended since
-    the objective of the tag is to obtain an input element containing an
-    anti-forgery token, not to achieve Cross-Site Request Forgery!
+/// admonition | Alternative tags.
+    type: tip
+
+In alternative to `{% af_input %}`, it is possible to use the tag
+`{% csrf_input %}` (like Django). However, `af_input` is recommended since
+the objective of the tag is to obtain an input element containing an
+anti-forgery token, not to achieve Cross-Site Request Forgery!
+
+///
 
 An example of a rendered view looks like the following:
 
@@ -138,14 +146,18 @@ Validation is applied by default to all `DELETE PATCH POST PUT` web requests.
 Requests using other methods are not validated as they are not supposed to
 change the state and should execute read-only operations.
 
-!!! danger "Important note about token generation"
-    Tokens are signed using symmetric encryption. For your production
-    environments, configure application secrets using environment variables
-    as described in [data protection](dataprotection.md).
+/// admonition | Important note about token generation.
+    type: danger
+
+Tokens are signed using symmetric encryption. For your production environments,
+configure application secrets using environment variables as described in [data
+protection](dataprotection.md).
+
+///
 
 ## How to send the anti-forgery token
 
-The anti-forgery token can be sent to the server in one of these ways:
+The anti-forgery token can be sent to the server in one of the following ways:
 
 | Location       | Parameter Name               |
 | -------------- | ---------------------------- |
@@ -226,8 +238,8 @@ async def create_example():
 
 ## Custom AntiForgeryHandler classes
 
-The following example shows how to override methods of the `AntiForgeryHandler`
-class:
+The following example demonstrates how to override methods of the
+`AntiForgeryHandler`:
 
 ```python
 from blacksheep.server.csrf import AntiForgeryHandler, use_anti_forgery
