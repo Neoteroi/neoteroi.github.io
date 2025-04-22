@@ -15,7 +15,7 @@ This page covers:
 
 !!! info
     The [BlackSheep MVC project
-    template](https://github.com/RobertoPrevato/BlackSheepMVC) includes a
+    template](https://github.com/Neoteroi/BlackSheep-MVC) includes a
     ready-to-use solution having an application with templates and layout
     configured.
 

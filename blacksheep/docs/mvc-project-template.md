@@ -351,7 +351,7 @@ class Greetings(Controller):
                 sentences=[
                     Sentence(
                         "Check this out!",
-                        "https://github.com/RobertoPrevato/BlackSheep",
+                        "https://github.com/Neoteroi/BlackSheep",
                     )
                 ],
             )

@@ -41,7 +41,7 @@ different request-response cycles, when possible. By default, connections are
 not disposed of as long as they are kept open.
 
 Implementation:
-[/blacksheep/client/pool.py](https://github.com/RobertoPrevato/BlackSheep/blob/master/blacksheep/client/pool.py).
+[/blacksheep/client/pool.py](https://github.com/Neoteroi/BlackSheep/blob/master/blacksheep/client/pool.py).
 
 Connections are created using `asyncio` function `loop.create_connection`.
 

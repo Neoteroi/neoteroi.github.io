@@ -344,7 +344,7 @@ def get_cat_by_id(cat_id: UUID):
 ```
 
 To see a complete example, refer to the source code of the [MVC project
-template](https://github.com/RobertoPrevato/BlackSheepMVC), and see how
+template](https://github.com/Neoteroi/BlackSheep-MVC), and see how
 documentation is organized and configured (in `app.docs`, `app.controllers.docs`).
 
 ### Deprecating an API
