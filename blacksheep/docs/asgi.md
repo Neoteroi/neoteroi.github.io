@@ -20,8 +20,10 @@ documentation use `Uvicorn`, but the framework has been tested also with
 <br />
 <div class="img-auto-width"></div>
 <p align="left">
-  <a href="https://pgjones.gitlab.io/hypercorn/"><img width="270" src="https://pgjones.gitlab.io/hypercorn/_images/logo.png" alt="Hypercorn"></a>
+  <a href="https://github.com/pgjones/hypercorn"><img width="270" src="https://raw.githubusercontent.com/pgjones/hypercorn/main/artwork/logo.png" alt="Hypercorn"></a>
 </p>
+
+---
 
 Many details, such as how to run the server in production, depend on the chosen
 ASGI server.
