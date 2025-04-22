@@ -1,10 +1,20 @@
 # Sessions
 
-BlackSheep implements built-in support for sessions, which are handled through
-digitally signed cookies. This page describes how to use sessions with the
-built-in classes.
+This page describes features to support sessions, handled with digitally signed
+cookies.
+
+/// admonition | Sessions are stored in cookies.
+    type: danger
+
+The built-in sessions store data in cookies on the client side. Therefore, web
+applications using these features must implement [Anti-Forgery
+validation](anti-request-forgery.md) to prevent Cross-Site Request Forgery
+(XSRF/CSRF).
+
+///
 
 ## Enabling sessions
+
 To enable sessions, use the `app.use_sessions` method as in the example below:
 
 ```python
@@ -27,13 +37,13 @@ def home(request: Request):
 
 The `use_sessions` method accepts the following parameters:
 
-| Name            | Description                                                                           | Defaults to                           |
-| --------------- | ------------------------------------------------------------------------------------- | ------------------------------------- |
-| secret_key      | required secret key used for signing                                                  | N/A                                   |
-| session_cookie  | optional session cookie name                                                          | "session"                             |
-| serializer      | optional `blacksheep.sessions.Serializer` to serialize and deserialize session values | `blacksheep.sessions.JSONSerializer`  |
-| signer          | optional `itsdangerous.Serializer` to sign and encrypt the session cookie             | `itsdangerous.URLSafeTimedSerializer` |
-| session_max_age | Optional session max age, in **seconds**                                              | `None`                                |
+| Name            | Description                                                                            | Defaults to                           |
+| --------------- | -------------------------------------------------------------------------------------- | ------------------------------------- |
+| secret_key      | Required secret key used for signing cookies.                                          | N/A                                   |
+| session_cookie  | Optional session cookie name.                                                          | "session"                             |
+| serializer      | Optional `blacksheep.sessions.Serializer` to serialize and deserialize session values. | `blacksheep.sessions.JSONSerializer`  |
+| signer          | Optional `itsdangerous.Serializer` to sign and encrypt the session cookie.             | `itsdangerous.URLSafeTimedSerializer` |
+| session_max_age | Optional session max age, in **seconds**.                                              | `None`                                |
 
 ```python
     def use_sessions(
@@ -51,7 +61,7 @@ The `use_sessions` method accepts the following parameters:
 The built-in sessions middleware uses
 [`itsdangerous`](https://itsdangerous.palletsprojects.com/en/1.1.x/) to sign,
 encrypt, and verify session cookies. Refer to [data
-protection](../dataprotection/) for more information on how tokens are signed
+protection](dataprotection.md) for more information on how tokens are signed
 and encrypted.
 
 ## Using sessions

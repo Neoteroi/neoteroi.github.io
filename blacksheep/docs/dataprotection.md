@@ -1,15 +1,17 @@
 # Data protection
 
 Web applications often need to protect data, so that it can be stored in
-cookies or other types of storage. BlackSheep uses [`itsdangerous`](https://pypi.org/project/itsdangerous/) to sign and encrypt
-information, for example when storing `claims` obtained from `id_token`s when
-using an integration with an identity provider using [OpenID
-Connect](../authentication/#oidc), or when handling [session cookies](../sessions/).
+cookies or other types of client storage. BlackSheep uses
+[`itsdangerous`](https://pypi.org/project/itsdangerous/) to sign and encrypt
+information. For example, it is used to store `claims` obtained from
+`id_token`s in integrations with identity providers using [OpenID
+Connect](authentication.md#oidc), or when handling [session
+cookies](sessions.md).
 
-This page documents:
+This page covers:
 
-- [X] How to handle secrets
-- [X] Example use of data protection
+- [X] Handling secrets.
+- [X] Using data protection features.
 
 ## How to handle secrets
 
@@ -20,7 +22,7 @@ generated automatically in memory when the application starts, for the best
 user experience.
 
 !!! danger
-    This means that keys are <strong>not persisted</strong> when applications
+    This means that keys are **not persisted** when applications
     restart, and are not consistent when multiple instances of the same
     application are deployed across regions, or within the same server. This is
     acceptable during local development, but should not be the case in
@@ -29,15 +31,13 @@ user experience.
 To use consistent keys, configure one or more environment variables like the
 following:
 
-* APP_SECRET_1="***"
-* APP_SECRET_2="***"
-* APP_SECRET_3="***"
+- APP_SECRET_1="***"
+- APP_SECRET_2="***"
+- APP_SECRET_3="***"
 
 Keys can be configured in a host environment, or fetched from a dedicated
 service such as `AWS Secrets Manager` or `Azure Key Vault` at application
 start-up, and configured as environment settings for the application.
-<strong>DO NOT</strong> store secrets that are meant to be used in production
-under source control.
 
 ## Example
 

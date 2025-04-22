@@ -53,6 +53,7 @@ app.serve_files("app/videos", root_path="videos")
 ```
 
 ## File extensions
+
 Only files with a configured extension are served to the client. By default,
 only files with these extensions are served (case insensitive check):
 
@@ -83,18 +84,21 @@ app.serve_files("static", extensions={'.foo', '.config'})
 ```
 
 ## Accept-Ranges and Range requests
-Range requests are enabled and handled by default (since version `0.2.1`),
-meaning that BlackSheep supports serving big files with the pause and resume
-feature, and serving videos with the possibility to jump to specific points.
+
+Range requests are enabled and handled by default, meaning that BlackSheep
+supports serving big files with the pause and resume feature, and serving
+videos and audio files with the possibility to jump to specific points.
 
 ## ETag and If-None-Match
-`ETag`, `If-None-Match` and HTTP Status 304 Not Modified are handled
-automatically, as well as support for `HEAD` requests returning only headers
-with information about the files.
+
+`ETag`, `If-None-Match` and `HTTP Status 304 Not Modified` responses are
+handled automatically, as well as support for `HEAD` requests returning only
+headers with information about the files.
 
 ## Configurable Cache-Control
-To control `Cache-Control` `max-age` HTTP header, use `cache_time` parameter
-(defaults to 10800 seconds).
+
+To control `Cache-Control` `max-age` HTTP header, use `cache_time` parameter,
+defaulting to 10800 seconds (3 hours).
 
 ```python
 app.serve_files("static", cache_time=90000)
@@ -102,17 +106,16 @@ app.serve_files("static", cache_time=90000)
 
 ## How to serve SPAs that use HTML5 History API
 
-To serve an SPA that uses HTML5 History API, configure files serving with a
-`fallback_document="index.html"` if the index file is called "index.html" (like
-it happens in most scenarios).
+To serve an SPA that uses the HTML5 History API, configure a
+`fallback_document="index.html"` if the index file is called "index.html".
 
-```python
+```python {hl_lines="7"}
 from blacksheep import Application
 
 app = Application()
 
 app.serve_files(
-    "/path/to/folder/containing/spa",
+    "app/static",
     fallback_document="index.html",
 )
 ```
@@ -121,13 +124,13 @@ If the SPA uses a file with a different name, specify both the index file name
 and the fallback document to be the same:
 
 
-```python
+```python {hl_lines="7-8"}
 from blacksheep import Application
 
 app = Application()
 
 app.serve_files(
-    "/path/to/folder/containing/spa",
+    "app/static",
     index_document="example.html",
     fallback_document="example.html",
 )

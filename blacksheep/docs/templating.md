@@ -1,26 +1,27 @@
 # Server Side Rendering (SSR)
 
-Server side templating refers to the ability of a web application to generate
-HTML pages from templates and dynamic variables. By default, BlackSheep does
-this using [`Jinja2` library](https://palletsprojects.com/p/jinja/) by the
-[Pallets](https://palletsprojects.com) team, but it supports custom renderers.
+Server-side templating refers to a web application's ability to generate HTML
+pages using templates and dynamic variables. By default, BlackSheep uses the
+[`Jinja2` library](https://palletsprojects.com/p/jinja/) library developed by
+the [Pallets](https://palletsprojects.com) team, but it also supports custom
+renderers.
 
-This page describes:
+This page covers:
 
-- [X] How to configure server side templating.
+- [X] Configuring server-side templating.
 - [X] Returning views using response functions.
-- [X] Returning views using the MVC features.
+- [X] Returning views with MVC features.
 - [X] Using alternatives to `Jinja2`.
 
 !!! info
     The [BlackSheep MVC project
-    template](https://github.com/RobertoPrevato/BlackSheepMVC) includes a
+    template](https://github.com/Neoteroi/BlackSheep-MVC) includes a
     ready-to-use solution having an application with templates and layout
     configured.
 
 ## Configuration
 
-This example shows how to use Jinja2 templating engine with BlackSheep:
+This example illustrates how to use Jinja2 templating engine with BlackSheep:
 
 ```python
 from blacksheep import Application, get
@@ -75,14 +76,13 @@ html_settings.use(JinjaRenderer(enable_async=True))
 @get("/")
 async def home():
     return await view_async("home", {"example": "Hello", "foo": "World"})
-
 ```
 
 ## Loading templates
 
-It is possible to load templates by name including '.jinja', or without file
-extension; '.jinja' extension is added automatically. The extension must be
-lowercase.
+It is possible to load templates by name including `.jinja`, or without file
+extension; `.jinja` extension is added automatically if no extension is
+specified. The extension must be lowercase.
 
 ```python
 @get("/")
@@ -146,7 +146,7 @@ def configure_templating(
 
 ## Using alternatives to Jinja2
 
-To use alternative classes for server side rendering:
+To use alternative classes for server-side rendering:
 
 1. Define an implementation of `blacksheep.server.rendering.abc.Renderer`
 2. Configure it using `from blacksheep.settings.html import html_settings`

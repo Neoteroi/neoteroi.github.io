@@ -6,7 +6,7 @@ presented here applies also to other projects from
 [rodi](https://github.com/Neoteroi/rodi),
 [guardpost](https://github.com/Neoteroi/guardpost),
 [essentials-openapi](https://github.com/Neoteroi/essentials-openapi)), although
-among these projects, only `BlackSheep` is using `Cython`.
+among these projects, only BlackSheep is using `Cython`.
 
 ## System requirements
 
@@ -43,7 +43,7 @@ Watch the following video for instructions:
 
 ## Formatters and style enforcement
 
-`BlackSheep` uses the following tools for code formatting:
+BlackSheep uses the following tools for code formatting:
 
 * [`flake8`](https://flake8.pycqa.org/en/latest/)
 * [`black`](https://github.com/psf/black)
@@ -83,7 +83,7 @@ enough!), and to be fully test-covered.
 
 ## Code coverage
 
-`BlackSheep` features 100% code coverage, except for some rare cases where
+BlackSheep features 100% code coverage, except for some rare cases where
 `#pragma: no cover` is used. New contributions should not decrease code
 coverage, unless there is a good reason to skip lines. Integration with
 [`Codecov`](https://app.codecov.io/gh/Neoteroi/BlackSheep) checks code coverage

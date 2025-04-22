@@ -1,11 +1,10 @@
-The HTTP Strict-Transport-Security response header (often abbreviated as HSTS)
-is a standard feature used to instruct clients that a site should only be
-accessed using HTTPS, and any attempt to access it using HTTP should be
-converted automatically to HTTPS.
+The HTTP Strict-Transport-Security (HSTS) response header is a standard feature
+that instructs clients to access a site exclusively using HTTPS. Any attempt to
+access the site via HTTP is automatically redirected to HTTPS.
 
-BlackSheep offers a middleware to configure the HTTP Strict-Transport-Security
-response header globally. This page explains how to use the built-in middleware
-to enforce HSTS on a web application.
+BlackSheep provides middleware to globally configure the HTTP
+Strict-Transport-Security (HSTS) response header. This page explains how to use
+the built-in middleware to enforce HSTS in a web application.
 
 ## Enabling HSTS
 
@@ -21,13 +20,16 @@ if not is_development():
     app.middlewares.append(HSTSMiddleware())
 ```
 
-!!! tip "Considerations for local development"
-    It is generally undesirable to enable `HSTS` during local development,
-    since browsers get instructed to require `HTTPS` for all traffic on
-    `localhost`. This is why the example above configures the middleware only
-    if the application is not running in development mode.
-    See [_Defining application environment_](/blacksheep/settings/#defining-application-environment)
-    for more information.
+/// admonition | Considerations for local development.
+    type: tip
+
+Enabling `HSTS` during local development is generally not recommended, as it
+instructs browsers to require `HTTPS` for all traffic on `localhost`. For this
+reason, the example above configures the middleware only when the application
+is not running in development mode. Refer to [_Defining application environment_](settings.md#defining-application-environment)
+for more information.
+
+///
 
 ## Options
 
@@ -37,5 +39,7 @@ if not is_development():
 | include_subdomains | `bool` | Control the `include-subdomains` directive of the HSTS header (default false) |
 
 ## For more information
-For more information on HTTP Strict Transport Security, it is recommended to
-refer to the [developer.mozilla.org documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
+
+For more information on HTTP Strict Transport Security, refer to the
+[developer.mozilla.org
+documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).

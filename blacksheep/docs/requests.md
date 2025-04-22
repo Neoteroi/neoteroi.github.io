@@ -1,4 +1,5 @@
 # Requests
+
 This page describes:
 
 - [X] Handling requests.
@@ -7,6 +8,7 @@ This page describes:
 - [X] Reading request bodies.
 
 ## The Request class
+
 BlackSheep handles requests as instances of the `blacksheep.Request` class.
 This class provides methods and properties to handle request headers, cookies,
 the URL, route parameters, the request body, the user's identity, and other
@@ -14,6 +16,7 @@ information like the content type of the request. Each web request results in
 the creation of a new instance of `Request`.
 
 ### Reading parameters from the request object
+
 It is possible to read query and route parameters from an instance of
 `request`. The example below shows how the query string, route parameters, and
 request headers can be read from the request:
@@ -112,6 +115,7 @@ def home(accept: FromAcceptHeader, foo: FromFooCookie) -> Response:
 ```
 
 ### Reading the request body
+
 The request class offers several methods to read request bodies of different
 kinds.
 
@@ -256,6 +260,7 @@ kinds.
     ```
 
 #### Reading files
+
 Files read from `multipart/form-data` payload.
 
 ===  "Using binders (recommended)"
@@ -284,6 +289,7 @@ Files read from `multipart/form-data` payload.
     ```
 
 #### Reading streams
+
 Reading streams enables reading large-sized bodies using an asynchronous
 generator. The example below saves a file of arbitrary size without blocking
 the event loop:

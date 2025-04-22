@@ -41,25 +41,22 @@ trace, serving a page like the following:
 
 ![Internal server error page](./img/internal-server-error-page.png)
 
-Consider using environmental variables to handle these kinds of settings that
-can vary across environments. For example:
+/// admonition | Use the `APP_SHOW_ERROR_DETAILS`.
+    type: tip
 
-```python
-import os
-from blacksheep import Application
+Rather than using the `show_error_details` parameter, it is recommended to use
+the environment variable `APP_SHOW_ERROR_DETAILS` to control whether the
+application displays detailed error information. Setting
+`APP_SHOW_ERROR_DETAILS=1` or `APP_SHOW_ERROR_DETAILS=True` enables this
+feature.
+///
 
-app = Application(show_error_details=bool(os.environ.get("SHOW_ERROR_DETAILS", None)))
+/// admonition | Settings strategy
 
-
-@get("/")
-def crash_test():
-    raise Exception("Crash test")
-
-```
-
-!!! info "Settings strategy"
-    BlackSheep project templates include a strategy to handle application
-    settings and configuration roots.
+BlackSheep project templates include a strategy to handle application
+settings and configuration roots. Refer to [_Getting started with the MVC project template_](./mvc-project-template.md)
+for more information.
+///
 
 ### Configuring exceptions handlers
 
@@ -69,14 +66,13 @@ handling a web request and reaches the application, the application checks if
 there is a matching handler for that kind of exception. An exception handler is
 defined as a function with the following signature:
 
-```python
+```python {hl_lines="3"}
 from blacksheep import Request, Response, text
 
 async def exception_handler(self, request: Request, exc: Exception) -> Response:
     pass
 ```
 
-In the exception below
 ```python
 
 class CustomException(Exception):
@@ -114,7 +110,7 @@ specific handler for one of the descendant classes.
 It is also possible to register exception handlers using decorators, instead
 of interacting with `app.exceptions_handlers` dictionary:
 
-```python
+```python {hl_lines="5"}
 class CustomException(Exception):
     pass
 
@@ -131,8 +127,7 @@ To override how unhandled exceptions are handled, define a custom `Application`
 class overriding its `handle_internal_server_error` method, like in the
 following example:
 
-```python
-
+```python {hl_lines="5-6"}
 from blacksheep import Application, json
 from blacksheep.messages import Request
 
@@ -165,7 +160,7 @@ create an HTTP `ClientSession` that will be disposed of when the application
 stops. Note how the instance of `ClientSession` is also bound to application
 services, so that it can be injected into request handlers that need it.
 
-```python
+```python {linenums="1" hl_lines="9-10 16"}
 import asyncio
 from blacksheep import Application
 from blacksheep.client.pool import ClientConnectionPools
@@ -198,14 +193,22 @@ if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=44777, log_level="debug", lifespan="on")
 ```
 
-!!! info
-    The method leverages `contextlib.asynccontextmanager`. What is defined
-    before the `yield` statement executes when the application starts, and what
-    is defined after the `yield` statement executes when the application stops.
+- The code before the `yield` statement (lines _11-16_) is executed when the
+  application starts.
+- The code after the `yield` statement (lines _17-18_) is executed when the
+  application stops.
+
+/// admonition | @app.lifespan
+
+This method leverages `contextlib.asynccontextmanager`. What is defined
+before the `yield` statement executes when the application starts, and what
+is defined after the `yield` statement executes when the application stops.
+
+///
 
 The following example illustrates how a `redis-py` [connection can be disposed
 of](https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html)
-using the same method:
+using `@app.lifespan`:
 
 ```python
 import redis.asyncio as redis
@@ -231,31 +234,39 @@ async def configure_redis():
     await connection.close()
 ```
 
-!!! info "Example using Redis"
-    The `BlackSheep-Examples` repository includes an example where `Redis` is
-    used to store access tokens and refresh tokens obtained using
-    `OpenID Connect`: [example](https://github.com/Neoteroi/BlackSheep-Examples/blob/main/oidc/scopes_redis_aad.py). For more information on `redis-py` and its async
-    interface, refer to its [official documentation](https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html).
-
 ### on_start
 
-This event should be used to configure things such as new request handlers,
-and services registered in `app.services`, such as database connection pools,
+This event should be used to configure components such as new request handlers
+and services registered in `app.services`, including database connection pools
 and HTTP client sessions.
 
 ### after_start
 
-This event should be used to configure things that must happen after request
-handlers are normalized. At this point, the application router contains information
-about actual routes handled by the web application, and routes can be inspected.
-For example, the built-in generation of OpenAPI Documentation generates the
-API specification file at this point.
+This event should be used to configure tasks that must occur after request
+handlers are normalized. At this stage, the application router contains
+information about the actual routes handled by the web application, allowing
+routes to be inspected. For example, the built-in OpenAPI documentation
+generation creates the API specification file at this point.
+
+/// admonition | Example: inspecting routes.
+    type: tip
+
+An `after_start` callback that prints all routes registered in the application
+router:
+
+```python
+@app.after_start
+async def after_start_print_routes(application: Application) -> None:
+    print(application.router.routes)
+```
+///
 
 ### on_stop
 
-This event should be used to fire callbacks that need to happen when the application
-is stopped. For example, disposing of services that require disposal, such as
-database connection pools, and HTTP client sessions using connection pools.
+This event should be used to trigger callbacks that need to run when the
+application stops. For example, it can be used to dispose of services that
+require cleanup, such as database connection pools and HTTP client sessions
+using connection pools.
 
 ### Application life cycle
 
@@ -329,16 +340,6 @@ are fired, and the state of the application when they are executed.
     app.on_stop += on_stop
     ```
 
-!!! info
-    For example, to define an `after_start` callback that logs all routes registered
-    in the application router:
-
-    ```python
-    @app.after_start
-    async def after_start_print_routes(application: Application) -> None:
-        print(application.router.routes)
-    ```
-
 ## Next
 
-Read about the details of [routing in BlackSheep](../routing).
+Read about the details of [routing in BlackSheep](routing.md).

@@ -95,17 +95,17 @@ from blacksheep.server.env import is_development, is_production
 
 ## Changes to dependency injection
 
-In v2, `rodi` and `BlackSheep` have been modified to enable alternative
+In v2, `rodi` and BlackSheep have been modified to enable alternative
 implementations of dependency injection. `rodi` now defines a
 `ContainerProtocol` with a basic API to register and resolve dependencies, and
-`BlackSheep` relies on that protocol instead of its specific implementation in
+BlackSheep relies on that protocol instead of its specific implementation in
 `rodi`.
 
 For more information, read the [_dedicated part in the Dependency Injection_](/blacksheep/dependency-injection/#the-container-protocol) page.
 
 ## Changes to server side rendering
 
-`BlackSheep` v2 has been modified to not be strictly reliant on `Jinja2` for
+BlackSheep v2 has been modified to not be strictly reliant on `Jinja2` for
 template rendering. To achieve this, two new namespaces have been added:
 
 - `blacksheep.server.rendering.abc`, defining an abstract `Renderer` class,

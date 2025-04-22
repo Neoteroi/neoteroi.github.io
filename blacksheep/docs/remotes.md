@@ -1,34 +1,33 @@
-# Remotes
-
 The `blacksheep.server.remotes` namespace provides classes and functions to
 handle information related to remote proxies and clients.
 
-Web applications in production environments are commonly hosted behind other
-kinds of servers, such as Apache, IIS, or NGINX. Proxy servers usually obscure
-some of the information of the original web request before it reaches the web
-applications.
+Web applications in production environments are often hosted behind servers
+such as Apache, IIS, or NGINX. Proxy servers typically obscure some information
+from the original web request before it reaches the web application.
 
 For example:
 
-* when HTTPS requests are proxied over HTTP, the original scheme (HTTPS) is
+- When HTTPS requests are proxied over HTTP, the original scheme (HTTPS) is
   lost and must be forwarded in a header.
-* when an app receives a request from a proxy and not its true source, the
-  original client IP address must also be forwarded in a header.
-* the *path* of web requests can be changed while being proxied (e.g. NGINX
-  configured to proxy requests to `/example` to the root `/` of a web
+- When an application receives a request from a proxy instead of its true
+  source, the original client IP address must also be forwarded in a header.
+- The path of web requests can be altered during proxying (e.g., NGINX
+  configured to proxy requests from `/example` to the root `/` of a web
   application).
 
-This information may be important in request processing, for example in
-redirects, authentication, link generation when absolute URLs are needed, and
-client geolocation.
+This information is often critical for request processing, such as in
+redirects, authentication, link generation (when absolute URLs are required),
+and client geolocation. This page documents how to configure BlackSheep to work
+with proxy servers and load balancers, using the provided classes to handle:
 
-This page documents how to configure BlackSheep to work with proxy servers and
-load balancers, using the provided classes to handle:
+- [X] X-Forwarded headers.
+- [X] Forwarded header.
+- [X] Trusted hosts.
+- [X] How to read information about the original clients in web requests.
 
-- [X] X-Forwarded headers
-- [X] Forwarded header
-- [X] Trusted hosts
-- [X] How to read information about the original clients in web requests
+For information on how to handle the prefix of routes when exposing a web
+application behind a proxy, refer to the dedicated page
+[_Behind Proxies_](./behind-proxies.md).
 
 ## Handling X-Forwarded headers
 
@@ -44,9 +43,9 @@ information about original web requests to web applications.
 BlackSheep provides an `XForwardedHeadersMiddleware` class to handle these
 headers, providing:
 
-* optional validation of trusted hosts
-* optional validation of proxies count and IP addresses by known IPs or known
-  networks
+- Optional validation of trusted hosts.
+- Optional validation of proxies count and IP addresses by known IPs or known
+  networks.
 
 To configure a BlackSheep web application to handle `X-Forwarded` headers and
 configure incoming web requests to expose the correct information about source
@@ -81,6 +80,7 @@ When `known_proxies` is not provided, it is set by default to handle `localhost`
 `[ip_address("127.0.0.1")]`.
 
 ## Handling Forwarded header
+
 The `Forwarded` header is a standard header to propagate information about
 original web requests to web applications.
 
@@ -116,6 +116,7 @@ When `known_proxies` is not provided, it is set by default to handle `localhost`
 `[ip_address("127.0.0.1")]`.
 
 ## Handling trusted hosts
+
 When forwarded headers middlewares are not used, but it is necessary to
 validate hosts, it is possible to use the `TrustedHostsMiddleware`:
 
@@ -136,6 +137,7 @@ def configure_forwarded_headers(app):
 ```
 
 ## Reading information about the original clients in web requests
+
 Web requests expose information about the original clients in the following
 properties, that are updated by forwarded header middlewares:
 
@@ -170,12 +172,8 @@ absolute_url = get_request_absolute_url(request)
 absolute_url_to_path = get_absolute_url_to_path(request, "/example")
 ```
 
-!!! warning
-    When configuring [OpenID Connect](../authentication/#oidc) authentication,
-    it can be necessary to handle forwarded headers, so that the application can
-    generate correct `redirect_uri` for authorization servers.
-
 ## ASGI root_path
 
 When the `ASGI` scope includes the `root_path` information, it is automatically
-used for the request `base_path` property.
+used for the request `base_path` property. For more information on this
+subject, refer to the dedicated page [_Behind Proxies_](./behind-proxies.md).

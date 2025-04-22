@@ -6,7 +6,7 @@ This feature improves code quality and the developer experience since it
 provides a strategy to read values from request objects in a consistent way and
 removes the need to write parts that read values from the request object inside
 request handlers. It also enables a more accurate generation of [OpenAPI
-Documentation](../openapi), since the framework is aware of what kind of
+Documentation](openapi.md), since the framework is aware of what kind of
 parameters are used by the request handlers (e.g. _headers, cookies, query_).
 
 This page describes:
@@ -17,15 +17,15 @@ This page describes:
 
 It is recommended to read the following pages before this one:
 
-* [Getting started: Basics](../getting-started/)
-* [Getting started: MVC](../mvc-project-template/)
-* [Requests](../requests/)
+* [Getting started: Basics](getting-started.md)
+* [Getting started: MVC](mvc-project-template.md)
+* [Requests](requests.md)
 
 ## Introduction
 
 Automatic binding of request query strings and route parameters has been
 described in several places in the previous pages, and explicit and implicit
-binding is introduced in the section about [requests](../requests/).
+binding is introduced in the section about [requests](requests.md).
 
 Binding is implicit when the source of a parameter is inferred by conventions,
 or explicit when the programmer specifies exact binders from
@@ -99,7 +99,7 @@ In the example above, `create_cat_handler` is obtained from
 `application.services`, an exception is thrown if the the service cannot be
 resolved. This happens if the service is not registered in application
 services, or any of the services on which it depends is not registered
-(see [_Service resolution_](../dependency-injection/#service-resolution) for
+(see [_Service resolution_](dependency-injection.md#service-resolution) for
 more information on services that depend on other services).
 
 `input` is obtained by reading the request payload, parsing it as JSON, and

@@ -1,6 +1,6 @@
 # OpenID Connect
 
-BlackSheep implements built-in support for OpenID Connect authentication,
+BlackSheep provides built-in support for OpenID Connect authentication,
 meaning that it can be easily integrated with identity provider services such
 as:
 
@@ -9,18 +9,22 @@ as:
 * [Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview)
 * [Okta](https://www.okta.com)
 
-This page documents:
+This page covers:
 
-- [X] How to use OpenID Connect integration to provide sign-in and sign-up features,
+- [X] Using OpenID Connect integration to provide sign-in and sign-up features.
   and to identify users who use the application
-- [X] How to use OpenID Connect integration to obtain `access_token`s to use APIs
-  (in addition, or instead of `id_token`s)
+- [X] Using OpenID Connect integration to obtain `access_token`s to use APIs
+  (in addition, or instead of `id_token`s).
 - [X] How tokens are protected and how to configure applications to support
-  multiple instances and regions
+  multiple instances and regions.
 
-!!! warning
-    Using JWT Bearer and OpenID integrations requires more dependencies: use
-    `pip install blacksheep[full]` to use these features
+/// admonition | Additional dependencies.
+    type: warning
+
+Using JWT Bearer and OpenID integrations requires additional dependencies.
+Install them by running: `pip install blacksheep[full]`.
+
+///
 
 ## Basic example
 
@@ -74,13 +78,13 @@ async def home(user: Identity):
 
 ### use_openid_connect
 
-| Parameter          | Type, default                                                     | Description                                                                                                                                                                                                                       |
-| ------------------ | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| app                | Application                                                       | Instance of BlackSheep application.                                                                                                                                                                                               |
-| settings           | OpenIDSettings                                                    | Instance of OpenIDSettings.                                                                                                                                                                                                       |
+| Parameter          | Type, default                                                     | Description                                                                                                                                                                                                                        |
+| ------------------ | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| app                | Application                                                       | Instance of BlackSheep application.                                                                                                                                                                                                |
+| settings           | OpenIDSettings                                                    | Instance of OpenIDSettings.                                                                                                                                                                                                        |
 | auth_handler       | Optional[OpenIDTokensHandler] = None (CookiesOpenIDTokensHandler) | Instance of OpenIDTokensHandler that can handle tokens for requests and responses for the OpenID Connect flow. This class is responsible for communicating tokens to clients, and restoring tokens context for following requests. |
-| parameters_builder | Optional[ParametersBuilder] = None                                | Optional instance of `ParametersBuilder`, used to handle parameters configured in redirects and requests to the authorization server.                                                                                             |
-| is_default         | bool = True                                                       | If default, clients are automatically redirected to the `sign-in` page when a non-authenticated user tries to access in `GET` a web page that requires authentication.                                                            |
+| parameters_builder | Optional[ParametersBuilder] = None                                | Optional instance of `ParametersBuilder`, used to handle parameters configured in redirects and requests to the authorization server.                                                                                              |
+| is_default         | bool = True                                                       | If default, clients are automatically redirected to the `sign-in` page when a non-authenticated user tries to access in `GET` a web page that requires authentication.                                                             |
 
 ### OpenIDSettings
 
@@ -100,8 +104,8 @@ The `OpenIDSettings` class has the following properties:
 | refresh_token_path        | str = "/refresh-token"          | The local path used to handle refresh tokens to obtain new tokens.                                                                                                                    |
 | scope                     | str = "openid profile email"    | The scope of the request, by default an `id_token` is obtained with email and profile.                                                                                                |
 | response_type             | str = "code"                    | Type of OAuth response.                                                                                                                                                               |
-| redirect_uri              | Optional[str] = None            | If specified, the redirect URL that must match the one configured for the application. If not provided, a redirect_url is obtained automatically (see note 🗡️).                       |
-| scheme_name               | str = "OpenIDConnect"           | The name of the authentication scheme, affecting the name of authentication cookies (see note 🍒).                                                                                    |
+| redirect_uri              | Optional[str] = None            | If specified, the redirect URL that must match the one configured for the application. If not provided, a redirect_url is obtained automatically (see note 🗡️).                        |
+| scheme_name               | str = "OpenIDConnect"           | The name of the authentication scheme, affecting the name of authentication cookies (see note 🍒).                                                                                     |
 | error_redirect_path       | Optional[str] = None            | If specified, the local path to which a user is redirected in case of error.                                                                                                          |
 | end_session_endpoint      | Optional[str] = None            | If specified, the local path to which the user can log out.                                                                                                                           |
 
@@ -109,13 +113,13 @@ Notes:
 
 * 🗡️ obtaining a redirect_url automatically can require handling of forward
   headers, when an application is deployed behind a proxy. See
-  [remotes for more information](../remotes).
+  [remotes for more information](remotes.md).
 * 🍒 this should be changed when configuring more than one OIDC identity
   provider.
 
 !!! info
     `access_token`s issued for APIs can be validated using
-    [JWT Bearer authentication](../authentication/#jwt-bearer)
+    [JWT Bearer authentication](authentication.md#jwt-bearer)
 
 ## Examples using custom scopes
 
@@ -125,11 +129,11 @@ looks like the following:
 
 ```python
 """
-This example shows how to configure an OpenID Connect integration with Auth0, obtaining
-an id_token, an access_token, and a refresh_token. The id_token is exchanged with the
-client using a response cookie (also used to authenticate users
-for following requests), while the access token and the refresh token are not stored
-and can only be accessed using optional events.
+This example shows how to configure an OpenID Connect integration with Auth0,
+obtaining an id_token, an access_token, and a refresh_token. The id_token is
+exchanged with the client using a response cookie (also used to authenticate
+users for following requests), while the access token and the refresh token are
+not stored and can only be accessed using optional events.
 """
 import uvicorn
 from blacksheep.server.application import Application
@@ -141,7 +145,7 @@ from common.secrets import Secrets
 
 load_dotenv()
 secrets = Secrets.from_env()
-app = Application(show_error_details=True)
+app = Application()
 
 
 # Auth0 with a custom scope
@@ -303,4 +307,4 @@ start-up, and configured as environment settings for the application.
 <strong>DO NOT</strong> store secrets that are meant to be used in production
 under source control.
 
-For more information, refer to [data protection](../dataprotection/).
+For more information, refer to [data protection](dataprotection.md).

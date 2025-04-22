@@ -96,7 +96,7 @@ json_settings.use(
 ### Example: using orjson
 
 To use [`orjson`](https://github.com/ijl/orjson) for JSON serialization and
-deserialization with the built-in [`responses`](../responses/) and
+deserialization with the built-in [`responses`](responses.md) and
 `JSONContent` class, it can be configured this way:
 
 ```python

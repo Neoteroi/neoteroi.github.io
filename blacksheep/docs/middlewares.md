@@ -1,7 +1,7 @@
 # Middlewares
 
-A BlackSheep application supports middlewares, which provide a flexible way to
-define a chain of functions that handle every web request.
+Middlewares enable modifying the chain of functions that handle each web
+request.
 
 This page covers:
 
@@ -14,33 +14,32 @@ Middlewares enable the definition of callbacks that are executed for each web
 request in a specific order.
 
 !!! info
-    When a function should be called only for certain routes, use
-    instead a [decorator function](../middlewares/#wrapping-request-handlers).
+    If a function should only be called for specific routes, use
+    a [decorator function](middlewares.md#wrapping-request-handlers) instead.
 
-Middlewares are called in order: each receives the `Request` object as the
-first parameter, and the next handler to be called as the second parameter. Any
-middleware can decide to not call the next handler, and return a `Response`
-object instead. For example, a middleware can be used to return an `HTTP 401
-Unauthorized` response in certain scenarios.
+Middlewares are executed in order: each receives the `Request` object as the
+first parameter and the next handler to be called as the second parameter. Any
+middleware can choose not to call the next handler and instead return a
+`Response` object. For instance, a middleware can be used to return an `HTTP
+401 Unauthorized` response in certain scenarios.
 
 ```python
-from blacksheep import Application, text
+from blacksheep import Application, get
 
-app = Application(show_error_details=True)
-get = app.router.get
+app = Application()
 
 
 async def middleware_one(request, handler):
-    print("middleware one: A")
+    print("middleware 1: A")
     response = await handler(request)
-    print("middleware one: B")
+    print("middleware 1: B")
     return response
 
 
 async def middleware_two(request, handler):
-    print("middleware two: C")
+    print("middleware 2: C")
     response = await handler(request)
-    print("middleware two: D")
+    print("middleware 2: D")
     return response
 
 
@@ -51,15 +50,15 @@ app.middlewares.append(middleware_two)
 @get("/")
 def home():
     return "OK"
-
 ```
 
 In this example, the following data would be printed to the console:
+
 ```
-middleware one: A
-middleware two: C
-middleware two: D
-middleware one: B
+middleware 1: A
+middleware 2: C
+middleware 2: D
+middleware 1: B
 ```
 
 ### Middlewares defined as classes
@@ -69,6 +68,7 @@ example below:
 
 ```python
 class ExampleMiddleware:
+
     async def __call__(self, request, handler):
         # do something before passing the request to the next handler
 
@@ -99,6 +99,7 @@ class ExampleMiddleware:
 ```
 
 ### Resolution chains
+
 When middlewares are defined for an application, resolution chains are built at
 its start. Every handler configured in the application router is replaced by a
 chain, executing middlewares in order, down to the registered handler.
@@ -143,17 +144,21 @@ async def home():
     return "OK"
 ```
 
-**The order of decorators matters**: user-defined decorators must be applied
-before the route decorator (before `@get` in the example above).
+/// admonition | The order of decorators matters.
+    type: warning
+
+User-defined decorators must be applied before the route decorator (in the example above, before `@get`).
+
+///
 
 ### Define a wrapper compatible with synchronous and asynchronous functions
 
 To define a wrapper that is compatible with both synchronous and asynchronous
 functions, it is possible to use `inspect.iscoroutinefunction` function. For
-example, to alter the decorator above to be compatible with request handlers
-defined as synchronous functions (recommended):
+example, to alter the decorator above to be *also* compatible with request
+handlers defined as synchronous functions:
 
-```python
+```python {hl_lines="1 11"}
 import inspect
 from functools import wraps
 from typing import Tuple
@@ -193,4 +198,4 @@ def headers(additional_headers: Tuple[Tuple[str, str], ...]):
 !!! warning
     The `ensure_response` function is necessary to support scenarios
     when the request handlers defined by the user doesn't return an instance of
-    Response class (see _[request handlers normalization](../request-handlers/)_).
+    Response class (see _[request handlers normalization](request-handlers.md)_).

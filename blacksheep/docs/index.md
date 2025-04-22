@@ -28,8 +28,8 @@ pip install blacksheep
 
 To get started with BlackSheep, read these tutorials:
 
-- [Basics](./getting-started/)
-- [The MVC template](./mvc-project-template/)
+- [Basics](getting-started.md)
+- [The MVC template](mvc-project-template.md)
 
 ## Versions
 

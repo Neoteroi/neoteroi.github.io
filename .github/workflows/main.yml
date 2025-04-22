@@ -33,7 +33,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
         with:
-          fetch-depth: 1
           submodules: false
 
       - name: Use Python ${{ matrix.python-version }}

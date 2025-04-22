@@ -15,7 +15,7 @@ for folder in "${folders[@]}" ; do
 
     cd $folder
 
-    mkdocs build
+    GIT_CONTRIBS_ON=True mkdocs build
 
     # check if there is a copy-archive.sh file, to support including docs
     # of older versions of the library

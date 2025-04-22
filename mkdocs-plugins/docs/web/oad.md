@@ -68,10 +68,6 @@ Example result:
 
 ![Example result](../img/oad-example-1.png)
 
-!!! danger "Soon changing..."
-    This feature is currently shipped as plugin for MkDocs, it will be modified
-    to be an extension for Python Markdown.
-
 ## Supported sources for OpenAPI Documentation
 
 | Source                         | Example                                                     |

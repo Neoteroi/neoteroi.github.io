@@ -2,7 +2,7 @@
 
 Server side routing refers to the ability of a web application to handle web
 requests using different functions, depending on the URL path and HTTP method.
-Each `BlackSheep` application is bound to a router, which provides several ways
+Each BlackSheep application is bound to a router, which provides several ways
 to define routes. A function that is bound to a route is called a "request
 handler", since its responsibility is to handle web requests and produce
 responses.
@@ -75,6 +75,7 @@ async def example():
 ```
 
 ### Without decorators
+
 Request handlers can be registered without decorators:
 
 ```python
@@ -87,11 +88,11 @@ app.router.add_options("/", hello_world)
 ```
 
 ### Request handlers as class methods
-Request handlers can also be configured as class methods, defining classes that
-inherit the `blacksheep.server.controllers.Controller` class (name taken from
-the MVC architecture):
 
-```python
+Request handlers can also be configured as class methods, defining classes that
+inherit the `blacksheep.server.controllers.Controller` class:
+
+```python {hl_lines="4 17 22 27 32"}
 from dataclasses import dataclass
 
 from blacksheep import Application, text, json
@@ -126,8 +127,10 @@ class Home(Controller):
     @post("/foo")
     async def create_foo(self, foo: CreateFooInput):
         # HTTP POST /foo
-        # with foo instance automatically injected parsing the request body as JSON
-        # if the value cannot be parsed as CreateFooInput, Bad Request is returned automatically
+        # with foo instance automatically injected parsing
+        # the request body as JSON
+        # if the value cannot be parsed as CreateFooInput,
+        # Bad Request is returned automatically
         return json({"status": True})
 ```
 
@@ -139,33 +142,38 @@ BlackSheep supports three ways to define route parameters:
 * `"/{example}"` - using curly braces
 * `"/<example>"` - using angle brackets (i.e. [Flask notation](https://flask.palletsprojects.com/en/1.1.x/quickstart/?highlight=routing#variable-rules))
 
-Route parameters can be read from `request.route_values`, or injected
-automatically by the request handler's function signature:
+Route parameters can be read from `request.route_values`, or bound
+automatically by the request handler's signature:
 
-```python
+=== "Using the signature (recommended)"
 
-@get("/{example}")
-def handler(request):
-    # reading route values from the request object:
-    value = request.route_values["example"]
+    ```python {hl_lines="3-4"}
+    from blacksheep import get
 
-    return text(value)
+    @get("/api/cats/{cat_id}")
+    def get_cat(cat_id):
+        # cat_id is bound automatically
+        ...
+    ```
 
+=== "Using the Request object"
 
-@get("/api/cats/{cat_id}")
-def get_cat(cat_id):
-    # cat_id is injected automatically
-    ...
-```
+    ```python {hl_lines="3 6"}
+    from blacksheep import Request, get
+
+    @get("/{example}")
+    def handler(request: Request):
+        # reading route values from the request object:
+        value = request.route_values["example"]
+        ...
+    ```
 
 It is also possible to specify the expected type, using `typing` annotations:
 
 ```python
-
 @get("/api/cats/{cat_id}")
 def get_cat(cat_id: int):
     ...
-
 ```
 
 ```python
@@ -175,7 +183,6 @@ from uuid import UUID
 @get("/api/cats/{cat_id}")
 def get_cat(cat_id: UUID):
     ...
-
 ```
 
 In this case, BlackSheep will automatically produce an `HTTP 400 Bad Request`
@@ -188,6 +195,7 @@ UUID.
 ```
 
 ## Value patterns
+
 By default, route parameters are matched by any string until the next slash "/"
 character. Having the following route:
 
@@ -301,7 +309,7 @@ example, a web request for the root of the service "/" having a request header
 "X-Area" == "Test" gets the reply of the `test_home` request handler, and
 without such header the reply of the `home` request handler is returned.
 
-```python
+```python {hl_lines="4 6 12-13 17"}
 from blacksheep import Application, Router
 
 
@@ -319,7 +327,6 @@ def test_home():
 
 
 app = Application(router=router)
-
 ```
 
 A router can have filters based on headers, host name, query string parameters,
@@ -333,6 +340,8 @@ filter_by_query = Router(params={"version": "1"})
 
 filter_by_host  = Router(host="neoteroi.xyz")
 ```
+
+### Custom filters
 
 To define a custom filter, define a type of `RouteFilter` and set it using the
 `filters` parameter:
@@ -378,8 +387,8 @@ class Home(Controller):
         ...
 ```
 
-In this case, routes are registered using default singleton routers, used if an
-application is instantiated without specifying a router:
+In this case, routes are registered using **default singleton routers**, used
+if an application is instantiated without specifying a router:
 
 ```python
 from blacksheep import Application
@@ -443,7 +452,7 @@ async def home():
 
 Then specify the router when instantiating the application:
 
-```python
+```python {hl_lines="3 7"}
 from blacksheep import Application
 
 from app.router import router
@@ -476,7 +485,7 @@ post = controllers_router.post
 
 Then when defining your controllers:
 
-```python
+```python {hl_lines="3 8"}
 from blacksheep.server.controllers import Controller
 
 from app.controllers import get, post
@@ -489,7 +498,7 @@ class Home(Controller):
         ...
 ```
 
-```python
+```python {hl_lines="3 8"}
 from blacksheep import Application
 
 from app.controllers import controllers_router
@@ -500,8 +509,25 @@ app = Application()
 app.controllers_router = controllers_router
 ```
 
-!!! info "About Router and RoutesRegistry"
+/// admonition | About Router and RoutesRegistry
 
-    Controller routes use a "RoutesRegistry" to support the dynamic generation
-    of paths by controller class name. Controller routes are evaluated and
-    merged into `Application.router` when the application starts.
+Controller routes use a "RoutesRegistry" to support the dynamic generation
+of paths by controller class name. Controller routes are evaluated and
+merged into `Application.router` when the application starts.
+///
+
+## Routing prefix
+
+In some scenarios, it may be necessary to centrally manage prefixes for all
+request handlers. To set a prefix for all routes in a `Router`, use the `prefix`
+parameter in its constructor.
+
+```python
+router = Router(prefix="/foo")
+```
+
+To globally configure a prefix for all routes, use the environment variable
+`APP_ROUTE_PREFIX` and specify the desired prefix as its value.
+
+This feature is intended for applications deployed behind proxies. For more
+information, refer to [_Behind proxies_](./behind-proxies.md).

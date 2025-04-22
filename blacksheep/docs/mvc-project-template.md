@@ -10,24 +10,23 @@ project template, covering the following topics:
 - [X] Handling parameters in controllers.
 - [X] Serving static files
 
-It is recommended to follow the [previous tutorial](../getting-started) before
+It is recommended to follow the [previous tutorial](getting-started.md) before
 reading this one.
 
 ### Requirements
 
 * [Python](https://www.python.org) version >= **3.10** (3.8 and 3.9 are
-  supported but not recommended to follow this tutorial)
-* path to the python executable configured in the environment `$PATH` variable
+  supported but not recommended for this tutorial)
+* Ensure the Python executable is included in the `$PATH` environment variable.
   (tip: if you install Python on Windows using the official installer, enable
-  the checkbox to update your `$PATH` variable automatically)
+  the checkbox to update your `$PATH` variable during the installation)
 * a text editor: any is fine; this tutorial uses [Visual Studio Code](https://code.visualstudio.com/Download)
 
 ## Introduction to the BlackSheep CLI
 
-The previous tutorial described the basics of creating an application from
-scratch. While that knowledge is important, it is usually not desirable to
-start every project from scratch. BlackSheep offers a command-line interface
-(CLI) that can be used to start new projects. The CLI can be installed from the
+The previous tutorial covered the basics of creating an application from
+scratch. While that knowledge is important, starting every project from scratch is often unnecessary. BlackSheep provides a command-line interface
+(CLI) to simplify the process of starting new projects. The CLI can be installed from the
 [Python Package Index](https://pypi.org/project/blacksheep-cli/) using the
 `blacksheep-cli` package:
 
@@ -35,7 +34,7 @@ start every project from scratch. BlackSheep offers a command-line interface
 pip install blacksheep-cli
 ```
 
-Once installed, the `create` command can be used to start new projects:
+The BlackSheep-CLI provides the `create` command to start new projects:
 
 ```bash
 blacksheep create
@@ -62,16 +61,20 @@ tutorial, answer:
    INI
 ```
 
-!!! tip "blacksheep create"
-    It is possible to use the `create` command specifying the project name
-    and template directly, like in:
+/// admonition | BlackSheep create.
+    type: tip
 
-    - `blacksheep create some_name`
-    - `blacksheep create some_name --template api`
+It is possible to use the `create` command specifying the project name
+and template directly, like in:
+
+- `blacksheep create some_name`
+- `blacksheep create some_name --template api`
+
+///
 
 ![MVC template](./img/mvc-template-v2.png)
 
-After a project is created, the CLI displays a message with instructions.
+After a project is created, the CLI displays a message with instructions:
 
 ```
 ──────────────────────────────────────────────────────────────────────
@@ -101,25 +104,26 @@ python dev.py
 uvicorn app.main:app --port 44777 --lifespan on --reload
 ```
 
-And navigate to the local page, opening a browser at [`http://localhost:44777`](http://localhost:44777)
-(use the same port of the previous command).
+Navigate to the local page, opening a browser at [`http://localhost:44777`](http://localhost:44777)
+(use the same port used in the previous command).
 
 The browser should display this page:
 
 ![MVC Project home](./img/mvc-template-home.png)
 
-Several things are happening because the web application is configured:
+The web application is configured to handle several tasks:
 
-- to build and serve dynamic HTML pages
-- to serve static files (e.g. pictures, JavaScript, CSS files)
-- to expose an API and offer OpenAPI Documentation about the API
-- to handle application settings and application start/stop events
+- Build and serve dynamic HTML pages.
+- Serve static files (e.g., images, JavaScript, CSS files).
+- Expose an API and provide OpenAPI documentation for it.
+- Handle application settings and manage application start/stop events.
 
-Let's see these elements in order, but first let's get acquainted with the
-project's structure.
+Let's explore these elements in order, but first, let's review the project's
+structure.
 
 ## Project structure
-The project is organized with the following folder structure:
+
+The project follows the folder structure outlined below:
 
 ```
 ├── app
@@ -146,22 +150,19 @@ The project is organized with the following folder structure:
 └── settings.yaml (base settings file)
 ```
 
-- the `app` folder contains files that are specific to the web application,
-  settings, a folder for `controllers` that define routes, folders for `static`
-  files and one for `views` (HTML templates)
-- other packages at the root of the project, like `domain`, should be
-  abstracted from the web server and should be reusable in other kinds of
-  applications (for example, a CLI)
-- the root folder contains the `dev.py` file to start the application in
+- The `app` folder contains files that are specific to the web application,
+  settings, a folder for `controllers` that define request handlers, folders
+  for `static` files and one for `views` (HTML templates).
+- Other packages at the root of the project, like `domain`, should be
+  abstracted from the web server and potentially reusable in other kinds of
+  applications.
+- The root folder contains the `dev.py` file to start the application in
   development mode, and settings files with `.yaml` extension that are read
   when the application starts (since the YAML format was selected when using
-  the `blacksheep create` command)
-
-The project uses `onion architecture`. For example, a valid scenario would be
-to add an additional package for the data access layer, and implement the
-business logic in modules inside the `domain` folder.
+  the `blacksheep create` command).
 
 ## Open the project with a text editor
+
 Open the project's folder using your favorite text editor.
 
 ![Visual Studio Code](./img/vs-code-mvc.png)
@@ -176,8 +177,8 @@ async def home():
     ...
 ```
 
-`blacksheep` offers an alternative way to define request handlers: using class
-methods. Both approaches have pros and cons, which will be described later in
+BlackSheep offers an alternative way to define request handlers: using classes.
+Both approaches have pros and cons, which will be described later in
 more detail. To see this in practice, create a new file
 `app/controllers/greetings.py` and copy the following code into it:
 
@@ -190,41 +191,51 @@ class Greetings(Controller):
     @get("/hello-world")
     def index(self):
         return self.text("Hello, World!")
-
 ```
 
 Stop and restart the application, then navigate to
 [`http://localhost:44777/hello-world`](http://localhost:44777/hello-world): it
 will display the response from the `Greetings.index` method.
 
-When the path of a web request matches a route defined in a controller type, a
-new instance of that `Controller` is created. In other words, every instance of
-controller is scoped to a specific web request. Just like function handlers,
-controllers support the automatic injection of parameters into request
-handlers, and also dependency injection into their constructors (`__init__`
-methods). This is a feature that improves development speed and enables cleaner
-code (compare this approach with a scenario where all dependencies need to be
-imported and referenced inside function bodies by hand).
+When the path of a web request matches a route defined in a controller, a new
+instance of that `Controller` is created to handle the request. In other words,
+each container instance is scoped to a specific web request. Just like function
+handlers, controllers support automatic injection of parameters and dependency
+injection to resolve parameters defined in constructors (`__init__` methods)
+and class properties. This feature enhances development speed and promotes
+cleaner code.
 
-The `Controller` class implements methods to return values and offers
-`on_request` and `on_response` extensibility points.
+/// admonition | Rodi documentation.
+    type: info
 
-!!! tip "Controllers and routes automatic import"
-    Python modules defined inside `controllers` and `routes` packages are
-    automatically imported by a BlackSheep application. The automatic import
-    happens relative to the namespace where the application is instantiated.
+Refer to [Rodi's documentation](https://www.neoteroi.dev/rodi/) for a detailed
+introduction to dependency injection.
+///
+
+The `Controller` class provides methods to return various kinds of responses
+and offers `on_request` and `on_response` extensibility points. These functions
+can be overridden in subclasses of `Controller` to apply logic at the start and
+end of each web request.
+
+/// admonition | Automatic import of controllers and routes.
+    type: tip
+
+Python modules defined inside `controllers` and `routes` packages are
+automatically imported by a BlackSheep application. The automatic import
+happens relatively to the namespace where the application is instantiated.
+///
 
 ## Server side templating (views and models)
 
-Server side templating refers to the ability of a web application to generate
-HTML pages from templates and dynamic variables. By default, BlackSheep does
-this using the [`Jinja2` library](https://palletsprojects.com/p/jinja/)
-by the [Pallets](https://palletsprojects.com) team.
+Server-side templating refers to a web application's ability to generate HTML
+pages using templates and dynamic variables. By default, BlackSheep achieves
+this with the [`Jinja2` library](https://palletsprojects.com/p/jinja/)
+developed by the [Pallets](https://palletsprojects.com) team.
 
-To see how this works in practice when using `Controllers`, edit the `Greetings`
-controller created previously to look like this:
+To see how this works in practice when using controllers, edit the `Greetings`
+controller created previously as follows:
 
-```python
+```python {hl_lines="8"}
 from blacksheep.server.controllers import Controller, get
 
 
@@ -235,8 +246,10 @@ class Greetings(Controller):
         return self.view()
 ```
 
-Then, create a new folder inside `views` directory, called "greetings", and
+Then, create a new folder inside `views` directory, named "greetings", and
 add an HTML file named "hello.jinja".
+
+<!--TODO: UPDATE THE PICTURE!-->
 
 ![New view](./img/new-view.png)
 
@@ -251,14 +264,14 @@ Copy the following contents into `hello.jinja`:
 Now navigate to [http://localhost:44777/hello-view](http://localhost:44777/hello-view),
 to see the response from the new HTML view.
 
-Note how convention over configuration is used in this case, to determine that
+Notice how convention over configuration is used in this case, to determine that
 `./views/greetings/hello.jinja` file must be used, because of the convention:<br />
 `./views/{CONTROLLER_NAME}/{METHOD_NAME}.jinja`.
 
 The view currently is an HTML fragment, not a full document. To make it a
 full page, modify `hello.jinja` to use the application layout:
 
-```html
+```html {hl_lines="1 11-15"}
 {%- extends "layout.jinja" -%}
 {%- block title -%}
   Hello Page!
@@ -282,20 +295,21 @@ full page, modify `hello.jinja` to use the application layout:
 Refresh the page at [http://localhost:44777/hello-view](http://localhost:44777/hello-view) to see the result.
 
 In this case, a page layout is applied using: `{%- extends "layout.jinja" -%}`,
-with several blocks going in various areas of `layout.jinja`. For more
-information on layouts and features of the templating library, refer to the
-[Jinja2 documentation](https://jinja2docs.readthedocs.io/en/stable/).
+with several blocks defined in `layout.jinja`. For more information on layouts
+and features of the templating library, refer to the [Jinja2
+documentation](https://jinja2docs.readthedocs.io/en/stable/).
 
 ---
 
-So far the tutorials only showed the _Controller_ and the _View_ part of the _MVC_ architecture. A _Model_ is a context for an HTML view.
-To include dynamic content into an HTML template, use mustaches _`{{name}}`_
-placeholders and pass a model having properties whose names match their key
-to the `view` function.
+Until now, the tutorial have only demonstrated the _Controller_ and _View_
+components of the _MVC_ architecture. A _Model_ serves as the context for an
+HTML view. To include dynamic content in an HTML template, use mustache-style
+_`{{name}}`_ placeholders and pass a model with properties whose names match
+the placeholders to the `view` function.
 
 For example, modify `hello.jinja` to use dynamic content from a model:
 
-```html
+```html {hl_lines="5-7"}
   <div style="margin: 10em 2em;">
     <h1>Hello, {{name}}!</h1>
 
@@ -309,7 +323,7 @@ For example, modify `hello.jinja` to use dynamic content from a model:
 
 and `greetings.py` to contain the following code:
 
-```python
+```python {hl_lines="13 22-23"}
 from dataclasses import dataclass
 from typing import List
 from blacksheep.server.controllers import Controller, get
@@ -337,7 +351,7 @@ class Greetings(Controller):
                 sentences=[
                     Sentence(
                         "Check this out!",
-                        "https://github.com/RobertoPrevato/BlackSheep",
+                        "https://github.com/Neoteroi/BlackSheep",
                     )
                 ],
             )
@@ -353,10 +367,11 @@ Models can be defined as [dictionaries](https://docs.python.org/3.9/library/stdt
 implementing a constructor.
 
 ## Handling parameters in controllers
-The previous tutorial showed how request handlers support the automatic
-injection of parameters read from the HTTP request. Controllers support the
-same, therefore it is possible to have parameters read automatically and
-injected into controller methods:
+
+The _Getting started guide_ demonstrated how request handlers support the
+automatic injection of parameters from HTTP requests. Controllers offer the
+same functionality, allowing parameters to be automatically read and passed
+into controller methods:
 
 ```python
 class Example(Controller):
@@ -371,45 +386,46 @@ class Example(Controller):
 ```
 
 Controllers also support dependency injection for their constructor
-(`__init__` method), this will be explained in the next page.
+(`__init__` method) and class properties, this will be explained in the next
+page.
 
 ## Serving static files
-This tutorial previously showed how the homepage of the MVC project template looks
-like, at the root of the website:
+
+The homepage of the MVC project template looks like in the following picture:
 
 ![MVC Project home](./img/mvc-template-home.png)
 
-The project template includes a folder for `static` files, including pictures,
-CSS, and JavaScript files. Static files are served using a catch-all route, reading
-files whose path, relative to the static folder, matches the URL path of the request.
+The project template includes a folder for static files, such as images, CSS,
+and JavaScript files. Static files are served using a catch-all route that
+reads files whose paths, relative to the static folder, match the URL path of
+the request.
 
-For example, if the `static` folder contains the file `scripts/example.js`,
-web requests at `http://localhost:44777/scripts/example.js` will be resolved
-with this file and related information. When handling static files, BlackSheep
-automatically takes care of several details:
+For example, if the `static` folder contains the file `scripts/example.js`, an
+HTTP GET web request to `http://localhost:44777/scripts/example.js` will
+resolve to this file and its related information. When serving static files,
+BlackSheep automatically handles several tasks:
 
-- it handles the ETag response header, If-None-Match request header and HTTP 304 Not
-  Modified responses if files don't change on the file system
-- it handles HTTP GET requests returning file information
-- it handles Range requests, to support pause and restore downloads out of the box
-  and enable optimal support for videos (videos can be downloaded from a certain
-  point in time)
+- It manages the `ETag` response header, the `If-None-Match` request header, and
+  `HTTP 304 Not Modified` responses when files remain unchanged on the file
+  system.
+- It processes `HTTP GET` and `HTTP HEAD` requests to return file information.
+- It supports Range requests, enabling pause-and-resume downloads and optimal
+  handling of videos (e.g., downloading videos from a specific point in time).
 
-Try to add a file to the static folder, and download it writing the path in your
+Add a file to the static folder and access it by entering its path in your
 browser.
 
-Relative paths are supported, but only files inside the root static folder are
-served, it is not possible to download files outside of the static folder (it would be
-a security issue if it worked otherwise!).
-Additionally, BlackSheep only handles certain file extensions:  by default
-only the most common file extensions used in web applications.
-Paths starting with "/" are always considered absolute paths starting from the
-root of the website.
+Relative paths are supported, but only files within the root static folder are
+served. It is not possible to download files outside of the static folder, as
+this would pose a security risk. Additionally, BlackSheep only handles certain
+file extensions by default, specifically the most common ones used in web
+applications. Paths starting with '/' are always treated as absolute paths
+starting from the root of the website.
 
 ## Strategy for application settings
 
 The `API` and the `MVC` project templates include a strategy to read and
-validate application settings, from various sources, and support multiple
+validate application settings from various sources and support multiple
 system environments (like `dev`, `test`, and `prod` environments).
 
 - [`Pydantic`](https://docs.pydantic.dev/latest/) is always used to describe and validate application settings.
@@ -434,13 +450,22 @@ general concepts presented here apply to many kinds of web frameworks:
 - use of MVC architecture
 
 The next pages describe the built-in support for
-[dependency injection](../dependency-injection), and automatic generation of
-[OpenAPI Documentation](../openapi).
+[dependency injection](dependency-injection.md), and automatic generation of
+[OpenAPI Documentation](openapi.md).
 
-!!! info "For more information..."
-    For more information about Server Side Rendering, read [_Templating_](/blacksheep/templating/).<br>
-    For more information about the BlackSheep CLI, read [_More about the CLI_](/blacksheep/cli/).
 
-!!! tip "Don't miss the api project template"
-    Try also the `api` project template, to start new Web API projects that
-    don't handle HTML views.
+/// admonition | For more information...
+
+For more information about Server Side Rendering, read [_Templating_](/blacksheep/templating/).
+
+For more information about the BlackSheep CLI, read [_More about the CLI_](/blacksheep/cli/).
+
+///
+
+/// admonition | Don't miss the api project template.
+    type: tip
+
+Try also the `api` project template, to start new Web API projects that
+don't handle HTML views.
+
+///
