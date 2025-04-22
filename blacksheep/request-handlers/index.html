@@ -1589,120 +1589,118 @@
 
 
 <h1 id="request-handlers">Request handlers<a class="headerlink" href="#request-handlers" title="Permanent link">&para;</a></h1>
-<p>The previous pages describe that a request handler in BlackSheep is a function
-associated with a route,  having the responsibility of handling web requests.
-This page describes <code>request handlers</code> in detail, covering the following:</p>
+<p>The previous pages explain that a request handler in BlackSheep is a function
+associated with a route, responsible for handling web requests. This page
+provides a detailed explanation of request handlers, covering the following
+topics:</p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Request handler normalization.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Using asynchronous and synchronous code.</li>
 </ul>
 <h2 id="request-handler-normalization">Request handler normalization.<a class="headerlink" href="#request-handler-normalization" title="Permanent link">&para;</a></h2>
-<p>A normal request handler in BlackSheep is defined as an asynchronous function
-having the following signature:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span>
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">normal_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="o">...</span>
+<p>A standard request handler in BlackSheep is defined as an asynchronous function
+with the following signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">normal_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="o">...</span>
 </code></pre></div>
-<p>To be a request handler, a function must be associated with a route:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">normal_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example&quot;</span><span class="p">)</span>
+<p>For a function to act as a request handler, it must be associated with a route:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">normal_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>A request handler defined this way is called directly to generate a response
 when a web request matches the route associated with the function (in this
 case, HTTP GET at the root of the website "/").</p>
-<p>However, to improve the developer's experience and development speed,
-BlackSheep implements automatic normalization of request handlers. For example,
-it is possible to define a request handler as a synchronous function, the
-framework automatically wraps the synchronous function into an asynchronous
-wrapper:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/sync&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">sync_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example&quot;</span><span class="p">)</span>
+<p>To enhance the developer experience and improve development speed, BlackSheep
+implements automatic normalization of request handlers. For instance, a request
+handler can be defined as a synchronous function, and the framework will
+automatically wrap it in an asynchronous wrapper:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/sync&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">sync_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example&quot;</span><span class="p">)</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">Avoid blocking code in synchronous methods!</p>
-<p>When a request handler is defined as a synchronous method, BlackSheep
-assumes that the author of the code knows what they are doing and about
-asynchronous programming, and that the response should be returned
-immediately without I/O or CPU-intensive operations that would block the
-event loop. BlackSheep does nothing to prevent blocking the event loop, if
-you add blocking operations in your code.</p>
+<p>When a request handler is defined as a synchronous function, BlackSheep assumes
+that the developer understands asynchronous programming and intends for the
+response to be returned immediately without performing I/O or CPU-intensive
+operations that could block the event loop.</p>
 </div>
 <p>Similarly, request handlers are normalized when their function signature is
 different than the normal one. For example, a request handler can be defined
 without arguments, and returning a plain <code>str</code> or an instance of an object
 (which gets serialized to <code>JSON</code> and configured as response content):</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/greetings&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">hello_there</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="s2">&quot;Hello, There!&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/greetings&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">hello_there</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="k">return</span> <span class="s2">&quot;Hello, There!&quot;</span>
 </code></pre></div>
 <p>In the example below, the response content is JSON <code>{"id":1,"name":"Celine"}</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-
-
-<span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Cat</span><span class="p">:</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/example-cat&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_example_cat</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Cat</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Cat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Celine&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Cat</span><span class="p">:</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/example-cat&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_example_cat</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Cat</span><span class="p">:</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="k">return</span> <span class="n">Cat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Celine&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="automatic-binding-of-parameters">Automatic binding of parameters<a class="headerlink" href="#automatic-binding-of-parameters" title="Permanent link">&para;</a></h3>
 <p>An important feature enabled by function normalization is the automatic binding
 of request parameters, as described in the <code>Getting Started</code> pages. Common
 scenarios are using route parameters and query string parameters:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># in this case, a route parameter is passed directly to the request handler</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/greetings/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
-
-
-<span class="c1"># in this case, query string parameters by name are read from the request and</span>
-<span class="c1"># passed to the request handler</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_cats</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">search</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># in this case, a route parameter is passed directly to the request handler</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/greetings/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># in this case, query string parameters by name are read from the request and</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1"># passed to the request handler</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cats</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">search</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="o">...</span>
 </code></pre></div>
-<p>In the <code>get_cats</code> example above, function parameters are read automatically
-from the query string and parsed, if present, otherwise default values are
+<p>In the <code>get_cats</code> example above, function parameters are automatically read
+from the query string and parsed if present; otherwise, default values are
 used.</p>
 <h3 id="explicit-and-implicit-binding">Explicit and implicit binding<a class="headerlink" href="#explicit-and-implicit-binding" title="Permanent link">&para;</a></h3>
 <p>All examples so far showed how to use implicit binding of request parameters.
 In the <code>get_cats</code> example above, all parameters are <em>implicitly</em> bound from the
-request query string. To enable more scenarios, <code>BlackSheep</code> also provides
+request query string. To enable more scenarios, BlackSheep also provides
 explicit bindings that allow specifying the source of the parameter (e.g.
 request headers, cookies, route, query, body, application services). In the
 example below, <code>cat_input</code> is read automatically from the request payload as
 JSON and deserialized automatically into an instance of the <code>CreateCatInput</code>
 class.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.bindings</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromJSON</span>
-
-
-<span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">CreateCatInput</span><span class="p">:</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="o">...</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/cat&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_cat</span><span class="p">(</span>
-    <span class="n">cat_input</span><span class="p">:</span> <span class="n">FromJSON</span><span class="p">[</span><span class="n">CreateCatInput</span><span class="p">]</span>
-<span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">cat_input</span><span class="o">.</span><span class="n">value</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.bindings</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromJSON</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">CreateCatInput</span><span class="p">:</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="o">...</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/cat&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_cat</span><span class="p">(</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="n">cat_input</span><span class="p">:</span> <span class="n">FromJSON</span><span class="p">[</span><span class="n">CreateCatInput</span><span class="p">]</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="p">):</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">cat_input</span><span class="o">.</span><span class="n">value</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>More details about bindings are described in <em><a href="../binders/">Binders</a></em>.</p>
 <h3 id="normalization-and-openapi-documentation">Normalization and OpenAPI Documentation<a class="headerlink" href="#normalization-and-openapi-documentation" title="Permanent link">&para;</a></h3>
@@ -1716,39 +1714,39 @@ handlers don't need to be asynchronous in those scenarios when the response is
 well-known and can be produced without doing any I/O bound operation or any
 CPU-intensive operation. This is the case for example of redirects, and the
 previous "Hello, There!" example:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">redirect</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/sync&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">sync_handler</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="s2">&quot;Example Sync&quot;</span>
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/redirect-me&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">redirect_example</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;/sync&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">redirect</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/sync&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">sync_handler</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="k">return</span> <span class="s2">&quot;Example Sync&quot;</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/redirect-me&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">redirect_example</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;/sync&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Request handlers that do I/O bound operations or CPU-intensive operations
-should instead be <code>async</code>, to not hinder the performance of the web server. For
+<p>Request handlers that perform I/O-bound or CPU-intensive operations should be
+defined as <code>async</code> to avoid hindering the performance of the web server. For
 example, if information is fetched from a database or a remote API when
-handling a web request handler, it is correct to use asynchronous code
-to reduce RAM consumption and not block the event loop of the web application.</p>
+handling a web request handler, it is correct to use asynchronous code to
+reduce RAM consumption and not block the event loop of the web application.</p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>If an operation is CPU-intensive (e.g. involving file operations,
-resizing a picture), the request handlers that initiate such operation should
-be async, and use a <a href="https://docs.python.org/3/library/asyncio-eventloop.html#executing-code-in-thread-or-process-pools">thread or process
+<p class="admonition-title">CPU and I/O intensive operations.</p>
+<p>If an operation is CPU-intensive (e.g. file operations or image resizing), the
+request handlers that initiate such operation should be async, and use a
+<a href="https://docs.python.org/3/library/asyncio-eventloop.html#executing-code-in-thread-or-process-pools">thread or process
 pool</a>
-to not block the web app's event loop.
-Similarly, request handlers that initiate I/O bound operations (e.g. web
-requests to external APIs, connecting to a database) should also be <code>async</code>.</p>
+to not block the web app's event loop. Similarly, request handlers that
+initiate I/O bound operations (e.g. web requests to external APIs, connecting
+to a database) should also be <code>async</code>.</p>
 </div>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
 <p>The next pages describe <a href="../requests/">requests</a> and <a href="../responses/">responses</a>
 in detail.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

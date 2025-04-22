@@ -1508,14 +1508,16 @@
 
 <h1 id="data-protection">Data protection<a class="headerlink" href="#data-protection" title="Permanent link">&para;</a></h1>
 <p>Web applications often need to protect data, so that it can be stored in
-cookies or other types of storage. BlackSheep uses <a href="https://pypi.org/project/itsdangerous/"><code>itsdangerous</code></a> to sign and encrypt
-information, for example when storing <code>claims</code> obtained from <code>id_token</code>s when
-using an integration with an identity provider using <a href="../authentication/#oidc">OpenID
-Connect</a>, or when handling <a href="../sessions/">session cookies</a>.</p>
-<p>This page documents:</p>
+cookies or other types of client storage. BlackSheep uses
+<a href="https://pypi.org/project/itsdangerous/"><code>itsdangerous</code></a> to sign and encrypt
+information. For example, it is used to store <code>claims</code> obtained from
+<code>id_token</code>s in integrations with identity providers using <a href="../authentication/#oidc">OpenID
+Connect</a>, or when handling <a href="../sessions/">session
+cookies</a>.</p>
+<p>This page covers:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to handle secrets</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Example use of data protection</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Handling secrets.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Using data protection features.</li>
 </ul>
 <h2 id="how-to-handle-secrets">How to handle secrets<a class="headerlink" href="#how-to-handle-secrets" title="Permanent link">&para;</a></h2>
 <p>Symmetric encryption is used to sign and encrypt information in several
@@ -1540,24 +1542,22 @@ following:</p>
 </ul>
 <p>Keys can be configured in a host environment, or fetched from a dedicated
 service such as <code>AWS Secrets Manager</code> or <code>Azure Key Vault</code> at application
-start-up, and configured as environment settings for the application.
-<strong>DO NOT</strong> store secrets that are meant to be used in production
-under source control.</p>
+start-up, and configured as environment settings for the application.</p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.dataprotection</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_serializer</span>
-
-
-<span class="n">serializer</span> <span class="o">=</span> <span class="n">get_serializer</span><span class="p">(</span><span class="n">purpose</span><span class="o">=</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
-
-<span class="n">token</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;This will be kept secret&quot;</span><span class="p">})</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.dataprotection</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_serializer</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">serializer</span> <span class="o">=</span> <span class="n">get_serializer</span><span class="p">(</span><span class="n">purpose</span><span class="o">=</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">token</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;This will be kept secret&quot;</span><span class="p">})</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">data</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

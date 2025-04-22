@@ -1720,14 +1720,14 @@ and exceptions. This page describes the details of the <code>Application</code> 
 <p>BlackSheep catches any unhandled exception that happen during the execution of
 request handlers, producing an <code>HTTP 500 Internal Server Error</code> response. To see
 this in practice, start an application like the following:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">crash_test</span><span class="p">():</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Crash test&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">crash_test</span><span class="p">():</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Crash test&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>And observe how a request to its root produces a response with HTTP status 500,
 and the text "Internal server error".</p>
@@ -1736,27 +1736,24 @@ issue if the web application returned error details to the client. However,
 while developing and occasionally while investigating issues, it is useful to
 be able to obtain error details directly from the web requests that are
 failing. To enable error details, update the app declaration as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <p>Now the application returns the details of the exception with the full stack
 trace, serving a page like the following:</p>
 <p><img alt="Internal server error page" src="../img/internal-server-error-page.png" /></p>
-<p>Consider using environmental variables to handle these kinds of settings that
-can vary across environments. For example:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SHOW_ERROR_DETAILS&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)))</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">crash_test</span><span class="p">():</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Crash test&quot;</span><span class="p">)</span>
-</code></pre></div>
-<div class="admonition info">
+<div class="admonition tip">
+<p class="admonition-title">Use the <code>APP_SHOW_ERROR_DETAILS</code>.</p>
+<p>Rather than using the <code>show_error_details</code> parameter, it is recommended to use
+the environment variable <code>APP_SHOW_ERROR_DETAILS</code> to control whether the
+application displays detailed error information. Setting
+<code>APP_SHOW_ERROR_DETAILS=1</code> or <code>APP_SHOW_ERROR_DETAILS=True</code> enables this
+feature.</p>
+</div>
+<div class="admonition">
 <p class="admonition-title">Settings strategy</p>
 <p>BlackSheep project templates include a strategy to handle application
-settings and configuration roots.</p>
+settings and configuration roots. Refer to <a href="../mvc-project-template/"><em>Getting started with the MVC project template</em></a>
+for more information.</p>
 </div>
 <h3 id="configuring-exceptions-handlers">Configuring exceptions handlers<a class="headerlink" href="#configuring-exceptions-handlers" title="Permanent link">&para;</a></h3>
 <p>The BlackSheep <code>Application</code> object has an <code>exceptions_handlers</code> dictionary
@@ -1764,32 +1761,31 @@ that defines how errors should be handled. When an exception happens while
 handling a web request and reaches the application, the application checks if
 there is a matching handler for that kind of exception. An exception handler is
 defined as a function with the following signature:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">text</span>
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="k">pass</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">text</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="hll"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+</span><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">pass</span>
 </code></pre></div>
-<p>In the exception below
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CustomException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">CustomException</span><span class="p">):</span>
-    <span class="k">nonlocal</span> <span class="n">app</span>
-    <span class="k">assert</span> <span class="bp">self</span> <span class="ow">is</span> <span class="n">app</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">CustomException</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Called&quot;</span><span class="p">)</span>
-
-
-<span class="c1"># Register the exception handler for the CustomException type:</span>
-<span class="n">app</span><span class="o">.</span><span class="n">exceptions_handlers</span><span class="p">[</span><span class="n">CustomException</span><span class="p">]</span> <span class="o">=</span> <span class="n">exception_handler</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="c1"># of course, the exception can be raised at any point</span>
-    <span class="c1"># for example in the business logic layer</span>
-    <span class="k">raise</span> <span class="n">CustomException</span><span class="p">()</span>
-</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">CustomException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">pass</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">CustomException</span><span class="p">):</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="k">nonlocal</span> <span class="n">app</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">assert</span> <span class="bp">self</span> <span class="ow">is</span> <span class="n">app</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">CustomException</span><span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Called&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># Register the exception handler for the CustomException type:</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">app</span><span class="o">.</span><span class="n">exceptions_handlers</span><span class="p">[</span><span class="n">CustomException</span><span class="p">]</span> <span class="o">=</span> <span class="n">exception_handler</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="c1"># of course, the exception can be raised at any point</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="c1"># for example in the business logic layer</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="k">raise</span> <span class="n">CustomException</span><span class="p">()</span>
+</code></pre></div>
 <p>Exceptions inheriting from <code>HTTPException</code> can be mapped to handlers by their
 type or by their status code, using <code>int</code> keys; while user-defined exceptions
 are mapped to handlers by their type.</p>
@@ -1799,26 +1795,26 @@ specific handler for one of the descendant classes.</p>
 <h3 id="configuring-exception-handlers-using-decorators">Configuring exception handlers using decorators<a class="headerlink" href="#configuring-exception-handlers-using-decorators" title="Permanent link">&para;</a></h3>
 <p>It is also possible to register exception handlers using decorators, instead
 of interacting with <code>app.exceptions_handlers</code> dictionary:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CustomException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">CustomException</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handler_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">CustomException</span><span class="p">):</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">CustomException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="k">pass</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">CustomException</span><span class="p">)</span>
+</span><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handler_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="n">CustomException</span><span class="p">):</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="o">...</span>
 </code></pre></div>
 <h3 id="overriding-the-default-exception-handler-for-unhandled-exceptions">Overriding the default exception handler for unhandled exceptions<a class="headerlink" href="#overriding-the-default-exception-handler-for-unhandled-exceptions" title="Permanent link">&para;</a></h3>
 <p>To override how unhandled exceptions are handled, define a custom <code>Application</code>
 class overriding its <code>handle_internal_server_error</code> method, like in the
 following example:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MyApp</span><span class="p">(</span><span class="n">Application</span><span class="p">):</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_internal_server_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
-        <span class="c1"># TODO: handle this as you wish!</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Oh, no!&quot;</span><span class="p">},</span> <span class="mi">500</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">json</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">MyApp</span><span class="p">(</span><span class="n">Application</span><span class="p">):</span>
+</span><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="hll">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_internal_server_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
+</span><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="c1"># TODO: handle this as you wish!</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Oh, no!&quot;</span><span class="p">},</span> <span class="mi">500</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <h2 id="application-events">Application events<a class="headerlink" href="#application-events" title="Permanent link">&para;</a></h2>
@@ -1836,89 +1832,127 @@ and must be disposed of when the application stops.</p>
 create an HTTP <code>ClientSession</code> that will be disposed of when the application
 stops. Note how the instance of <code>ClientSession</code> is also bound to application
 services, so that it can be injected into request handlers that need it.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.client.pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientConnectionPools</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.client.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientSession</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">lifespan</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">register_http_client</span><span class="p">():</span>
-    <span class="k">async</span> <span class="k">with</span> <span class="n">ClientSession</span><span class="p">(</span>
-        <span class="n">pools</span><span class="o">=</span><span class="n">ClientConnectionPools</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">())</span>
-    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client created and registered as singleton&quot;</span><span class="p">)</span>
-        <span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ClientSession</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
-        <span class="k">yield</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client disposed of&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">http_client</span><span class="p">:</span> <span class="n">ClientSession</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">http_client</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;client_instance_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">(</span><span class="n">http_client</span><span class="p">)}</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">44777</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="n">lifespan</span><span class="o">=</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
-</code></pre></div>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>The method leverages <code>contextlib.asynccontextmanager</code>. What is defined
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span>
+<span class="normal"><a href="#__codelineno-6-12">12</a></span>
+<span class="normal"><a href="#__codelineno-6-13">13</a></span>
+<span class="normal"><a href="#__codelineno-6-14">14</a></span>
+<span class="normal"><a href="#__codelineno-6-15">15</a></span>
+<span class="normal"><a href="#__codelineno-6-16">16</a></span>
+<span class="normal"><a href="#__codelineno-6-17">17</a></span>
+<span class="normal"><a href="#__codelineno-6-18">18</a></span>
+<span class="normal"><a href="#__codelineno-6-19">19</a></span>
+<span class="normal"><a href="#__codelineno-6-20">20</a></span>
+<span class="normal"><a href="#__codelineno-6-21">21</a></span>
+<span class="normal"><a href="#__codelineno-6-22">22</a></span>
+<span class="normal"><a href="#__codelineno-6-23">23</a></span>
+<span class="normal"><a href="#__codelineno-6-24">24</a></span>
+<span class="normal"><a href="#__codelineno-6-25">25</a></span>
+<span class="normal"><a href="#__codelineno-6-26">26</a></span>
+<span class="normal"><a href="#__codelineno-6-27">27</a></span>
+<span class="normal"><a href="#__codelineno-6-28">28</a></span>
+<span class="normal"><a href="#__codelineno-6-29">29</a></span>
+<span class="normal"><a href="#__codelineno-6-30">30</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.client.pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientConnectionPools</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.client.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientSession</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">lifespan</span>
+</span><a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="hll"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">register_http_client</span><span class="p">():</span>
+</span><a id="__codelineno-6-11" name="__codelineno-6-11"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">ClientSession</span><span class="p">(</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a>        <span class="n">pools</span><span class="o">=</span><span class="n">ClientConnectionPools</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">())</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13"></a>    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client created and registered as singleton&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15"></a>        <span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ClientSession</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="hll">        <span class="k">yield</span>
+</span><a id="__codelineno-6-17" name="__codelineno-6-17"></a>
+<a id="__codelineno-6-18" name="__codelineno-6-18"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client disposed of&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19"></a>
+<a id="__codelineno-6-20" name="__codelineno-6-20"></a>
+<a id="__codelineno-6-21" name="__codelineno-6-21"></a><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">http_client</span><span class="p">:</span> <span class="n">ClientSession</span><span class="p">):</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">http_client</span><span class="p">)</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;client_instance_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">(</span><span class="n">http_client</span><span class="p">)}</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25"></a>
+<a id="__codelineno-6-26" name="__codelineno-6-26"></a>
+<a id="__codelineno-6-27" name="__codelineno-6-27"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28"></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<a id="__codelineno-6-29" name="__codelineno-6-29"></a>
+<a id="__codelineno-6-30" name="__codelineno-6-30"></a>    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">44777</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="n">lifespan</span><span class="o">=</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>The code before the <code>yield</code> statement (lines <em>11-16</em>) is executed when the
+  application starts.</li>
+<li>The code after the <code>yield</code> statement (lines <em>17-18</em>) is executed when the
+  application stops.</li>
+</ul>
+<div class="admonition">
+<p class="admonition-title">@app.lifespan</p>
+<p>This method leverages <code>contextlib.asynccontextmanager</code>. What is defined
 before the <code>yield</code> statement executes when the application starts, and what
 is defined after the <code>yield</code> statement executes when the application stops.</p>
 </div>
 <p>The following example illustrates how a <code>redis-py</code> <a href="https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html">connection can be disposed
 of</a>
-using the same method:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">redis.asyncio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">redis</span>
-
-<span class="o">...</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">lifespan</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">configure_redis</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Configure an async Redis client, and dispose of its connections when the</span>
-<span class="sd">    application stops.</span>
-<span class="sd">    See:</span>
-<span class="sd">    https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">connection</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ping successful: </span><span class="si">{</span><span class="k">await</span><span class="w"> </span><span class="n">connection</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">connection</span><span class="p">)</span>
-
-    <span class="k">yield</span> <span class="n">connection</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Disposing the Redis connection pool...&quot;</span><span class="p">)</span>
-    <span class="k">await</span> <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+using <code>@app.lifespan</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">redis.asyncio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">redis</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="o">...</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nd">@app</span><span class="o">.</span><span class="n">lifespan</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">configure_redis</span><span class="p">():</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="sd">    Configure an async Redis client, and dispose of its connections when the</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="sd">    application stops.</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="sd">    See:</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="sd">    https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="n">connection</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">()</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ping successful: </span><span class="si">{</span><span class="k">await</span><span class="w"> </span><span class="n">connection</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">connection</span><span class="p">)</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    <span class="k">yield</span> <span class="n">connection</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Disposing the Redis connection pool...&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>    <span class="k">await</span> <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div>
-<div class="admonition info">
-<p class="admonition-title">Example using Redis</p>
-<p>The <code>BlackSheep-Examples</code> repository includes an example where <code>Redis</code> is
-used to store access tokens and refresh tokens obtained using
-<code>OpenID Connect</code>: <a href="https://github.com/Neoteroi/BlackSheep-Examples/blob/main/oidc/scopes_redis_aad.py">example</a>. For more information on <code>redis-py</code> and its async
-interface, refer to its <a href="https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html">official documentation</a>.</p>
-</div>
 <h3 id="on_start">on_start<a class="headerlink" href="#on_start" title="Permanent link">&para;</a></h3>
-<p>This event should be used to configure things such as new request handlers,
-and services registered in <code>app.services</code>, such as database connection pools,
+<p>This event should be used to configure components such as new request handlers
+and services registered in <code>app.services</code>, including database connection pools
 and HTTP client sessions.</p>
 <h3 id="after_start">after_start<a class="headerlink" href="#after_start" title="Permanent link">&para;</a></h3>
-<p>This event should be used to configure things that must happen after request
-handlers are normalized. At this point, the application router contains information
-about actual routes handled by the web application, and routes can be inspected.
-For example, the built-in generation of OpenAPI Documentation generates the
-API specification file at this point.</p>
+<p>This event should be used to configure tasks that must occur after request
+handlers are normalized. At this stage, the application router contains
+information about the actual routes handled by the web application, allowing
+routes to be inspected. For example, the built-in OpenAPI documentation
+generation creates the API specification file at this point.</p>
+<div class="admonition tip">
+<p class="admonition-title">Example: inspecting routes.</p>
+<p>An <code>after_start</code> callback that prints all routes registered in the application
+router:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nd">@app</span><span class="o">.</span><span class="n">after_start</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">after_start_print_routes</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">application</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">routes</span><span class="p">)</span>
+</code></pre></div>
+</div>
 <h3 id="on_stop">on_stop<a class="headerlink" href="#on_stop" title="Permanent link">&para;</a></h3>
-<p>This event should be used to fire callbacks that need to happen when the application
-is stopped. For example, disposing of services that require disposal, such as
-database connection pools, and HTTP client sessions using connection pools.</p>
+<p>This event should be used to trigger callbacks that need to run when the
+application stops. For example, it can be used to dispose of services that
+require cleanup, such as database connection pools and HTTP client sessions
+using connection pools.</p>
 <h3 id="application-life-cycle">Application life cycle<a class="headerlink" href="#application-life-cycle" title="Permanent link">&para;</a></h3>
 <p>Refer to the following diagram to know more about when application events
 are fired, and the state of the application when they are executed.</p>
@@ -1928,76 +1962,67 @@ are fired, and the state of the application when they are executed.</p>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Event handlers can be registered using decorators.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">get</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example Async&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_start</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On start&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">after_start</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">after_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After start&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_stop</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_stop</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On stop&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example Async&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="nd">@app</span><span class="o">.</span><span class="n">on_start</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On start&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="nd">@app</span><span class="o">.</span><span class="n">after_start</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">after_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After start&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="nd">@app</span><span class="o">.</span><span class="n">on_stop</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_stop</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On stop&quot;</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>In alternative to decorators, event handlers can be registered using <code>+=</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">get</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example Async&quot;</span><span class="p">)</span>
-
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">before_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before start&quot;</span><span class="p">)</span>
-
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">after_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After start&quot;</span><span class="p">)</span>
-
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_stop</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On stop&quot;</span><span class="p">)</span>
-
-
-<span class="n">app</span><span class="o">.</span><span class="n">on_start</span> <span class="o">+=</span> <span class="n">before_start</span>
-<span class="n">app</span><span class="o">.</span><span class="n">after_start</span> <span class="o">+=</span> <span class="n">after_start</span>
-<span class="n">app</span><span class="o">.</span><span class="n">on_stop</span> <span class="o">+=</span> <span class="n">on_stop</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Example Async&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">before_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before start&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">after_start</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After start&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_stop</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On stop&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="n">app</span><span class="o">.</span><span class="n">on_start</span> <span class="o">+=</span> <span class="n">before_start</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="n">app</span><span class="o">.</span><span class="n">after_start</span> <span class="o">+=</span> <span class="n">after_start</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="n">app</span><span class="o">.</span><span class="n">on_stop</span> <span class="o">+=</span> <span class="n">on_stop</span>
 </code></pre></div>
 </div>
 </div>
-</div>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>For example, to define an <code>after_start</code> callback that logs all routes registered
-in the application router:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">after_start</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">after_start_print_routes</span><span class="p">(</span><span class="n">application</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">application</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">routes</span><span class="p">)</span>
-</code></pre></div>
 </div>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
-<p>Read about the details of <a href="../routing">routing in BlackSheep</a>.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<p>Read about the details of <a href="../routing/">routing in BlackSheep</a>.</p>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

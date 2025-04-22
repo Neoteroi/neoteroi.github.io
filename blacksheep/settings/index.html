@@ -1658,42 +1658,42 @@ specified, the application defaults to production.</p>
 <p>In the following example, the error details page displayed for unhandled
 exceptions is enabled only for development, while <a href="/blacksheep/hsts/">HTTP Strict Transport Security</a>
 is only enabled for all other environments.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_development</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.security.hsts</span><span class="w"> </span><span class="kn">import</span> <span class="n">HSTSMiddleware</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="k">if</span> <span class="n">is_development</span><span class="p">():</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">show_error_details</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HSTSMiddleware</span><span class="p">())</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_development</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.security.hsts</span><span class="w"> </span><span class="kn">import</span> <span class="n">HSTSMiddleware</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">if</span> <span class="n">is_development</span><span class="p">():</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">app</span><span class="o">.</span><span class="n">show_error_details</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HSTSMiddleware</span><span class="p">())</span>
 </code></pre></div>
 <h2 id="configuring-json-settings">Configuring JSON settings<a class="headerlink" href="#configuring-json-settings" title="Permanent link">&para;</a></h2>
 <p>BlackSheep supports configuring the functions that are used for JSON
 serialization and deserialization in the web framework.</p>
 <p>By default, the built-in <code>json</code> module is used for serializing and
 deserializing objects, but this can be changed in the way illustrated below.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_settings</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">custom_loads</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function is responsible for parsing JSON into instances of objects.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">custom_dumps</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function is responsible for creating JSON representations of objects.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="n">json_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span>
-    <span class="n">loads</span><span class="o">=</span><span class="n">custom_loads</span><span class="p">,</span>
-    <span class="n">dumps</span><span class="o">=</span><span class="n">custom_dumps</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_settings</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">custom_loads</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="sd">    This function is responsible for parsing JSON into instances of objects.</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="k">def</span><span class="w"> </span><span class="nf">custom_dumps</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="sd">    This function is responsible for creating JSON representations of objects.</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">json_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="n">loads</span><span class="o">=</span><span class="n">custom_loads</span><span class="p">,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    <span class="n">dumps</span><span class="o">=</span><span class="n">custom_dumps</span><span class="p">,</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">)</span>
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
@@ -1705,19 +1705,19 @@ that supports serialization of common objects such as <code>UUID</code>, <code>d
 <p>To use <a href="https://github.com/ijl/orjson"><code>orjson</code></a> for JSON serialization and
 deserialization with the built-in <a href="../responses/"><code>responses</code></a> and
 <code>JSONContent</code> class, it can be configured this way:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">orjson</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_settings</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">orjson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
-
-
-<span class="n">json_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span>
-    <span class="n">loads</span><span class="o">=</span><span class="n">orjson</span><span class="o">.</span><span class="n">loads</span><span class="p">,</span>
-    <span class="n">dumps</span><span class="o">=</span><span class="n">serialize</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">orjson</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_settings</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="k">return</span> <span class="n">orjson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">json_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">loads</span><span class="o">=</span><span class="n">orjson</span><span class="o">.</span><span class="n">loads</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">dumps</span><span class="o">=</span><span class="n">serialize</span><span class="p">,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">)</span>
 </code></pre></div>
 <p><strong>Note:</strong> the <code>decode("utf8")</code> call is required when configuring <code>orjson</code> for
 the built-in <code>responses</code> functions and the <code>JSONContent</code> class. This is because
@@ -1733,66 +1733,66 @@ fee of the superfluous <code>decode -&gt; encode</code> passage, it is recommend
   class</li>
 <li>use a custom-defined function for JSON responses like the following example:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">my_json</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns a response with application/json content,</span>
-<span class="sd">    and given status (default HTTP 200 OK).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
-        <span class="n">status</span><span class="p">,</span>
-        <span class="kc">None</span><span class="p">,</span>
-        <span class="n">Content</span><span class="p">(</span>
-            <span class="sa">b</span><span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
-            <span class="n">orjson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">my_json</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="sd">    Returns a response with application/json content,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="sd">    and given status (default HTTP 200 OK).</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="n">status</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="n">Content</span><span class="p">(</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>            <span class="sa">b</span><span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>            <span class="n">orjson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="p">),</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="p">)</span>
 </code></pre></div>
 <h3 id="example-applying-transformations-during-json-operations">Example: applying transformations during JSON operations<a class="headerlink" href="#example-applying-transformations-during-json-operations" title="Permanent link">&para;</a></h3>
 <p>The example below illustrates how to apply transformations to objects while
 they are serialized and deserialized. Beware that the example only illustrates
 this possibility, it doesn't handle objects inside lists, <code>@dataclass</code>, or
 <code>pydantic</code> models!</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_settings</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">essentials.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">dumps</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">default_json_dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">custom_loads</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-    <span class="c1"># example: applies a transformation when deserializing an object from JSON</span>
-    <span class="c1"># this can be used for example to change property names upon deserialization</span>
-
-    <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
-        <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;modified_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">obj</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">custom_dumps</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="c1"># example: applies a transformation when serializing an object into JSON</span>
-    <span class="c1"># this can be used for example to change property names upon serialization</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
-        <span class="n">value</span><span class="p">[</span><span class="s2">&quot;modified_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">default_json_dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
-
-<span class="n">json_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span>
-    <span class="n">loads</span><span class="o">=</span><span class="n">custom_loads</span><span class="p">,</span>
-    <span class="n">dumps</span><span class="o">=</span><span class="n">custom_dumps</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_settings</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">essentials.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">dumps</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">default_json_dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="k">return</span> <span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">custom_loads</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="c1"># example: applies a transformation when deserializing an object from JSON</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="c1"># this can be used for example to change property names upon deserialization</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>        <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;modified_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>        <span class="k">del</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>    <span class="k">return</span> <span class="n">obj</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="k">def</span><span class="w"> </span><span class="nf">custom_dumps</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>    <span class="c1"># example: applies a transformation when serializing an object into JSON</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>    <span class="c1"># this can be used for example to change property names upon serialization</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>        <span class="n">value</span><span class="p">[</span><span class="s2">&quot;modified_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>        <span class="k">del</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;@&quot;</span><span class="p">]</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>    <span class="k">return</span> <span class="n">default_json_dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a>
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="n">json_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span>
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>    <span class="n">loads</span><span class="o">=</span><span class="n">custom_loads</span><span class="p">,</span>
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a>    <span class="n">dumps</span><span class="o">=</span><span class="n">custom_dumps</span><span class="p">,</span>
+<a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a><span class="p">)</span>
 </code></pre></div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

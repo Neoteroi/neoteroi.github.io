@@ -1625,10 +1625,10 @@
 
 
 <h1 id="authentication-in-blacksheep">Authentication in BlackSheep<a class="headerlink" href="#authentication-in-blacksheep" title="Permanent link">&para;</a></h1>
-<p>The words "authentication strategy" in the context of a web application refer
-to the ability to identify the user who is using the application. BlackSheep
-implements a built-in authentication strategy for request handlers. This page
-describes:</p>
+<p>The term 'authentication strategy' in the context of a web application refers
+to the process of identifying the user accessing the application. BlackSheep
+provides a built-in authentication strategy for request handlers. This page
+covers:</p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to use the built-in authentication strategy.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to configure a custom authentication handler.</li>
@@ -1636,75 +1636,73 @@ describes:</p>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to read the user's context in request handlers.</li>
 </ul>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Using JWT Bearer and OpenID integrations requires more dependencies: use
-<code>pip install blacksheep[full]</code> to use these features</p>
+<p class="admonition-title">Additional dependencies.</p>
+<p>Using JWT Bearer and OpenID integrations requires additional dependencies.
+Install them by running: <code>pip install blacksheep[full]</code>.</p>
 </div>
 <h2 id="underlying-library">Underlying library<a class="headerlink" href="#underlying-library" title="Permanent link">&para;</a></h2>
-<p>The authentication and authorization logic implemented for BlackSheep was
-packed and published into a dedicated library:
+<p>The authentication and authorization logic for BlackSheep is packaged and
+published in a dedicated library:
 <a href="https://github.com/neoteroi/guardpost"><code>guardpost</code></a> (<a href="https://pypi.org/project/guardpost/">in
 pypi</a>).</p>
 <h2 id="how-to-use-built-in-authentication">How to use built-in authentication<a class="headerlink" href="#how-to-use-built-in-authentication" title="Permanent link">&para;</a></h2>
-<p>Examples of common strategies to identify users in web applications include:</p>
+<p>Common strategies for identifying users in web applications include:</p>
 <ul>
-<li>reading an <code>Authorization: Bearer xxx</code> request header containing a <a href="https://jwt.io/introduction/">JWT</a>
-  with claims that identify the user</li>
-<li>reading a signed token from a cookie</li>
+<li>Reading an <code>Authorization: Bearer xxx</code> request header containing a <a href="https://jwt.io/introduction/">JWT</a>.
+  with claims that identify the user.</li>
+<li>Reading a signed token from a cookie.</li>
 </ul>
-<p>The next paragraphs explain first how to use the built-in support for JWT
-Bearer tokens, and how to write a custom authentication handler.</p>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>The word "user" is usually used only to refer to human users, while
-the word "service" is used to describe non-human clients. In Java and .NET, a
-common word to describe a generic identity is "principal".</p>
+<p>The following sections first explain how to use the built-in support for JWT
+Bearer tokens and then describe how to write a custom authentication handler.</p>
+<div class="admonition">
+<p class="admonition-title">Terms: user, service, principal.</p>
+<p>The term 'user' typically refers to human users, while 'service' describes non-human clients. In Java and .NET, the term 'principal' is commonly used to describe a generic identity.</p>
 </div>
 <h2 id="oidc">OIDC<a class="headerlink" href="#oidc" title="Permanent link">&para;</a></h2>
 <p>BlackSheep implements built-in support for OpenID Connect authentication,
 meaning that it can be easily integrated with identity provider services such
 as:</p>
 <ul>
-<li><a href="https://auth0.com">Auth0</a></li>
-<li><a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id">Entra ID</a></li>
-<li><a href="https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview">Azure Active Directory B2C</a></li>
-<li><a href="https://www.okta.com">Okta</a></li>
+<li><a href="https://auth0.com">Auth0</a>.</li>
+<li><a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id">Entra ID</a>.</li>
+<li><a href="https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview">Azure Active Directory B2C</a>.</li>
+<li><a href="https://www.okta.com">Okta</a>.</li>
 </ul>
 <div class="admonition tip">
-<p class="admonition-title">Examples in GitHub</p>
+<p class="admonition-title">Examples in GitHub.</p>
 <p>The <a href="https://github.com/Neoteroi/BlackSheep-Examples/">Neoteroi/BlackSheep-Examples/</a>
-repository in GitHub contains examples of JWT Bearer authentication and
-OpenID Connect integrations.</p>
+repository in GitHub contains examples of JWT Bearer authentication and OpenID
+Connect integrations.</p>
 </div>
-<p>A basic example integration with any of the identity providers above, having
-implicit flow enabled for <code>id_token</code> (meaning that the code doesn't need to
-handle any secret), looks like the following:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">pretty_json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenIDSettings</span><span class="p">,</span> <span class="n">use_openid_connect</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Identity</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="c1"># basic Auth0 integration that handles only an id_token</span>
-<span class="n">use_openid_connect</span><span class="p">(</span>
-    <span class="n">app</span><span class="p">,</span>
-    <span class="n">OpenIDSettings</span><span class="p">(</span>
-        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;&lt;YOUR_AUTHORITY&gt;&quot;</span><span class="p">,</span>
-        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;&lt;CLIENT_ID&gt;&quot;</span><span class="p">,</span>
-        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;&lt;CALLBACK_PATH&gt;&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-<span class="p">)</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">pretty_json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">response</span>
-
-    <span class="k">return</span> <span class="n">html</span><span class="p">(</span><span class="s2">&quot;&lt;a href=&#39;/sign-in&#39;&gt;Sign in&lt;/a&gt;&lt;br/&gt;&quot;</span><span class="p">)</span>
+<p>A basic example of integration with any of the identity providers listed above,
+using implicit flow for <code>id_token</code> (which removes the need to handle secrets),
+is shown below:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">pretty_json</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenIDSettings</span><span class="p">,</span> <span class="n">use_openid_connect</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Identity</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># basic Auth0 integration that handles only an id_token</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">use_openid_connect</span><span class="p">(</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">app</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">OpenIDSettings</span><span class="p">(</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;&lt;YOUR_AUTHORITY&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;&lt;CLIENT_ID&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;&lt;CALLBACK_PATH&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="p">),</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">)</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        <span class="n">response</span> <span class="o">=</span> <span class="n">pretty_json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        <span class="k">return</span> <span class="n">response</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    <span class="k">return</span> <span class="n">html</span><span class="p">(</span><span class="s2">&quot;&lt;a href=&#39;/sign-in&#39;&gt;Sign in&lt;/a&gt;&lt;br/&gt;&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Where:</p>
 <table>
@@ -1730,67 +1728,67 @@ handle any secret), looks like the following:</p>
 </tbody>
 </table>
 <p>For more information and examples, refer to the dedicated page about
-<a href="../openid-connect">OpenID Connect authentication</a>.</p>
+<a href="../openid-connect/">OpenID Connect authentication</a>.</p>
 <h2 id="jwt-bearer">JWT Bearer<a class="headerlink" href="#jwt-bearer" title="Permanent link">&para;</a></h2>
 <p>BlackSheep implements built-in support for JWT Bearer authentication, and
 validation of JWTs:</p>
 <ul>
-<li>issued by identity providers implementing OpenID Connect (OIDC) discovery
-  (such as Auth0, Azure Active Directory)</li>
-<li>and more in general, JWTs signed using asymmetric encryption and verified
-  using public RSA keys</li>
+<li>Issued by identity providers implementing OpenID Connect (OIDC) discovery
+  (such as Auth0, Microsoft Entra ID).</li>
+<li>And more in general, JWTs signed using asymmetric encryption and verified
+  using public RSA keys.</li>
 </ul>
 <p>The following example shows how to configure JWT Bearer authentication for an
-application registered in <code>Azure Active Directory</code>, and also how to configure
+application registered in <code>Microsoft Entra ID</code>, and also how to configure
 authorization to restrict access to certain methods, only for users who are
 successfully authenticated:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost</span><span class="w"> </span><span class="kn">import</span> <span class="n">Policy</span><span class="p">,</span> <span class="n">User</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticatedRequirement</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.jwt</span><span class="w"> </span><span class="kn">import</span> <span class="n">JWTBearerAuthentication</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">auth</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="n">JWTBearerAuthentication</span><span class="p">(</span>
-        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;https://login.microsoftonline.com/&lt;YOUR_TENANT_NAME&gt;.onmicrosoft.com&quot;</span><span class="p">,</span>
-        <span class="n">valid_audiences</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&lt;YOUR_APP_CLIENT_ID&gt;&quot;</span><span class="p">],</span>
-        <span class="n">valid_issuers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;https://login.microsoftonline.com/&lt;YOUR_TENANT_ID&gt;/v2.0&quot;</span><span class="p">],</span>
-    <span class="p">)</span>
-<span class="p">)</span>
-
-<span class="c1"># configure authorization, to restrict access to methods using @auth decorator</span>
-<span class="n">authorization</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">use_authorization</span><span class="p">()</span>
-
-<span class="n">authorization</span> <span class="o">+=</span> <span class="n">Policy</span><span class="p">(</span><span class="s2">&quot;example_name&quot;</span><span class="p">,</span> <span class="n">AuthenticatedRequirement</span><span class="p">())</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;Hello, World&quot;</span>
-
-
-<span class="nd">@auth</span><span class="p">(</span><span class="s2">&quot;example_name&quot;</span><span class="p">)</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/message&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;This is only for authenticated users&quot;</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/open/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost</span><span class="w"> </span><span class="kn">import</span> <span class="n">Policy</span><span class="p">,</span> <span class="n">User</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticatedRequirement</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.jwt</span><span class="w"> </span><span class="kn">import</span> <span class="n">JWTBearerAuthentication</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">auth</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">JWTBearerAuthentication</span><span class="p">(</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;https://login.microsoftonline.com/&lt;YOUR_TENANT_NAME&gt;.onmicrosoft.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        <span class="n">valid_audiences</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&lt;YOUR_APP_CLIENT_ID&gt;&quot;</span><span class="p">],</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        <span class="n">valid_issuers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;https://login.microsoftonline.com/&lt;YOUR_TENANT_ID&gt;/v2.0&quot;</span><span class="p">],</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="p">)</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">)</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="c1"># configure authorization, to restrict access to methods using @auth decorator</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="n">authorization</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">use_authorization</span><span class="p">()</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="n">authorization</span> <span class="o">+=</span> <span class="n">Policy</span><span class="p">(</span><span class="s2">&quot;example_name&quot;</span><span class="p">,</span> <span class="n">AuthenticatedRequirement</span><span class="p">())</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    <span class="k">return</span> <span class="s2">&quot;Hello, World&quot;</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="nd">@auth</span><span class="p">(</span><span class="s2">&quot;example_name&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/message&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">():</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>    <span class="k">return</span> <span class="s2">&quot;This is only for authenticated users&quot;</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/open/&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
 </code></pre></div>
-<p>The built-in handler for JWT Bearer authentication does not support JWTs signed
-with symmetric keys. Support for symmetric keys might be added in the future,
-inside <strong><a href="https://github.com/Neoteroi/guardpost">guardpost</a></strong> library.</p>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>💡 It is possible to configure several JWTBearerAuthentication handlers,
+<p>The built-in handler for JWT Bearer authentication does not currently support
+JWTs signed with symmetric keys. Support for symmetric keys might be added in
+the future.</p>
+<div class="admonition">
+<p class="admonition-title">💡</p>
+<p>It is possible to configure several JWTBearerAuthentication handlers,
 for applications that need to support more than one identity provider. For
 example, for applications that need to support sign-in through Auth0, Azure
 Active Directory, Azure Active Directory B2C.</p>
@@ -1798,81 +1796,81 @@ Active Directory, Azure Active Directory B2C.</p>
 <h2 id="writing-a-custom-authentication-handler">Writing a custom authentication handler<a class="headerlink" href="#writing-a-custom-authentication-handler" title="Permanent link">&para;</a></h2>
 <p>The example below shows how to configure a custom authentication handler that
 obtains the user's identity for each web request.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticationHandler</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">User</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">ExampleAuthHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Identity</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># TODO: apply the desired logic to obtain a user&#39;s identity from</span>
-        <span class="c1"># information in the web request, for example reading a piece of</span>
-        <span class="c1"># information from a header (or cookie).</span>
-        <span class="n">header_value</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get_first_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Authorization&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">header_value</span><span class="p">:</span>
-            <span class="c1"># implement your logic to obtain the user</span>
-            <span class="c1"># in this example, an identity is hard-coded just to illustrate</span>
-            <span class="c1"># testing in the next paragraph</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">},</span> <span class="s2">&quot;MOCK&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># if the request cannot be authenticated, set the context.identity</span>
-            <span class="c1"># to None - do not throw exception because the app might support</span>
-            <span class="c1"># different ways to authenticate users</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
-
-
-<span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ExampleAuthHandler</span><span class="p">())</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;Hello, World&quot;</span>
-
-
-<span class="nd">@auth</span><span class="p">(</span><span class="s2">&quot;example_name&quot;</span><span class="p">)</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/message&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;This is only for authenticated users&quot;</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/open/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticationHandler</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">User</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">ExampleAuthHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="k">pass</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Identity</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        <span class="c1"># TODO: apply the desired logic to obtain a user&#39;s identity from</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        <span class="c1"># information in the web request, for example reading a piece of</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        <span class="c1"># information from a header (or cookie).</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        <span class="n">header_value</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get_first_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Authorization&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>        <span class="k">if</span> <span class="n">header_value</span><span class="p">:</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>            <span class="c1"># implement your logic to obtain the user</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>            <span class="c1"># in this example, an identity is hard-coded just to illustrate</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>            <span class="c1"># testing in the next paragraph</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">},</span> <span class="s2">&quot;MOCK&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>            <span class="c1"># if the request cannot be authenticated, set the context.identity</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>            <span class="c1"># to None - do not throw exception because the app might support</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>            <span class="c1"># different ways to authenticate users</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>        <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ExampleAuthHandler</span><span class="p">())</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>    <span class="k">return</span> <span class="s2">&quot;Hello, World&quot;</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="nd">@auth</span><span class="p">(</span><span class="s2">&quot;example_name&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/message&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">():</span>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>    <span class="k">return</span> <span class="s2">&quot;This is only for authenticated users&quot;</span>
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/open/&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
 </code></pre></div>
 <p>It is possible to configure several authentication handlers to implement
-different ways to identify users. To differentiate the way the user has been
-authenticated, use the second parameter of <code>Identity</code>'s constructor:</p>
-<div class="highlight"><pre><span></span><code><span class="n">identity</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">},</span> <span class="s2">&quot;AUTHENTICATION_MODE&quot;</span><span class="p">)</span>
+different ways to identify users. To distinguish how the user was
+authenticated, use the second parameter of the Identity constructor:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">identity</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">},</span> <span class="s2">&quot;AUTHENTICATION_MODE&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>The authentication context is the instance of <code>Request</code> created to handle the
-incoming web request. Authentication handlers must set the <code>identity</code> property
-on the request, to enable automatic injection of <code>user</code> by dependency injection.</p>
+<p>The authentication context is the <code>Request</code> instance created to handle the
+incoming web request. Authentication handlers must set the <code>identity</code> property on
+the request to enable the automatic injection of <code>user</code> via dependency injection.</p>
 <h3 id="testing-the-example">Testing the example<a class="headerlink" href="#testing-the-example" title="Permanent link">&para;</a></h3>
-<p>To test the example above, start a web server as explained in the <a href="../getting-started">getting
+<p>To test the example above, start a web server as explained in the <a href="../getting-started/">getting
 started guide</a>, then navigate to its root. A web request to
 the root of the application without an <code>Authorization</code> header will produce a
 response with the following body:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;anonymous&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span><span class="nt">&quot;anonymous&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">}</span>
 </code></pre></div>
 <p>While a web request with an <code>Authorization</code> header will produce a response with
 the following body:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">}</span>
 </code></pre></div>
 <p>For example, to generate web requests using <code>curl</code>:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w">  </span>http://127.0.0.1:44555/open
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w">  </span>http://127.0.0.1:44555/open
 </code></pre></div>
 <p>Gets the output: <code>{"anonymous":true}</code>.</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: foo&quot;</span><span class="w"> </span>http://127.0.0.1:44555/open
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: foo&quot;</span><span class="w"> </span>http://127.0.0.1:44555/open
 </code></pre></div>
 <p>Gets the output: <code>{"name":"Jan Kowalski"}</code>.</p>
 <p><em>The application has been started on port 44555 (e.g. <code>uvicorn server:app --port=44555</code>).</em></p>
@@ -1881,30 +1879,30 @@ the following body:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Using binders (recommended)</label><label for="__tabbed_1_2">Directly from the request</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Identity</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Identity</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="o">...</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">identity</span>
-    <span class="c1"># user can be None or an instance of Identity (set in the authentication</span>
-    <span class="c1"># handler)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">identity</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="c1"># user can be None or an instance of Identity (set in the authentication</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="c1"># handler)</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
-<p>While authentication deals with identifying users, authorization deals with
-determining whether the user is authorized to do the action of the web request.
-The next page describes the built-in <a href="../authorization">authorization strategy</a>
-in BlackSheep.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<p>While authentication focuses on <em>identifying</em> users, authorization determines
+whether a user <em>is permitted</em> to perform the requested action. The next page
+describes the built-in <a href="../authorization/">authorization strategy</a> in
+BlackSheep.</p>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

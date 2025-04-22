@@ -1514,35 +1514,35 @@
 
   <h1>Compression</h1>
 
-<p>BlackSheep implements built-in features to handle automatic response
-compression. This page describes:</p>
+<p>This page describes built-in features to handle automatic response compression.
+It covers:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to use the <code>GzipMiddleware</code> to enable gzip compression</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Using the <code>GzipMiddleware</code> to enable gzip compression.</li>
 </ul>
 <h2 id="gzipmiddleware">GzipMiddleware<a class="headerlink" href="#gzipmiddleware" title="Permanent link">&para;</a></h2>
 <p>To enable automatic compression of response bodies using <code>gzip</code>, use the
 <code>GzipMiddleware</code> like in the following example:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.compression</span><span class="w"> </span><span class="kn">import</span> <span class="n">GzipMiddleware</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GzipMiddleware</span><span class="p">())</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.compression</span><span class="w"> </span><span class="kn">import</span> <span class="n">GzipMiddleware</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GzipMiddleware</span><span class="p">())</span>
 </code></pre></div>
 <p>Or, in alternative:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.compression</span><span class="w"> </span><span class="kn">import</span> <span class="n">use_gzip_compression</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="n">use_gzip_compression</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.compression</span><span class="w"> </span><span class="kn">import</span> <span class="n">use_gzip_compression</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">use_gzip_compression</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Not for streamed content</p>
+<div class="admonition">
+<p class="admonition-title">Not for streamed content.</p>
 <p>The <code>GzipMiddleware</code> does not compress bytes streamed using the
 <code>StreamedContent</code> class (used by default when serving files), it only
 compresses whole bodies like, for example, those that are generated when
@@ -1594,7 +1594,7 @@ following strings:</p>
 <li><em>text/css</em></li>
 <li><em>text/csv</em></li>
 </ul>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

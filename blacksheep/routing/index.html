@@ -565,6 +565,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Using sub-routers and filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom filters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -588,6 +603,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routing-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      Routing prefix
+    </span>
+  </a>
   
 </li>
       
@@ -1647,6 +1671,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Using sub-routers and filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom filters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1673,6 +1712,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#routing-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      Routing prefix
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1693,7 +1741,7 @@
 <h1 id="routing">Routing<a class="headerlink" href="#routing" title="Permanent link">&para;</a></h1>
 <p>Server side routing refers to the ability of a web application to handle web
 requests using different functions, depending on the URL path and HTTP method.
-Each <code>BlackSheep</code> application is bound to a router, which provides several ways
+Each BlackSheep application is bound to a router, which provides several ways
 to define routes. A function that is bound to a route is called a "request
 handler", since its responsibility is to handle web requests and produce
 responses.</p>
@@ -1816,74 +1864,75 @@ handlers: with decorators (🗡️ in the table below) and without decorators
 <h3 id="with-decorators">With decorators<a class="headerlink" href="#with-decorators" title="Permanent link">&para;</a></h3>
 <p>The following example shows how to define a request handler for the root
 path of a web application "/":</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;Hello World&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="k">return</span> <span class="s2">&quot;Hello World&quot;</span>
 </code></pre></div>
 <p>Alternatively, the application router offers a <code>route</code> method:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">route</span>
-
-
-<span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/example&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="s2">&quot;TRACE&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">():</span>
-    <span class="c1"># HTTP GET /example</span>
-    <span class="c1"># HTTP HEAD /example</span>
-    <span class="c1"># HTTP TRACE /example</span>
-    <span class="k">return</span> <span class="s2">&quot;Hello, World!&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">route</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/example&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="s2">&quot;TRACE&quot;</span><span class="p">])</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">():</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="c1"># HTTP GET /example</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="c1"># HTTP HEAD /example</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="c1"># HTTP TRACE /example</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">return</span> <span class="s2">&quot;Hello, World!&quot;</span>
 </code></pre></div>
 <h3 id="without-decorators">Without decorators<a class="headerlink" href="#without-decorators" title="Permanent link">&para;</a></h3>
 <p>Request handlers can be registered without decorators:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;Hello World&quot;</span>
-
-
-<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">hello_world</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_options</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">hello_world</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="k">return</span> <span class="s2">&quot;Hello World&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">hello_world</span><span class="p">)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_options</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">hello_world</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="request-handlers-as-class-methods">Request handlers as class methods<a class="headerlink" href="#request-handlers-as-class-methods" title="Permanent link">&para;</a></h3>
 <p>Request handlers can also be configured as class methods, defining classes that
-inherit the <code>blacksheep.server.controllers.Controller</code> class (name taken from
-the MVC architecture):</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="c1"># example input contract:</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">CreateFooInput</span><span class="p">:</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">nice</span><span class="p">:</span> <span class="nb">bool</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">Home</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Hello World&quot;</span>
-
-    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># HTTP GET /</span>
-        <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">greet</span><span class="p">())</span>
-
-    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/foo&quot;</span><span class="p">)</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># HTTP GET /foo</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;nice&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
-
-    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/foo&quot;</span><span class="p">)</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">:</span> <span class="n">CreateFooInput</span><span class="p">):</span>
-        <span class="c1"># HTTP POST /foo</span>
-        <span class="c1"># with foo instance automatically injected parsing the request body as JSON</span>
-        <span class="c1"># if the value cannot be parsed as CreateFooInput, Bad Request is returned automatically</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+inherit the <code>blacksheep.server.controllers.Controller</code> class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">json</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+</span><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># example input contract:</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">CreateFooInput</span><span class="p">:</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="n">nice</span><span class="p">:</span> <span class="nb">bool</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">Home</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        <span class="k">return</span> <span class="s2">&quot;Hello World&quot;</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="hll">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>        <span class="c1"># HTTP GET /</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>        <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">greet</span><span class="p">())</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="hll">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/foo&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>        <span class="c1"># HTTP GET /foo</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;nice&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="hll">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/foo&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">:</span> <span class="n">CreateFooInput</span><span class="p">):</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>        <span class="c1"># HTTP POST /foo</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a>        <span class="c1"># with foo instance automatically injected parsing</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>        <span class="c1"># the request body as JSON</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a>        <span class="c1"># if the value cannot be parsed as CreateFooInput,</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a>        <span class="c1"># Bad Request is returned automatically</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
 </code></pre></div>
 <h2 id="route-parameters">Route parameters<a class="headerlink" href="#route-parameters" title="Permanent link">&para;</a></h2>
 <p>BlackSheep supports three ways to define route parameters:</p>
@@ -1892,57 +1941,67 @@ the MVC architecture):</p>
 <li><code>"/{example}"</code> - using curly braces</li>
 <li><code>"/&lt;example&gt;"</code> - using angle brackets (i.e. <a href="https://flask.palletsprojects.com/en/1.1.x/quickstart/?highlight=routing#variable-rules">Flask notation</a>)</li>
 </ul>
-<p>Route parameters can be read from <code>request.route_values</code>, or injected
-automatically by the request handler's function signature:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{example}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">handler</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="c1"># reading route values from the request object:</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">route_values</span><span class="p">[</span><span class="s2">&quot;example&quot;</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats/</span><span class="si">{cat_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_cat</span><span class="p">(</span><span class="n">cat_id</span><span class="p">):</span>
-    <span class="c1"># cat_id is injected automatically</span>
-    <span class="o">...</span>
+<p>Route parameters can be read from <code>request.route_values</code>, or bound
+automatically by the request handler's signature:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Using the signature (recommended)</label><label for="__tabbed_1_2">Using the Request object</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="hll"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats/</span><span class="si">{cat_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">get_cat</span><span class="p">(</span><span class="n">cat_id</span><span class="p">):</span>
+</span><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="c1"># cat_id is bound automatically</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="o">...</span>
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="hll"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{example}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="c1"># reading route values from the request object:</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="hll">    <span class="n">value</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">route_values</span><span class="p">[</span><span class="s2">&quot;example&quot;</span><span class="p">]</span>
+</span><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="o">...</span>
+</code></pre></div>
+</div>
+</div>
+</div>
 <p>It is also possible to specify the expected type, using <code>typing</code> annotations:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats/</span><span class="si">{cat_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_cat</span><span class="p">(</span><span class="n">cat_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats/</span><span class="si">{cat_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cat</span><span class="p">(</span><span class="n">cat_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="o">...</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats/</span><span class="si">{cat_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_cat</span><span class="p">(</span><span class="n">cat_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">):</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats/</span><span class="si">{cat_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cat</span><span class="p">(</span><span class="n">cat_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">):</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>In this case, BlackSheep will automatically produce an <code>HTTP 400 Bad Request</code>
 response if the input cannot be parsed into the expected type, producing a
 response body similar to this one:</p>
-<div class="highlight"><pre><span></span><code>Bad Request: Invalid value [&#39;asdas&#39;] for parameter `cat_id`; expected a valid
-UUID.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Bad Request: Invalid value [&#39;asdas&#39;] for parameter `cat_id`; expected a valid
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>UUID.
 </code></pre></div>
 <h2 id="value-patterns">Value patterns<a class="headerlink" href="#value-patterns" title="Permanent link">&para;</a></h2>
 <p>By default, route parameters are matched by any string until the next slash "/"
 character. Having the following route:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/movies/</span><span class="si">{movie_id}</span><span class="s2">/actors/</span><span class="si">{actor_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_movie_actor_details</span><span class="p">(</span><span class="n">movie_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">actor_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/movies/</span><span class="si">{movie_id}</span><span class="s2">/actors/</span><span class="si">{actor_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_movie_actor_details</span><span class="p">(</span><span class="n">movie_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">actor_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>HTTP GET requests having the following paths are all matched:</p>
-<div class="highlight"><pre><span></span><code>/api/movies/12345/actors/200587
-
-/api/movies/Trading-Places/actors/Denholm-Elliott
-
-/api/movies/b5317165-ad31-47e2-8a2d-42dba8619b31/actors/a601d8f2-a1ab-4f20-aebf-60eda8e89df0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>/api/movies/12345/actors/200587
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>/api/movies/Trading-Places/actors/Denholm-Elliott
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>/api/movies/b5317165-ad31-47e2-8a2d-42dba8619b31/actors/a601d8f2-a1ab-4f20-aebf-60eda8e89df0
 </code></pre></div>
 <p>However, the framework supports more granular control on the expected value
 pattern. For example, to specify that <code>movie_id</code> and <code>actor_id</code> must be
 integers, it is possible to define route parameters this way:</p>
-<div class="highlight"><pre><span></span><code><span class="s2">&quot;/api/movies/{int:movie_id}/actors/{int:actor_id}&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="s2">&quot;/api/movies/{int:movie_id}/actors/{int:actor_id}&quot;</span>
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -1987,10 +2046,10 @@ The key of the dictionary is the name used by the parameter, while the value is
 a <a href="https://docs.python.org/3/library/re.html">regular expression</a> used to match
 the parameter's fragment. For example, to define a custom value pattern for
 route parameters composed of exactly two letters between <code>a-z</code> and <code>A-Z</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">Route</span><span class="o">.</span><span class="n">value_patterns</span><span class="p">[</span><span class="s2">&quot;example&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[a-zA-Z]</span><span class="si">{2}</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">Route</span><span class="o">.</span><span class="n">value_patterns</span><span class="p">[</span><span class="s2">&quot;example&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[a-zA-Z]</span><span class="si">{2}</span><span class="s2">&quot;</span>
 </code></pre></div>
 <p>And then use it in routes:</p>
-<div class="highlight"><pre><span></span><code><span class="s2">&quot;/{example:foo}&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="s2">&quot;/{example:foo}&quot;</span>
 </code></pre></div>
 <h2 id="catch-all-routes">Catch-all routes<a class="headerlink" href="#catch-all-routes" title="Permanent link">&para;</a></h2>
 <p>To define a catch-all route that will match every request, use a route
@@ -1998,12 +2057,12 @@ parameter with a path value pattern, like:</p>
 <ul>
 <li><code>{path:name}</code>, or <code>&lt;path:name&gt;</code></li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">text</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/catch-all/{path:sub_path}&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">catch_all</span><span class="p">(</span><span class="n">sub_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="n">sub_path</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">text</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/catch-all/{path:sub_path}&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">catch_all</span><span class="p">(</span><span class="n">sub_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span><span class="n">sub_path</span><span class="p">)</span>
 </code></pre></div>
 <p>For example, a request at <code>/catch-all/anything/really.js</code> would be matched by
 the route above, and the <code>sub_path</code> value would be <code>anything/really.js</code>.</p>
@@ -2011,186 +2070,197 @@ the route above, and the <code>sub_path</code> value would be <code>anything/rea
 the portion of the path caught by the star sign from the request object, read
 the "tail" property of <code>request.route_values</code>. But in this case the value of the
 caught path can only be read from the request object.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/catch-all/*&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">catch_all</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">sub_path</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">route_values</span><span class="p">[</span><span class="s2">&quot;tail&quot;</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/catch-all/*&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">catch_all</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="n">sub_path</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">route_values</span><span class="p">[</span><span class="s2">&quot;tail&quot;</span><span class="p">]</span>
 </code></pre></div>
 <h2 id="defining-a-fallback-route">Defining a fallback route<a class="headerlink" href="#defining-a-fallback-route" title="Permanent link">&para;</a></h2>
 <p>To define a fallback route that handles web requests not handled by any other
 route, use <code>app.router.fallback</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fallback</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;OOPS! Nothing was found here!&quot;</span>
-
-
-<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">fallback</span> <span class="o">=</span> <span class="n">fallback</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">fallback</span><span class="p">():</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="k">return</span> <span class="s2">&quot;OOPS! Nothing was found here!&quot;</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">fallback</span> <span class="o">=</span> <span class="n">fallback</span>
 </code></pre></div>
 <h2 id="using-sub-routers-and-filters">Using sub-routers and filters<a class="headerlink" href="#using-sub-routers-and-filters" title="Permanent link">&para;</a></h2>
 <p>The <code>Router</code> class supports filters for routes and sub-routers. In the following
 example, a web request for the root of the service "/" having a request header
 "X-Area" == "Test" gets the reply of the <code>test_home</code> request handler, and
 without such header the reply of the <code>home</code> request handler is returned.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Router</span>
-
-
-<span class="n">test_router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;X-Area&quot;</span><span class="p">:</span> <span class="s2">&quot;Test&quot;</span><span class="p">})</span>
-
-<span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">sub_routers</span><span class="o">=</span><span class="p">[</span><span class="n">test_router</span><span class="p">])</span>
-
-<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;Home 1&quot;</span>
-
-<span class="nd">@test_router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">test_home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;Home 2&quot;</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">router</span><span class="o">=</span><span class="n">router</span><span class="p">)</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Router</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="hll"><span class="n">test_router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;X-Area&quot;</span><span class="p">:</span> <span class="s2">&quot;Test&quot;</span><span class="p">})</span>
+</span><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="hll"><span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">sub_routers</span><span class="o">=</span><span class="p">[</span><span class="n">test_router</span><span class="p">])</span>
+</span><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>    <span class="k">return</span> <span class="s2">&quot;Home 1&quot;</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="hll"><span class="nd">@test_router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">test_home</span><span class="p">():</span>
+</span><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>    <span class="k">return</span> <span class="s2">&quot;Home 2&quot;</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="hll"><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">router</span><span class="o">=</span><span class="n">router</span><span class="p">)</span>
+</span></code></pre></div>
 <p>A router can have filters based on headers, host name, query string parameters,
 and custom user-defined filters.</p>
 <p>Query string filters can be defined using the <code>params</code> parameter, and host name
 filters can be defined using the <code>host</code> parameter:</p>
-<div class="highlight"><pre><span></span><code><span class="n">filter_by_query</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">})</span>
-
-<span class="n">filter_by_host</span>  <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;neoteroi.xyz&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">filter_by_query</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">})</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">filter_by_host</span>  <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;neoteroi.xyz&quot;</span><span class="p">)</span>
 </code></pre></div>
+<h3 id="custom-filters">Custom filters<a class="headerlink" href="#custom-filters" title="Permanent link">&para;</a></h3>
 <p>To define a custom filter, define a type of <code>RouteFilter</code> and set it using the
 <code>filters</code> parameter:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Router</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.routing</span><span class="w"> </span><span class="kn">import</span> <span class="n">RouteFilter</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">CustomFilter</span><span class="p">(</span><span class="n">RouteFilter</span><span class="p">):</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="c1"># implement here the desired logic</span>
-        <span class="k">return</span> <span class="kc">True</span>
-
-
-<span class="n">example_router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">CustomFilter</span><span class="p">()])</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Router</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.routing</span><span class="w"> </span><span class="kn">import</span> <span class="n">RouteFilter</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">CustomFilter</span><span class="p">(</span><span class="n">RouteFilter</span><span class="p">):</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>        <span class="c1"># implement here the desired logic</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>        <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="n">example_router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">CustomFilter</span><span class="p">()])</span>
 </code></pre></div>
 <h2 id="using-the-default-router-and-other-routers">Using the default router and other routers<a class="headerlink" href="#using-the-default-router-and-other-routers" title="Permanent link">&para;</a></h2>
 <p>The examples in the documentation show how to register routes using methods
 imported from the BlackSheep package:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>Or, for controllers:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">get</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">Home</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
-
-    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">Home</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>        <span class="o">...</span>
 </code></pre></div>
-<p>In this case, routes are registered using default singleton routers, used if an
-application is instantiated without specifying a router:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-
-
-<span class="c1"># This application uses the default singleton routers exposed by BlackSheep:</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<p>In this case, routes are registered using <strong>default singleton routers</strong>, used
+if an application is instantiated without specifying a router:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1"># This application uses the default singleton routers exposed by BlackSheep:</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
 </code></pre></div>
 <p>This works in most scenarios, when a single <code>Application</code> instance per process
 is used. For more complex scenarios, it is possible to instantiate a router
 and use it as desired:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># app/router.py</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Router</span>
-
-
-<span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># app/router.py</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Router</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">()</span>
 </code></pre></div>
 <p>And use it when registering routes:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">app.router</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span>
-
-
-<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">app.router</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>It is also possible to expose the router methods to reduce code verbosity, like
 the BlackSheep package does:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># app/router.py</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Router</span>
-
-
-<span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">()</span>
-
-
-<span class="n">get</span> <span class="o">=</span> <span class="n">router</span><span class="o">.</span><span class="n">get</span>
-<span class="n">post</span> <span class="o">=</span> <span class="n">router</span><span class="o">.</span><span class="n">post</span>
-
-<span class="c1"># ...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># app/router.py</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Router</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">()</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="n">get</span> <span class="o">=</span> <span class="n">router</span><span class="o">.</span><span class="n">get</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="n">post</span> <span class="o">=</span> <span class="n">router</span><span class="o">.</span><span class="n">post</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a>
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="c1"># ...</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">app.router</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">app.router</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>Then specify the router when instantiating the application:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">app.router</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span>
-
-
-<span class="c1"># This application uses the router instantiated in app.router:</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">router</span><span class="o">=</span><span class="n">router</span><span class="p">)</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">app.router</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span>
+</span><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="c1"># This application uses the router instantiated in app.router:</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="hll"><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">router</span><span class="o">=</span><span class="n">router</span><span class="p">)</span>
+</span></code></pre></div>
 <h3 id="controllers-dedicated-router">Controllers dedicated router<a class="headerlink" href="#controllers-dedicated-router" title="Permanent link">&para;</a></h3>
 <p>Controllers need a different kind of router, an instance of
 <code>blacksheep.server.routing.RoutesRegistry</code>. If using a dedicated router for
 controllers is desired, do this instead:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># app/controllers.py</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">RoutesRegistry</span>
-
-
-<span class="n">controllers_router</span> <span class="o">=</span> <span class="n">RoutesRegistry</span><span class="p">()</span>
-
-
-<span class="n">get</span> <span class="o">=</span> <span class="n">controllers_router</span><span class="o">.</span><span class="n">get</span>
-<span class="n">post</span> <span class="o">=</span> <span class="n">controllers_router</span><span class="o">.</span><span class="n">post</span>
-
-<span class="c1"># ...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># app/controllers.py</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">RoutesRegistry</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="n">controllers_router</span> <span class="o">=</span> <span class="n">RoutesRegistry</span><span class="p">()</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="n">get</span> <span class="o">=</span> <span class="n">controllers_router</span><span class="o">.</span><span class="n">get</span>
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="n">post</span> <span class="o">=</span> <span class="n">controllers_router</span><span class="o">.</span><span class="n">post</span>
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a>
+<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="c1"># ...</span>
 </code></pre></div>
 <p>Then when defining your controllers:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">app.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">Home</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
-
-    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">app.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+</span><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">Home</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="hll">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>        <span class="o">...</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">app.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">controllers_router</span>
-
-
-<span class="c1"># This application uses the controllers&#39; router instantiated in app.controllers:</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-<span class="n">app</span><span class="o">.</span><span class="n">controllers_router</span> <span class="o">=</span> <span class="n">controllers_router</span>
-</code></pre></div>
-<div class="admonition info">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">app.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">controllers_router</span>
+</span><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="c1"># This application uses the controllers&#39; router instantiated in app.controllers:</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">controllers_router</span> <span class="o">=</span> <span class="n">controllers_router</span>
+</span></code></pre></div>
+<div class="admonition">
 <p class="admonition-title">About Router and RoutesRegistry</p>
 <p>Controller routes use a "RoutesRegistry" to support the dynamic generation
 of paths by controller class name. Controller routes are evaluated and
 merged into <code>Application.router</code> when the application starts.</p>
 </div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<h2 id="routing-prefix">Routing prefix<a class="headerlink" href="#routing-prefix" title="Permanent link">&para;</a></h2>
+<p>In some scenarios, it may be necessary to centrally manage prefixes for all
+request handlers. To set a prefix for all routes in a <code>Router</code>, use the <code>prefix</code>
+parameter in its constructor.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">router</span> <span class="o">=</span> <span class="n">Router</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/foo&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>To globally configure a prefix for all routes, use the environment variable
+<code>APP_ROUTE_PREFIX</code> and specify the desired prefix as its value.</p>
+<p>This feature is intended for applications deployed behind proxies. For more
+information, refer to <a href="../behind-proxies/"><em>Behind proxies</em></a>.</p>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

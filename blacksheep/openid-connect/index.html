@@ -1625,7 +1625,7 @@
 
 
 <h1 id="openid-connect">OpenID Connect<a class="headerlink" href="#openid-connect" title="Permanent link">&para;</a></h1>
-<p>BlackSheep implements built-in support for OpenID Connect authentication,
+<p>BlackSheep provides built-in support for OpenID Connect authentication,
 meaning that it can be easily integrated with identity provider services such
 as:</p>
 <ul>
@@ -1634,48 +1634,48 @@ as:</p>
 <li><a href="https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview">Azure Active Directory B2C</a></li>
 <li><a href="https://www.okta.com">Okta</a></li>
 </ul>
-<p>This page documents:</p>
+<p>This page covers:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to use OpenID Connect integration to provide sign-in and sign-up features,
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Using OpenID Connect integration to provide sign-in and sign-up features.
   and to identify users who use the application</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to use OpenID Connect integration to obtain <code>access_token</code>s to use APIs
-  (in addition, or instead of <code>id_token</code>s)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Using OpenID Connect integration to obtain <code>access_token</code>s to use APIs
+  (in addition, or instead of <code>id_token</code>s).</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How tokens are protected and how to configure applications to support
-  multiple instances and regions</li>
+  multiple instances and regions.</li>
 </ul>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Using JWT Bearer and OpenID integrations requires more dependencies: use
-<code>pip install blacksheep[full]</code> to use these features</p>
+<p class="admonition-title">Additional dependencies.</p>
+<p>Using JWT Bearer and OpenID integrations requires additional dependencies.
+Install them by running: <code>pip install blacksheep[full]</code>.</p>
 </div>
 <h2 id="basic-example">Basic example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h2>
 <p>A basic example with any of the identity providers listed above, having
 implicit flow enabled for <code>id_token</code>, looks like the following:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">pretty_json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenIDSettings</span><span class="p">,</span> <span class="n">use_openid_connect</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Identity</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="n">use_openid_connect</span><span class="p">(</span>
-    <span class="n">app</span><span class="p">,</span>
-    <span class="n">OpenIDSettings</span><span class="p">(</span>
-        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;&lt;YOUR_AUTHORITY&gt;&quot;</span><span class="p">,</span>
-        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;&lt;CLIENT_ID&gt;&quot;</span><span class="p">,</span>
-        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;&lt;CALLBACK_PATH&gt;&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-<span class="p">)</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">pretty_json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">response</span>
-
-    <span class="k">return</span> <span class="n">html</span><span class="p">(</span><span class="s2">&quot;&lt;a href=&#39;/sign-in&#39;&gt;Sign in&lt;/a&gt;&lt;br/&gt;&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">pretty_json</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenIDSettings</span><span class="p">,</span> <span class="n">use_openid_connect</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Identity</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">use_openid_connect</span><span class="p">(</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">app</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">OpenIDSettings</span><span class="p">(</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;&lt;YOUR_AUTHORITY&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;&lt;CLIENT_ID&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;&lt;CALLBACK_PATH&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="p">),</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">)</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        <span class="n">response</span> <span class="o">=</span> <span class="n">pretty_json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        <span class="k">return</span> <span class="n">response</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="k">return</span> <span class="n">html</span><span class="p">(</span><span class="s2">&quot;&lt;a href=&#39;/sign-in&#39;&gt;Sign in&lt;/a&gt;&lt;br/&gt;&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>When the application is configured with <code>use_openid_connect</code>, request handlers
 are automatically configured to handle users' sign-in, the redirect after a
@@ -1685,10 +1685,10 @@ for the client, having an expiration time matching the expiration time of the
 <code>id_token</code> itself. User's identity is automatically restored at each web
 request by an authentication middleware, and can be read as in the provided
 examples:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
-        <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="o">...</span>
 </code></pre></div>
 <h3 id="use_openid_connect">use_openid_connect<a class="headerlink" href="#use_openid_connect" title="Permanent link">&para;</a></h3>
 <table>
@@ -1824,7 +1824,7 @@ examples:</p>
 <ul>
 <li>🗡️ obtaining a redirect_url automatically can require handling of forward
   headers, when an application is deployed behind a proxy. See
-  <a href="../remotes">remotes for more information</a>.</li>
+  <a href="../remotes/">remotes for more information</a>.</li>
 <li>🍒 this should be changed when configuring more than one OIDC identity
   provider.</li>
 </ul>
@@ -1837,111 +1837,111 @@ examples:</p>
 <p>An integration with an <code>Auth0</code> application that uses custom scopes, where the
 application obtains both an <code>id_token</code> and an <code>access_token</code> for an API,
 looks like the following:</p>
-<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This example shows how to configure an OpenID Connect integration with Auth0, obtaining</span>
-<span class="sd">an id_token, an access_token, and a refresh_token. The id_token is exchanged with the</span>
-<span class="sd">client using a response cookie (also used to authenticate users</span>
-<span class="sd">for following requests), while the access token and the refresh token are not stored</span>
-<span class="sd">and can only be accessed using optional events.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.application</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenIDSettings</span><span class="p">,</span> <span class="n">use_openid_connect</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">common.routes</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_routes</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">common.secrets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Secrets</span>
-
-<span class="n">load_dotenv</span><span class="p">()</span>
-<span class="n">secrets</span> <span class="o">=</span> <span class="n">Secrets</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="c1"># Auth0 with a custom scope</span>
-<span class="n">use_openid_connect</span><span class="p">(</span>
-    <span class="n">app</span><span class="p">,</span>
-    <span class="n">OpenIDSettings</span><span class="p">(</span>
-        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;https://neoteroi.eu.auth0.com&quot;</span><span class="p">,</span>
-        <span class="n">audience</span><span class="o">=</span><span class="s2">&quot;http://localhost:5000/api/todos&quot;</span><span class="p">,</span>
-        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;OOGPl4dgG7qKsm2IOWq72QhXV4wsLhbQ&quot;</span><span class="p">,</span>
-        <span class="n">client_secret</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">auth0_client_secret</span><span class="p">,</span>
-        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;/signin-oidc&quot;</span><span class="p">,</span>
-        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid profile read:todos&quot;</span><span class="p">,</span>
-        <span class="n">error_redirect_path</span><span class="o">=</span><span class="s2">&quot;/sign-in-error&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-<span class="p">)</span>
-
-<span class="n">register_routes</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="sd">This example shows how to configure an OpenID Connect integration with Auth0,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="sd">obtaining an id_token, an access_token, and a refresh_token. The id_token is</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="sd">exchanged with the client using a response cookie (also used to authenticate</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="sd">users for following requests), while the access token and the refresh token are</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="sd">not stored and can only be accessed using optional events.</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.application</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenIDSettings</span><span class="p">,</span> <span class="n">use_openid_connect</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="kn">from</span><span class="w"> </span><span class="nn">common.routes</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_routes</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="kn">from</span><span class="w"> </span><span class="nn">common.secrets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Secrets</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="n">load_dotenv</span><span class="p">()</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="n">secrets</span> <span class="o">=</span> <span class="n">Secrets</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="c1"># Auth0 with a custom scope</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="n">use_openid_connect</span><span class="p">(</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="n">app</span><span class="p">,</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    <span class="n">OpenIDSettings</span><span class="p">(</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;https://neoteroi.eu.auth0.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>        <span class="n">audience</span><span class="o">=</span><span class="s2">&quot;http://localhost:5000/api/todos&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;OOGPl4dgG7qKsm2IOWq72QhXV4wsLhbQ&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>        <span class="n">client_secret</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">auth0_client_secret</span><span class="p">,</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;/signin-oidc&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid profile read:todos&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>        <span class="n">error_redirect_path</span><span class="o">=</span><span class="s2">&quot;/sign-in-error&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>    <span class="p">),</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="p">)</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="n">register_routes</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>An integration with <code>Entra ID</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">handler</span> <span class="o">=</span> <span class="n">use_openid_connect</span><span class="p">(</span>
-    <span class="n">app</span><span class="p">,</span>
-    <span class="n">OpenIDSettings</span><span class="p">(</span>
-        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;https://login.microsoftonline.com/b62b317a-19c2-40c0-8650-2d9672324ac4/v2.0/&quot;</span><span class="p">,</span>
-        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;499adb65-5e26-459e-bc35-b3e1b5f71a9d&quot;</span><span class="p">,</span>
-        <span class="n">client_secret</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">aad_client_secret</span><span class="p">,</span>
-        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid profile offline_access email &quot;</span>
-        <span class="s2">&quot;api://65d21481-4f1a-4731-9508-ad965cb4d59f/example&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">handler</span> <span class="o">=</span> <span class="n">use_openid_connect</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">app</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">OpenIDSettings</span><span class="p">(</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>        <span class="n">authority</span><span class="o">=</span><span class="s2">&quot;https://login.microsoftonline.com/b62b317a-19c2-40c0-8650-2d9672324ac4/v2.0/&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;499adb65-5e26-459e-bc35-b3e1b5f71a9d&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        <span class="n">client_secret</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">aad_client_secret</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid profile offline_access email &quot;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        <span class="s2">&quot;api://65d21481-4f1a-4731-9508-ad965cb4d59f/example&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="p">),</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">)</span>
 </code></pre></div>
 <p>An integration with <code>Okta</code>, using the <code>default</code> authorization server:</p>
-<div class="highlight"><pre><span></span><code><span class="n">use_openid_connect</span><span class="p">(</span>
-    <span class="n">app</span><span class="p">,</span>
-    <span class="n">OpenIDSettings</span><span class="p">(</span>
-        <span class="n">discovery_endpoint</span><span class="o">=</span><span class="s2">&quot;https://dev-34685660.okta.com/oauth2/default/.well-known/oauth-authorization-server&quot;</span><span class="p">,</span>
-        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;0oa2gy88qiVyuOClI5d7&quot;</span><span class="p">,</span>
-        <span class="n">client_secret</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">okta_client_secret</span><span class="p">,</span>
-        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;/authorization-code/callback&quot;</span><span class="p">,</span>
-        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid read:todos&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">use_openid_connect</span><span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">app</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">OpenIDSettings</span><span class="p">(</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        <span class="n">discovery_endpoint</span><span class="o">=</span><span class="s2">&quot;https://dev-34685660.okta.com/oauth2/default/.well-known/oauth-authorization-server&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;0oa2gy88qiVyuOClI5d7&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">client_secret</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">okta_client_secret</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">callback_path</span><span class="o">=</span><span class="s2">&quot;/authorization-code/callback&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid read:todos&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="p">),</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h2>
 <p>The API exposes the following events:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">OpenIDSettings</span><span class="p">,</span>
-    <span class="n">TokenResponse</span><span class="p">,</span>
-    <span class="n">use_openid_connect</span>
-<span class="p">)</span>
-
-
-<span class="n">oidc</span> <span class="o">=</span> <span class="n">use_openid_connect</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-
-
-<span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_id_token_validated</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">id_token_callback</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">id_token_claims</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This callback is called after an id_token is received, successfully</span>
-<span class="sd">    verified using public RSA keys from the identity provider, and parsed</span>
-
-<span class="sd">    Using this event handler is possible to modify the claims obtained from the</span>
-<span class="sd">    id_token before they are set in the authentication cookie. For example to</span>
-<span class="sd">    remove certain claims, or add other information.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_tokens_received</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_tokens_received</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">token_response</span><span class="p">:</span> <span class="n">TokenResponse</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This callback is called after a successful web request to the token</span>
-<span class="sd">    endpoint to exchange a code with an access_token, and eventually</span>
-<span class="sd">    refresh_token, and id_token.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_error</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_error</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This callback is called when an error is returned by the authorization</span>
-<span class="sd">    server in the redirect handler.</span>
-<span class="sd">    Note that this can happen for a common scenario, like the user refusing</span>
-<span class="sd">    to grant consent on the application.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">OpenIDSettings</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">TokenResponse</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">use_openid_connect</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">oidc</span> <span class="o">=</span> <span class="n">use_openid_connect</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_id_token_validated</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">id_token_callback</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">id_token_claims</span><span class="p">):</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="sd">    This callback is called after an id_token is received, successfully</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="sd">    verified using public RSA keys from the identity provider, and parsed</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="sd">    Using this event handler is possible to modify the claims obtained from the</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="sd">    id_token before they are set in the authentication cookie. For example to</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="sd">    remove certain claims, or add other information.</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_tokens_received</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_tokens_received</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">token_response</span><span class="p">:</span> <span class="n">TokenResponse</span><span class="p">):</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="sd">    This callback is called after a successful web request to the token</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="sd">    endpoint to exchange a code with an access_token, and eventually</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="sd">    refresh_token, and id_token.</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="nd">@oidc</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">on_error</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_error</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="sd">    This callback is called when an error is returned by the authorization</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="sd">    server in the redirect handler.</span>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="sd">    Note that this can happen for a common scenario, like the user refusing</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="sd">    to grant consent on the application.</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="sd">    &quot;&quot;&quot;</span>
 </code></pre></div>
 <h2 id="storing-tokens">Storing tokens<a class="headerlink" href="#storing-tokens" title="Permanent link">&para;</a></h2>
 <p>By default, <code>access_token</code>(s) and <code>refresh_token</code>(s) are not stored. To store
@@ -1954,12 +1954,12 @@ create custom implementations of the <code>TokensStore</code>, to use other mech
 for example, to store tokens in a Redis cache.</p>
 <p>When a user is authenticated, and has an <code>access_token</code> (and/or a
 <code>refresh_token</code>), they are accessible through the <code>Identity</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">access_token</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">)</span>
-        <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Identity</span><span class="p">):</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">access_token</span><span class="p">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="o">...</span>
 </code></pre></div>
 <p>To see how to use a <code>TokensStore</code>, refer to the examples above that use
 the built-in <code>CookiesTokensStore</code>.</p>
@@ -1997,7 +1997,7 @@ start-up, and configured as environment settings for the application.
 <strong>DO NOT</strong> store secrets that are meant to be used in production
 under source control.</p>
 <p>For more information, refer to <a href="../dataprotection/">data protection</a>.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

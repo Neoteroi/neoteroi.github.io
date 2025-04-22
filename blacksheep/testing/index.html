@@ -1646,40 +1646,40 @@ Server and actual HTTP client-server interactions. At the same time, they
 recreate a full end-to-end scenario of how requests are handled by an
 application server.</p>
 <p>A basic example of the <code>TestClient</code> would look like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;World&quot;</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
-
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">():</span>
-    <span class="c1"># the application needs to handle its start event, to recreate a valid scenario</span>
-    <span class="k">await</span> <span class="n">app</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-    <span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
-
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
-
-    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
-    <span class="k">assert</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;Hello, World!&quot;</span>
-
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Foo&quot;</span><span class="p">})</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
-
-    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
-    <span class="k">assert</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;Hello, Foo!&quot;</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">)</span>
-
-
-<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">test</span><span class="p">())</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;World&quot;</span><span class="p">):</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">():</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="c1"># the application needs to handle its start event, to recreate a valid scenario</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="k">await</span> <span class="n">app</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="k">assert</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;Hello, World!&quot;</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Foo&quot;</span><span class="p">})</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="k">assert</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;Hello, Foo!&quot;</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">test</span><span class="p">())</span>
 </code></pre></div>
 <p>A test client provides the following methods:</p>
 <table>
@@ -1747,110 +1747,110 @@ started tutorial</a></li>
   built-in <code>dataclasses</code></li>
 </ul>
 <h3 id="preparing-the-project-structure">Preparing the project structure<a class="headerlink" href="#preparing-the-project-structure" title="Permanent link">&para;</a></h3>
-<p>Prepare a Python virtual environment, as described in the <a href="../getting-started">getting started
+<p>Prepare a Python virtual environment, as described in the <a href="../getting-started/">getting started
 tutorial</a>. In addition to <code>blacksheep</code> and <code>uvicorn</code>,
 install the following packages in the virtual environment:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pytest<span class="w"> </span>pytest-asyncio<span class="w"> </span>pydantic
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>pytest<span class="w"> </span>pytest-asyncio<span class="w"> </span>pydantic
 </code></pre></div>
 <p>Then create a basic folder structure, like described by the following tree:</p>
-<div class="highlight"><pre><span></span><code>.
-├── app
-│   ├── __init__.py
-│   ├── app.py
-│   └── routes
-│       └── __init__.py
-├── domain.py
-└── server.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>.
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── app
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├── __init__.py
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   ├── app.py
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   └── routes
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│       └── __init__.py
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>├── domain.py
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>└── server.py
 </code></pre></div>
 <p>For example, using <a href="https://www.gnu.org/software/bash/">GNU Bash</a>:</p>
-<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>app
-touch<span class="w"> </span>app/app.py
-touch<span class="w"> </span>app/__init__.py
-
-mkdir<span class="w"> </span>app/routes
-touch<span class="w"> </span>app/routes/__init__.py
-
-touch<span class="w"> </span>domain.py
-touch<span class="w"> </span>server.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>mkdir<span class="w"> </span>app
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>touch<span class="w"> </span>app/app.py
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>touch<span class="w"> </span>app/__init__.py
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>mkdir<span class="w"> </span>app/routes
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>touch<span class="w"> </span>app/routes/__init__.py
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>touch<span class="w"> </span>domain.py
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>touch<span class="w"> </span>server.py
 </code></pre></div>
 <p>Edit <code>domain.py</code> file, to define two domain classes:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">ToDo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">CreateToDoInput</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">ToDo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="k">class</span><span class="w"> </span><span class="nc">CreateToDoInput</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
 </code></pre></div>
 <p>Create a <code>todos.py</code> file in <code>app.routes</code> package, that will contain the
 definition of the TODOs API. Start with the following contents:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># ./app/routes/todos.py</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">delete</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">domain</span><span class="w"> </span><span class="kn">import</span> <span class="n">ToDo</span><span class="p">,</span> <span class="n">CreateToDoInput</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_todos</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToDo</span><span class="p">]:</span>
-    <span class="o">...</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="o">...</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_todo</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">CreateToDoInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span><span class="p">:</span>
-    <span class="o">...</span>
-
-
-<span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># ./app/routes/todos.py</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">delete</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">domain</span><span class="w"> </span><span class="kn">import</span> <span class="n">ToDo</span><span class="p">,</span> <span class="n">CreateToDoInput</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_todos</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToDo</span><span class="p">]:</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="o">...</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="o">...</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_todo</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">CreateToDoInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span><span class="p">:</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="o">...</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>Create a <code>main.py</code> file in <code>app</code> package, that declares an application:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
 </code></pre></div>
 <p>And finally a <code>server.py</code> file at the project's root:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">app.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">app.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
 </code></pre></div>
 <h3 id="navigating-the-api-using-openapi-documentation">Navigating the API using OpenAPI Documentation<a class="headerlink" href="#navigating-the-api-using-openapi-documentation" title="Permanent link">&para;</a></h3>
 <p>At this point, the application can already be started. The API methods are not
 implemented, yet, so they cannot do anything interesting. However, the
 framework can generate OpenAPI Documentation and expose a documentation UI.</p>
 <p>To do so, create a <code>docs.py</code> file in the <code>app</code> package:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># ./app/docs.py</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.openapi.v3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPIHandler</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">openapidocs.v3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Info</span>
-
-<span class="n">docs</span> <span class="o">=</span> <span class="n">OpenAPIHandler</span><span class="p">(</span>
-    <span class="n">info</span><span class="o">=</span><span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Demo API&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.0.1&quot;</span><span class="p">),</span> <span class="n">anonymous_access</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-
-<span class="c1"># include only endpoints whose path starts with &quot;/api/&quot;</span>
-<span class="n">docs</span><span class="o">.</span><span class="n">include</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/api/&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># ./app/docs.py</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.openapi.v3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPIHandler</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">openapidocs.v3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Info</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">docs</span> <span class="o">=</span> <span class="n">OpenAPIHandler</span><span class="p">(</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">info</span><span class="o">=</span><span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Demo API&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.0.1&quot;</span><span class="p">),</span> <span class="n">anonymous_access</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># include only endpoints whose path starts with &quot;/api/&quot;</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="n">docs</span><span class="o">.</span><span class="n">include</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/api/&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>And modify <code>/app/main.py</code> file to configure the generation of OpenAPI
 Documentation:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">.docs</span><span class="w"> </span><span class="kn">import</span> <span class="n">docs</span>  <span class="c1"># +++</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-<span class="n">docs</span><span class="o">.</span><span class="n">bind_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>  <span class="c1"># +++</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">.docs</span><span class="w"> </span><span class="kn">import</span> <span class="n">docs</span>  <span class="c1"># +++</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">docs</span><span class="o">.</span><span class="n">bind_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>  <span class="c1"># +++</span>
 </code></pre></div>
 <p>Start the application using the following command:</p>
-<div class="highlight"><pre><span></span><code>uvicorn<span class="w"> </span>server:app<span class="w"> </span>--reload<span class="w"> </span>--port<span class="o">=</span><span class="m">44555</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>uvicorn<span class="w"> </span>server:app<span class="w"> </span>--reload<span class="w"> </span>--port<span class="o">=</span><span class="m">44555</span>
 </code></pre></div>
 <p>And navigate to the <a href="http://127.0.0.1:44555/docs">http://127.0.0.1:44555/docs</a>
 to see the documentation generated automatically by BlackSheep:</p>
@@ -1861,95 +1861,95 @@ and input request bodies and parameters.</p>
 <h3 id="creating-a-mocked-todos-api">Creating a mocked TODOs API<a class="headerlink" href="#creating-a-mocked-todos-api" title="Permanent link">&para;</a></h3>
 <p>For the sake of the testing demo, let's mock the implementation of the TODOs
 API to work with data stored in memory:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># ./app/routes/todos.py</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">not_found</span><span class="p">,</span> <span class="n">post</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">domain</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateToDoInput</span><span class="p">,</span> <span class="n">ToDo</span>
-
-
-<span class="n">_MOCKED</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">ToDo</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="mi">1</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;BlackSheep Documentation&quot;</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Update the documentation with information about the new features.&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="mi">2</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Transfer the documentation&quot;</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Transfer the documentation from Azure DevOps to GitHub.&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="mi">3</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Mow the grass&quot;</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Like in title.&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-<span class="p">}</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_todos</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToDo</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_MOCKED</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_MOCKED</span><span class="p">[</span><span class="n">todo_id</span><span class="p">]</span>
-    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">not_found</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_todo</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">CreateToDoInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span><span class="p">:</span>
-    <span class="n">item</span> <span class="o">=</span> <span class="n">ToDo</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">_MOCKED</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
-    <span class="n">_MOCKED</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
-    <span class="k">return</span> <span class="n">item</span>
-
-
-<span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">del</span> <span class="n">_MOCKED</span><span class="p">[</span><span class="n">todo_id</span><span class="p">]</span>
-    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">pass</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># ./app/routes/todos.py</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">not_found</span><span class="p">,</span> <span class="n">post</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">domain</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateToDoInput</span><span class="p">,</span> <span class="n">ToDo</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="n">_MOCKED</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">ToDo</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="mi">1</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>        <span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;BlackSheep Documentation&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Update the documentation with information about the new features.&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="p">),</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="mi">2</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>        <span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Transfer the documentation&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Transfer the documentation from Azure DevOps to GitHub.&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>    <span class="p">),</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    <span class="mi">3</span><span class="p">:</span> <span class="n">ToDo</span><span class="p">(</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>        <span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Mow the grass&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Like in title.&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>    <span class="p">),</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="p">}</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_todos</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToDo</span><span class="p">]:</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_MOCKED</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>        <span class="k">return</span> <span class="n">_MOCKED</span><span class="p">[</span><span class="n">todo_id</span><span class="p">]</span>
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>        <span class="k">return</span> <span class="n">not_found</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a>
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a>
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/todos&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_todo</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">CreateToDoInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToDo</span><span class="p">:</span>
+<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a>    <span class="n">item</span> <span class="o">=</span> <span class="n">ToDo</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">_MOCKED</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a>    <span class="n">_MOCKED</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a>    <span class="k">return</span> <span class="n">item</span>
+<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a>
+<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a>
+<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a><span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/api/todos/</span><span class="si">{todo_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_todo</span><span class="p">(</span><span class="n">todo_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a>        <span class="k">del</span> <span class="n">_MOCKED</span><span class="p">[</span><span class="n">todo_id</span><span class="p">]</span>
+<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a>        <span class="k">pass</span>
 </code></pre></div>
 <p>Now that the API is mocked, let's see how to add tests for it.</p>
 <h3 id="using-the-testclient-with-pytest">Using the TestClient with pytest<a class="headerlink" href="#using-the-testclient-with-pytest" title="Permanent link">&para;</a></h3>
 <p>Create a <code>tests</code> package and the following files:</p>
-<div class="highlight"><pre><span></span><code>└── tests
-    ├── __init__.py
-    ├── conftest.py
-    └── test_todos_api.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>└── tests
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    ├── __init__.py
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    ├── conftest.py
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    └── test_todos_api.py
 </code></pre></div>
 <p><code>conftest.py</code> is a special file used by <code>pytest</code> to arrange fixtures. Edit this
 file to include fixtures definition to arrange tests for the web application:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># ./tests/conftest.py</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pytest_asyncio</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">server</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span> <span class="k">as</span> <span class="n">app_server</span>
-
-
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">event_loop</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop_policy</span><span class="p">()</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
-    <span class="k">yield</span> <span class="n">loop</span>
-    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-
-<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">api</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">app_server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-    <span class="k">yield</span> <span class="n">app_server</span>
-    <span class="k">await</span> <span class="n">app_server</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-
-
-<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_client</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># ./tests/conftest.py</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest_asyncio</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">server</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span> <span class="k">as</span> <span class="n">app_server</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">event_loop</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop_policy</span><span class="p">()</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>    <span class="k">yield</span> <span class="n">loop</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">api</span><span class="p">():</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>    <span class="k">await</span> <span class="n">app_server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>    <span class="k">yield</span> <span class="n">app_server</span>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>    <span class="k">await</span> <span class="n">app_server</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a>
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a><span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_client</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a>    <span class="k">return</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 </code></pre></div>
 <p>Note how the file contains three fixtures:</p>
 <ol>
@@ -1968,49 +1968,49 @@ example replacing a class that interacts with a PostgreSQL Server to use
 instead SQLite for tests.</p>
 </div>
 <p>Finally, define a first test for the TODOs API:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># ./tests/test_todos_api.py</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.contents</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONContent</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">domain</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateToDoInput</span><span class="p">,</span> <span class="n">ToDo</span>
-
-
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_create_and_get_todo</span><span class="p">(</span><span class="n">test_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-
-    <span class="n">create_input</span> <span class="o">=</span> <span class="n">CreateToDoInput</span><span class="p">(</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Update documentation&quot;</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Update blacksheep&#39;s documentation to describe all new features.&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-        <span class="s2">&quot;/api/todos&quot;</span><span class="p">,</span>
-        <span class="n">content</span><span class="o">=</span><span class="n">JSONContent</span><span class="p">(</span><span class="n">create_input</span><span class="p">),</span>
-    <span class="p">)</span>
-
-    <span class="k">assert</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-
-    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-
-    <span class="k">assert</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="k">assert</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">data</span>
-
-    <span class="n">todo_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/api/todos/</span><span class="si">{</span><span class="n">todo_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">assert</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-
-    <span class="k">assert</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-
-    <span class="n">todo</span> <span class="o">=</span> <span class="n">ToDo</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
-
-    <span class="k">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="n">create_input</span><span class="o">.</span><span class="n">title</span>
-    <span class="k">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="n">create_input</span><span class="o">.</span><span class="n">description</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># ./tests/test_todos_api.py</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.contents</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONContent</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">domain</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateToDoInput</span><span class="p">,</span> <span class="n">ToDo</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_create_and_get_todo</span><span class="p">(</span><span class="n">test_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>    <span class="n">create_input</span> <span class="o">=</span> <span class="n">CreateToDoInput</span><span class="p">(</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Update documentation&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Update blacksheep&#39;s documentation to describe all new features.&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>    <span class="p">)</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>        <span class="s2">&quot;/api/todos&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>        <span class="n">content</span><span class="o">=</span><span class="n">JSONContent</span><span class="p">(</span><span class="n">create_input</span><span class="p">),</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>    <span class="p">)</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>    <span class="k">assert</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a>
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a>    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>
+<a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a>    <span class="k">assert</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>    <span class="k">assert</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">data</span>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a>
+<a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a>    <span class="n">todo_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+<a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/api/todos/</span><span class="si">{</span><span class="n">todo_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a>
+<a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a>    <span class="k">assert</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a>    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<a id="__codelineno-14-34" name="__codelineno-14-34" href="#__codelineno-14-34"></a>
+<a id="__codelineno-14-35" name="__codelineno-14-35" href="#__codelineno-14-35"></a>    <span class="k">assert</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<a id="__codelineno-14-36" name="__codelineno-14-36" href="#__codelineno-14-36"></a>
+<a id="__codelineno-14-37" name="__codelineno-14-37" href="#__codelineno-14-37"></a>    <span class="n">todo</span> <span class="o">=</span> <span class="n">ToDo</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+<a id="__codelineno-14-38" name="__codelineno-14-38" href="#__codelineno-14-38"></a>
+<a id="__codelineno-14-39" name="__codelineno-14-39" href="#__codelineno-14-39"></a>    <span class="k">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="n">create_input</span><span class="o">.</span><span class="n">title</span>
+<a id="__codelineno-14-40" name="__codelineno-14-40" href="#__codelineno-14-40"></a>    <span class="k">assert</span> <span class="n">todo</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="n">create_input</span><span class="o">.</span><span class="n">description</span>
 </code></pre></div>
 <p>Now it's possible to start the tests using <code>pytest</code>:</p>
-<div class="highlight"><pre><span></span><code>pytest
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>pytest
 </code></pre></div>
 <p>If the steps above were done correctly, the test succeeds and <code>pytest</code> produces
 feedback like in the following picture (using the verbose flag <code>-v</code>):</p>
@@ -2020,46 +2020,46 @@ feedback like in the following picture (using the verbose flag <code>-v</code>):
 <p>The following example shows how to configure a <code>@pytest.fixture</code> that starts
 an <code>uvicorn</code> process in memory to run integration tests against a real <code>ASGI</code>
 server:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># example server fixture</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Process</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">server</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">get_sleep_time</span><span class="p">():</span>
-    <span class="c1"># when starting a server process,</span>
-    <span class="c1"># a longer sleep time is necessary on Windows</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mf">1.5</span>
-    <span class="k">return</span> <span class="mf">0.5</span>
-
-
-<span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
-<span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_start_server</span><span class="p">():</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">server_host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">server_port</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">server</span><span class="p">():</span>
-    <span class="n">server_process</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_start_server</span><span class="p">)</span>
-    <span class="n">server_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-    <span class="n">sleep</span><span class="p">(</span><span class="n">get_sleep_time</span><span class="p">())</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">server_process</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The server process did not start!&quot;</span><span class="p">)</span>
-
-    <span class="k">yield</span> <span class="mi">1</span>
-
-    <span class="n">sleep</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>
-    <span class="n">server_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># example server fixture</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Process</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">server</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_sleep_time</span><span class="p">():</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>    <span class="c1"># when starting a server process,</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>    <span class="c1"># a longer sleep time is necessary on Windows</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span><span class="p">:</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>        <span class="k">return</span> <span class="mf">1.5</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>    <span class="k">return</span> <span class="mf">0.5</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a><span class="k">def</span><span class="w"> </span><span class="nf">_start_server</span><span class="p">():</span>
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">server_host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">server_port</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>
+<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a>
+<a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a><span class="k">def</span><span class="w"> </span><span class="nf">server</span><span class="p">():</span>
+<a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a>    <span class="n">server_process</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_start_server</span><span class="p">)</span>
+<a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a>    <span class="n">server_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-16-32" name="__codelineno-16-32" href="#__codelineno-16-32"></a>    <span class="n">sleep</span><span class="p">(</span><span class="n">get_sleep_time</span><span class="p">())</span>
+<a id="__codelineno-16-33" name="__codelineno-16-33" href="#__codelineno-16-33"></a>
+<a id="__codelineno-16-34" name="__codelineno-16-34" href="#__codelineno-16-34"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">server_process</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+<a id="__codelineno-16-35" name="__codelineno-16-35" href="#__codelineno-16-35"></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The server process did not start!&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-36" name="__codelineno-16-36" href="#__codelineno-16-36"></a>
+<a id="__codelineno-16-37" name="__codelineno-16-37" href="#__codelineno-16-37"></a>    <span class="k">yield</span> <span class="mi">1</span>
+<a id="__codelineno-16-38" name="__codelineno-16-38" href="#__codelineno-16-38"></a>
+<a id="__codelineno-16-39" name="__codelineno-16-39" href="#__codelineno-16-39"></a>    <span class="n">sleep</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>
+<a id="__codelineno-16-40" name="__codelineno-16-40" href="#__codelineno-16-40"></a>    <span class="n">server_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </code></pre></div>
 <p>The same server <code>host</code> and <code>port</code> can then be used with the desired HTTP Client
 implementation to run tests on the server, to recreate a full HTTP
@@ -2067,97 +2067,97 @@ client-server communication.</p>
 <p>The following code shows an example of <code>@pytest.fixture</code> returning an HTTP
 client that can make requests to the running servers, using
 <strong><a href="https://pypi.org/project/requests/">requests</a></strong> library:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urljoin</span>
-
-
-<span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
-<span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">ClientSession</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">url</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">session_two</span><span class="p">(</span><span class="n">server_host</span><span class="p">,</span> <span class="n">server_port_two</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ClientSession</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">server_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">server_port_two</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urljoin</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">ClientSession</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">):</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">url</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="k">def</span><span class="w"> </span><span class="nf">session_two</span><span class="p">(</span><span class="n">server_host</span><span class="p">,</span> <span class="n">server_port_two</span><span class="p">):</span>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a>    <span class="k">return</span> <span class="n">ClientSession</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">server_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">server_port_two</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>And a full example for the TODO API described in the tutorial could look like
 the following (the example requires the <code>requests</code> library):</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Process</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urljoin</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">server</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">ClientSession</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">url</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">get_sleep_time</span><span class="p">():</span>
-    <span class="c1"># when starting a server process,</span>
-    <span class="c1"># a longer sleep time is necessary on Windows</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mf">1.5</span>
-    <span class="k">return</span> <span class="mf">0.5</span>
-
-
-<span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
-<span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
-
-
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">client_session</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">ClientSession</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">server_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">server_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_start_server</span><span class="p">():</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">server_host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">server_port</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">server</span><span class="p">():</span>
-    <span class="n">server_process</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_start_server</span><span class="p">)</span>
-    <span class="n">server_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-    <span class="n">sleep</span><span class="p">(</span><span class="n">get_sleep_time</span><span class="p">())</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">server_process</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The server process did not start!&quot;</span><span class="p">)</span>
-
-    <span class="k">yield</span> <span class="mi">1</span>
-
-    <span class="n">sleep</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>
-    <span class="n">server_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
-
-
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_get</span><span class="p">(</span><span class="n">client_session</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/todos/1&quot;</span><span class="p">)</span>
-
-    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Process</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urljoin</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">server</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">ClientSession</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">):</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">url</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_sleep_time</span><span class="p">():</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>    <span class="c1"># when starting a server process,</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>    <span class="c1"># a longer sleep time is necessary on Windows</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span><span class="p">:</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>        <span class="k">return</span> <span class="mf">1.5</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a>    <span class="k">return</span> <span class="mf">0.5</span>
+<a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a>
+<a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a>
+<a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a><span class="n">server_host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+<a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a><span class="n">server_port</span> <span class="o">=</span> <span class="mi">44555</span>
+<a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a>
+<a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a>
+<a id="__codelineno-18-33" name="__codelineno-18-33" href="#__codelineno-18-33"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-34" name="__codelineno-18-34" href="#__codelineno-18-34"></a><span class="k">def</span><span class="w"> </span><span class="nf">client_session</span><span class="p">():</span>
+<a id="__codelineno-18-35" name="__codelineno-18-35" href="#__codelineno-18-35"></a>    <span class="k">return</span> <span class="n">ClientSession</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">server_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">server_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-36" name="__codelineno-18-36" href="#__codelineno-18-36"></a>
+<a id="__codelineno-18-37" name="__codelineno-18-37" href="#__codelineno-18-37"></a>
+<a id="__codelineno-18-38" name="__codelineno-18-38" href="#__codelineno-18-38"></a><span class="k">def</span><span class="w"> </span><span class="nf">_start_server</span><span class="p">():</span>
+<a id="__codelineno-18-39" name="__codelineno-18-39" href="#__codelineno-18-39"></a>    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">server_host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">server_port</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-40" name="__codelineno-18-40" href="#__codelineno-18-40"></a>
+<a id="__codelineno-18-41" name="__codelineno-18-41" href="#__codelineno-18-41"></a>
+<a id="__codelineno-18-42" name="__codelineno-18-42" href="#__codelineno-18-42"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-18-43" name="__codelineno-18-43" href="#__codelineno-18-43"></a><span class="k">def</span><span class="w"> </span><span class="nf">server</span><span class="p">():</span>
+<a id="__codelineno-18-44" name="__codelineno-18-44" href="#__codelineno-18-44"></a>    <span class="n">server_process</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_start_server</span><span class="p">)</span>
+<a id="__codelineno-18-45" name="__codelineno-18-45" href="#__codelineno-18-45"></a>    <span class="n">server_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-18-46" name="__codelineno-18-46" href="#__codelineno-18-46"></a>    <span class="n">sleep</span><span class="p">(</span><span class="n">get_sleep_time</span><span class="p">())</span>
+<a id="__codelineno-18-47" name="__codelineno-18-47" href="#__codelineno-18-47"></a>
+<a id="__codelineno-18-48" name="__codelineno-18-48" href="#__codelineno-18-48"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">server_process</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+<a id="__codelineno-18-49" name="__codelineno-18-49" href="#__codelineno-18-49"></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The server process did not start!&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-50" name="__codelineno-18-50" href="#__codelineno-18-50"></a>
+<a id="__codelineno-18-51" name="__codelineno-18-51" href="#__codelineno-18-51"></a>    <span class="k">yield</span> <span class="mi">1</span>
+<a id="__codelineno-18-52" name="__codelineno-18-52" href="#__codelineno-18-52"></a>
+<a id="__codelineno-18-53" name="__codelineno-18-53" href="#__codelineno-18-53"></a>    <span class="n">sleep</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>
+<a id="__codelineno-18-54" name="__codelineno-18-54" href="#__codelineno-18-54"></a>    <span class="n">server_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<a id="__codelineno-18-55" name="__codelineno-18-55" href="#__codelineno-18-55"></a>
+<a id="__codelineno-18-56" name="__codelineno-18-56" href="#__codelineno-18-56"></a>
+<a id="__codelineno-18-57" name="__codelineno-18-57" href="#__codelineno-18-57"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<a id="__codelineno-18-58" name="__codelineno-18-58" href="#__codelineno-18-58"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_get</span><span class="p">(</span><span class="n">client_session</span><span class="p">):</span>
+<a id="__codelineno-18-59" name="__codelineno-18-59" href="#__codelineno-18-59"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">client_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/todos/1&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-60" name="__codelineno-18-60" href="#__codelineno-18-60"></a>
+<a id="__codelineno-18-61" name="__codelineno-18-61" href="#__codelineno-18-61"></a>    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p>Fixtures can be defined in a dedicated module, to keep the tests code
 clean.</p>
 </div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

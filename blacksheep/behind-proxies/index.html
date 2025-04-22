@@ -1604,7 +1604,7 @@ likely causes complications for web apps serving HTML documents and
 implementing interactive sign-in.</p>
 </details>
 <hr />
-<p><code>BlackSheep</code> offers two ways to deal with this scenario:</p>
+<p>BlackSheep offers two ways to deal with this scenario:</p>
 <ul>
 <li>One approach, defined by the <code>ASGI</code> specification, involves specifying a
   <code>root_path</code> in the <code>ASGI</code> server. This information is passed in the scope of
@@ -1619,7 +1619,7 @@ implementing interactive sign-in.</p>
   the web server is desirable to align it with the path handled by the HTTP
   proxy server, and it is ideal when applying URL rewrite is not easy.</li>
 </ul>
-<p>For both options, <code>BlackSheep</code> handles the information provided by <code>root_path</code>
+<p>For both options, BlackSheep handles the information provided by <code>root_path</code>
 and the application router prefix in some specific ways.
 For example, the <code>get_absolute_url_to_path</code> defined in <code>blacksheep.messages</code>
 will handle the information and return an absolute URL to the server
@@ -1652,7 +1652,7 @@ according to both scenarios.</p>
 <a href="https://github.com/Neoteroi/BlackSheep-MVC/blob/88b0672a0696d4bef4775203fae086173fd9b0fc/%7B%7Bcookiecutter.project_name%7D%7D/app/templating.py#L26">render absolute paths</a>
 in Jinja templates.</p>
 </details>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (3)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

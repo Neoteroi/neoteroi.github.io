@@ -1608,7 +1608,7 @@ front-end web frameworks.</p>
 <h2 id="installing-the-cli">Installing the CLI<a class="headerlink" href="#installing-the-cli" title="Permanent link">&para;</a></h2>
 <p>The CLI is distributed as a separate package, and can be installed from the
 Python Package Index:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>blacksheep-cli
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>blacksheep-cli
 </code></pre></div>
 <p>Once installed, the CLI can be used to bootstrap new projects using interactive
 prompts.</p>
@@ -1630,9 +1630,9 @@ followed by <code>--help</code>, like in the following example:</p>
 <p>The <code>blacksheep-cli</code> is pre-configured with official templates. To list the
 available templates, use the <code>blacksheep templates list</code>, or the
 <code>blacksheep templates details</code> commands.</p>
-<div class="highlight"><pre><span></span><code>$<span class="w"> </span>blacksheep<span class="w"> </span>templates<span class="w"> </span>list
-api
-mvc
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>blacksheep<span class="w"> </span>templates<span class="w"> </span>list
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>api
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mvc
 </code></pre></div>
 <p>To display details about the templates, which are stored in a configuration file
 in the user's folder, use the <code>blacksheep templates details</code> command:</p>
@@ -1690,10 +1690,10 @@ whose questions match the parameters described in <code>cookiecutter.json</code>
 <p>The BlackSheep CLI supports all sources that are supported by <a href="https://cookiecutter.readthedocs.io/en/stable/usage.html#grab-a-cookiecutter-template"><code>cookiecutter</code></a>.</p>
 <p>Then include it in the list of available templates, using the <code>templates add</code> command,
 like in:</p>
-<div class="highlight"><pre><span></span><code>blacksheep<span class="w"> </span>templates<span class="w"> </span>add<span class="w"> </span>foo<span class="w"> </span>https://github.com/Neoteroi/BlackSheep-Foo<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;Some nice template! 🐃&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>blacksheep<span class="w"> </span>templates<span class="w"> </span>add<span class="w"> </span>foo<span class="w"> </span>https://github.com/Neoteroi/BlackSheep-Foo<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;Some nice template! 🐃&#39;</span>
 </code></pre></div>
 <p>To use a specific <code>git</code> tag, add a <code>${tag}</code> suffix to the source, like:</p>
-<div class="highlight"><pre><span></span><code>blacksheep<span class="w"> </span>templates<span class="w"> </span>add<span class="w"> </span>foov2<span class="w"> </span><span class="s1">&#39;https://github.com/Neoteroi/BlackSheepFoo$v2&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>blacksheep<span class="w"> </span>templates<span class="w"> </span>add<span class="w"> </span>foov2<span class="w"> </span><span class="s1">&#39;https://github.com/Neoteroi/BlackSheepFoo$v2&#39;</span>
 </code></pre></div>
 <h2 id="cookiecutter">Cookiecutter<a class="headerlink" href="#cookiecutter" title="Permanent link">&para;</a></h2>
 <p>The <code>blacksheep-cli</code> uses <a href="https://cookiecutter.readthedocs.io/en/stable/"><code>Cookiecutter</code></a>
@@ -1704,9 +1704,9 @@ non-interactive way if desired, using the <code>cookiecutter</code> CLI. This ca
 useful to bootstrap new projects in automated jobs (CI/CD).</p>
 <p>For example, to bootstrap a new project using the API template, with the name
 "foo" and using TOML files for application settings:</p>
-<div class="highlight"><pre><span></span><code>cookiecutter<span class="w"> </span>https://github.com/Neoteroi/BlackSheep-API<span class="w"> </span>--no-input<span class="w"> </span><span class="nv">project_name</span><span class="o">=</span>foo<span class="w"> </span><span class="nv">app_settings_format</span><span class="o">=</span>TOML
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cookiecutter<span class="w"> </span>https://github.com/Neoteroi/BlackSheep-API<span class="w"> </span>--no-input<span class="w"> </span><span class="nv">project_name</span><span class="o">=</span>foo<span class="w"> </span><span class="nv">app_settings_format</span><span class="o">=</span>TOML
 </code></pre></div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-01 23:22:49</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

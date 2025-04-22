@@ -1693,17 +1693,17 @@ code verbosity when defining routes and controllers.</p>
 be used to register routes independently from application instantiation. This
 enables a much cleaner code API, and consistent with the existing API to
 register controllers.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/examples&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_examples</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="o">...</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/examples&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">example</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/examples&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_examples</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="o">...</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/examples&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">example</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>For more information on the above, read <a href="/blacksheep/routing/#using-the-default-router-and-other-routers"><em>Using the default router and other routers</em></a>.</p>
 <p>All modules inside <code>routes</code> and <code>controllers</code> packages are imported
@@ -1711,16 +1711,16 @@ automatically in v2. Automatic import works relative to where a BlackSheep
 application is instantiated. In the structure described below, the modules in
 <code>app.controllers</code> and <code>app.routes</code> namespace are imported automatically when an
 application is instantiated inside <code>app.main</code>.</p>
-<div class="highlight"><pre><span></span><code>app/
-├── __init__.py
-├── controllers
-│   ├── __init__.py
-│   ├── home.py
-│   └── example.py
-├── routes
-│   ├── __init__.py
-│   └── example.py
-└──main.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>app/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── __init__.py
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── controllers
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── __init__.py
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── home.py
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   └── example.py
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>├── routes
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│   ├── __init__.py
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│   └── example.py
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>└──main.py
 </code></pre></div>
 <p>The difference in code verbosity is considerable, because previously defining
 routes and controllers explicitly was not sufficient to have them registered in
@@ -1732,20 +1732,20 @@ to apply logic depending on whether the application is running for local
 development, or a different kind of environment (e.g. <code>dev</code>, <code>test</code>, <code>prod</code>).</p>
 <p>These functions use the environment variable <code>APP_ENV</code> to determine the type
 of environment, defaulting to <code>production</code> if such variable is missing.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_development</span><span class="p">,</span> <span class="n">is_production</span>
-
-<span class="c1"># is_development returns true if APP_ENV (lower) is in {&quot;local&quot;, &quot;dev&quot;, &quot;development&quot;}</span>
-<span class="c1"># is_production returns true if APP_ENV (lower) is missing or in {&quot;prod&quot;, &quot;production&quot;}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_development</span><span class="p">,</span> <span class="n">is_production</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># is_development returns true if APP_ENV (lower) is in {&quot;local&quot;, &quot;dev&quot;, &quot;development&quot;}</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># is_production returns true if APP_ENV (lower) is missing or in {&quot;prod&quot;, &quot;production&quot;}</span>
 </code></pre></div>
 <h2 id="changes-to-dependency-injection">Changes to dependency injection<a class="headerlink" href="#changes-to-dependency-injection" title="Permanent link">&para;</a></h2>
-<p>In v2, <code>rodi</code> and <code>BlackSheep</code> have been modified to enable alternative
+<p>In v2, <code>rodi</code> and BlackSheep have been modified to enable alternative
 implementations of dependency injection. <code>rodi</code> now defines a
 <code>ContainerProtocol</code> with a basic API to register and resolve dependencies, and
-<code>BlackSheep</code> relies on that protocol instead of its specific implementation in
+BlackSheep relies on that protocol instead of its specific implementation in
 <code>rodi</code>.</p>
 <p>For more information, read the <a href="/blacksheep/dependency-injection/#the-container-protocol"><em>dedicated part in the Dependency Injection</em></a> page.</p>
 <h2 id="changes-to-server-side-rendering">Changes to server side rendering<a class="headerlink" href="#changes-to-server-side-rendering" title="Permanent link">&para;</a></h2>
-<p><code>BlackSheep</code> v2 has been modified to not be strictly reliant on <code>Jinja2</code> for
+<p>BlackSheep v2 has been modified to not be strictly reliant on <code>Jinja2</code> for
 template rendering. To achieve this, two new namespaces have been added:</p>
 <ul>
 <li><code>blacksheep.server.rendering.abc</code>, defining an abstract <code>Renderer</code> class,</li>
@@ -1759,46 +1759,46 @@ defined at the path <code>views/home.jinja</code>:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Now in v2</label><label for="__tabbed_1_2">Before in v1</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">view</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">view</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.templating</span><span class="w"> </span><span class="kn">import</span> <span class="n">use_templates</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageLoader</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-<span class="n">get</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span>
-
-<span class="n">view</span> <span class="o">=</span> <span class="n">use_templates</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="n">PackageLoader</span><span class="p">(</span><span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="s2">&quot;views&quot;</span><span class="p">))</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.templating</span><span class="w"> </span><span class="kn">import</span> <span class="n">use_templates</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageLoader</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">get</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">view</span> <span class="o">=</span> <span class="n">use_templates</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="n">PackageLoader</span><span class="p">(</span><span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="s2">&quot;views&quot;</span><span class="p">))</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <p>Template:</p>
-<div class="highlight"><pre><span></span><code><span class="cp">&lt;!doctype html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{example}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{foo}}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="cp">&lt;!doctype html&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{example}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{foo}}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></div>
 <p>For more information, read the updated
 <a href="/blacksheep/templating/"><em>page describing Server Side Rendering</em></a>.</p>
@@ -1814,25 +1814,25 @@ by <code>blacksheep</code> package like the other methods to register request ha
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Now in v2</label><label for="__tabbed_2_2">Before in v1</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">route</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;Example&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">route</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="k">return</span> <span class="s2">&quot;Example&quot;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;Example&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="k">return</span> <span class="s2">&quot;Example&quot;</span>
 </code></pre></div>
 </div>
 </div>
@@ -1857,60 +1857,60 @@ function to configure a web app to:</p>
 <li>configure the back-end API to use <code>JWT Bearer</code> authentication (clients must
   send requests with <code>Authorization: Bearer &lt;JWT&gt;</code> headers)</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This example shows how to configure an OpenID Connect integration having tokens</span>
-<span class="sd">exchanged with the client using the HTML5 Storage API, instead of response cookies.</span>
-<span class="sd">This scenario enables better reusability of web APIs.</span>
-<span class="sd">See how the id_token is used in ./static/index.html to authenticate following requests</span>
-<span class="sd">(&#39;Authorization: Bearer ***&#39; headers), and how the refresh token endpoint can be used</span>
-<span class="sd">to obtain fresh tokens.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.application</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.jwt</span><span class="w"> </span><span class="kn">import</span> <span class="n">JWTBearerAuthentication</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">JWTOpenIDTokensHandler</span><span class="p">,</span>
-    <span class="n">OpenIDSettings</span><span class="p">,</span>
-    <span class="n">use_openid_connect</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">common.routes</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_routes</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">common.secrets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Secrets</span>
-
-<span class="n">load_dotenv</span><span class="p">()</span>
-<span class="n">secrets</span> <span class="o">=</span> <span class="n">Secrets</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="n">AUTHORITY</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;https://login.microsoftonline.com/b62b317a-19c2-40c0-8650-2d9672324ac4/v2.0&quot;</span>
-<span class="p">)</span>
-<span class="n">CLIENT_ID</span> <span class="o">=</span> <span class="s2">&quot;499adb65-5e26-459e-bc35-b3e1b5f71a9d&quot;</span>
-<span class="n">use_openid_connect</span><span class="p">(</span>
-    <span class="n">app</span><span class="p">,</span>
-    <span class="n">OpenIDSettings</span><span class="p">(</span>
-        <span class="n">authority</span><span class="o">=</span><span class="n">AUTHORITY</span><span class="p">,</span>
-        <span class="n">client_id</span><span class="o">=</span><span class="n">CLIENT_ID</span><span class="p">,</span>
-        <span class="n">client_secret</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">aad_client_secret</span><span class="p">,</span>
-        <span class="n">scope</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;openid profile offline_access email &quot;</span>
-            <span class="s2">&quot;api://65d21481-4f1a-4731-9508-ad965cb4d59f/example&quot;</span>
-        <span class="p">),</span>
-    <span class="p">),</span>
-    <span class="n">auth_handler</span><span class="o">=</span><span class="n">JWTOpenIDTokensHandler</span><span class="p">(</span>
-        <span class="n">JWTBearerAuthentication</span><span class="p">(</span>
-            <span class="n">authority</span><span class="o">=</span><span class="n">AUTHORITY</span><span class="p">,</span>
-            <span class="n">valid_audiences</span><span class="o">=</span><span class="p">[</span><span class="n">CLIENT_ID</span><span class="p">],</span>
-        <span class="p">),</span>
-    <span class="p">),</span>
-<span class="p">)</span>
-
-<span class="n">register_routes</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">static_home</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="sd">This example shows how to configure an OpenID Connect integration having tokens</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="sd">exchanged with the client using the HTML5 Storage API, instead of response cookies.</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="sd">This scenario enables better reusability of web APIs.</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="sd">See how the id_token is used in ./static/index.html to authenticate following requests</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="sd">(&#39;Authorization: Bearer ***&#39; headers), and how the refresh token endpoint can be used</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="sd">to obtain fresh tokens.</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.application</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.jwt</span><span class="w"> </span><span class="kn">import</span> <span class="n">JWTBearerAuthentication</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authentication.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="n">JWTOpenIDTokensHandler</span><span class="p">,</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="n">OpenIDSettings</span><span class="p">,</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>    <span class="n">use_openid_connect</span><span class="p">,</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="p">)</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="kn">from</span><span class="w"> </span><span class="nn">common.routes</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_routes</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="kn">from</span><span class="w"> </span><span class="nn">common.secrets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Secrets</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="n">load_dotenv</span><span class="p">()</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="n">secrets</span> <span class="o">=</span> <span class="n">Secrets</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="n">AUTHORITY</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>    <span class="s2">&quot;https://login.microsoftonline.com/b62b317a-19c2-40c0-8650-2d9672324ac4/v2.0&quot;</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="p">)</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="n">CLIENT_ID</span> <span class="o">=</span> <span class="s2">&quot;499adb65-5e26-459e-bc35-b3e1b5f71a9d&quot;</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="n">use_openid_connect</span><span class="p">(</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a>    <span class="n">app</span><span class="p">,</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a>    <span class="n">OpenIDSettings</span><span class="p">(</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a>        <span class="n">authority</span><span class="o">=</span><span class="n">AUTHORITY</span><span class="p">,</span>
+<a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a>        <span class="n">client_id</span><span class="o">=</span><span class="n">CLIENT_ID</span><span class="p">,</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a>        <span class="n">client_secret</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">aad_client_secret</span><span class="p">,</span>
+<a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a>        <span class="n">scope</span><span class="o">=</span><span class="p">(</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a>            <span class="s2">&quot;openid profile offline_access email &quot;</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a>            <span class="s2">&quot;api://65d21481-4f1a-4731-9508-ad965cb4d59f/example&quot;</span>
+<a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a>        <span class="p">),</span>
+<a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a>    <span class="p">),</span>
+<a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a>    <span class="n">auth_handler</span><span class="o">=</span><span class="n">JWTOpenIDTokensHandler</span><span class="p">(</span>
+<a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a>        <span class="n">JWTBearerAuthentication</span><span class="p">(</span>
+<a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a>            <span class="n">authority</span><span class="o">=</span><span class="n">AUTHORITY</span><span class="p">,</span>
+<a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a>            <span class="n">valid_audiences</span><span class="o">=</span><span class="p">[</span><span class="n">CLIENT_ID</span><span class="p">],</span>
+<a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a>        <span class="p">),</span>
+<a id="__codelineno-8-47" name="__codelineno-8-47" href="#__codelineno-8-47"></a>    <span class="p">),</span>
+<a id="__codelineno-8-48" name="__codelineno-8-48" href="#__codelineno-8-48"></a><span class="p">)</span>
+<a id="__codelineno-8-49" name="__codelineno-8-49" href="#__codelineno-8-49"></a>
+<a id="__codelineno-8-50" name="__codelineno-8-50" href="#__codelineno-8-50"></a><span class="n">register_routes</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">static_home</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-8-51" name="__codelineno-8-51" href="#__codelineno-8-51"></a>
+<a id="__codelineno-8-52" name="__codelineno-8-52" href="#__codelineno-8-52"></a>
+<a id="__codelineno-8-53" name="__codelineno-8-53" href="#__codelineno-8-53"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-8-54" name="__codelineno-8-54" href="#__codelineno-8-54"></a>    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="changes-to-follow-naming-conventions">Changes to follow naming conventions<a class="headerlink" href="#changes-to-follow-naming-conventions" title="Permanent link">&para;</a></h2>
 <p>Some classes have been renamed to better follow Python naming conventions. For
@@ -1993,32 +1993,32 @@ compatibility in <code>v1</code>, as alternative names for <code>HTMLContent</co
   <a href="https://github.com/scottrutherford">scottrutherford</a>'s contribution.</li>
 </ul>
 <p><code>@app.lifespan</code> example:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.client.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientSession</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">lifespan</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">register_http_client</span><span class="p">():</span>
-    <span class="k">async</span> <span class="k">with</span> <span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client created and registered as singleton&quot;</span><span class="p">)</span>
-        <span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ClientSession</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
-        <span class="k">yield</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client disposed of&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">http_client</span><span class="p">:</span> <span class="n">ClientSession</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">http_client</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;client_instance_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">(</span><span class="n">http_client</span><span class="p">)}</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">44777</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="n">lifespan</span><span class="o">=</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.client.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientSession</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="nd">@app</span><span class="o">.</span><span class="n">lifespan</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">register_http_client</span><span class="p">():</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client created and registered as singleton&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ClientSession</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>        <span class="k">yield</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP client disposed of&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">http_client</span><span class="p">:</span> <span class="n">ClientSession</span><span class="p">):</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">http_client</span><span class="p">)</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;client_instance_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">(</span><span class="n">http_client</span><span class="p">)}</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">44777</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="n">lifespan</span><span class="o">=</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
 </code></pre></div>
 <ul>
 <li>Adds support for user-defined filters for server routes (<code>RouteFilter</code> class).</li>
@@ -2094,7 +2094,7 @@ compatibility in <code>v1</code>, as alternative names for <code>HTMLContent</co
 <li>Adds <code>.webp</code> and <code>.webm</code> to the list of extensions of files that are served
   by default.</li>
 </ul>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

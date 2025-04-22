@@ -1441,14 +1441,14 @@ for making locally-trusted development certificates</em>.</p>
   For <code>uvicorn</code>, refer to this documentation: <a href="https://www.uvicorn.org/deployment/#running-with-https">https://www.uvicorn.org/deployment/#running-with-https</a>.</li>
 </ul>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code>mkcert<span class="w"> </span>--install
-
-mkcert<span class="w"> </span>localhost<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>::1
-
-uvicorn<span class="w"> </span>server:app<span class="w"> </span>--port<span class="w"> </span><span class="m">44555</span><span class="w"> </span>--ssl-keyfile<span class="o">=</span>./localhost-key.pem<span class="w"> </span>--ssl-certfile<span class="o">=</span>./localhost.pem
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mkcert<span class="w"> </span>--install
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mkcert<span class="w"> </span>localhost<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>::1
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uvicorn<span class="w"> </span>server:app<span class="w"> </span>--port<span class="w"> </span><span class="m">44555</span><span class="w"> </span>--ssl-keyfile<span class="o">=</span>./localhost-key.pem<span class="w"> </span>--ssl-certfile<span class="o">=</span>./localhost.pem
 </code></pre></div>
 <p><img alt="Local HTTPS" src="../img/mkcert-local-https.png" /></p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-01 23:22:49</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

@@ -1520,31 +1520,29 @@
 
   <h1>HSTS</h1>
 
-<p>The HTTP Strict-Transport-Security response header (often abbreviated as HSTS)
-is a standard feature used to instruct clients that a site should only be
-accessed using HTTPS, and any attempt to access it using HTTP should be
-converted automatically to HTTPS.</p>
-<p>BlackSheep offers a middleware to configure the HTTP Strict-Transport-Security
-response header globally. This page explains how to use the built-in middleware
-to enforce HSTS on a web application.</p>
+<p>The HTTP Strict-Transport-Security (HSTS) response header is a standard feature
+that instructs clients to access a site exclusively using HTTPS. Any attempt to
+access the site via HTTP is automatically redirected to HTTPS.</p>
+<p>BlackSheep provides middleware to globally configure the HTTP
+Strict-Transport-Security (HSTS) response header. This page explains how to use
+the built-in middleware to enforce HSTS in a web application.</p>
 <h2 id="enabling-hsts">Enabling HSTS<a class="headerlink" href="#enabling-hsts" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_development</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.security.hsts</span><span class="w"> </span><span class="kn">import</span> <span class="n">HSTSMiddleware</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="k">if</span> <span class="ow">not</span> <span class="n">is_development</span><span class="p">():</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HSTSMiddleware</span><span class="p">())</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_development</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.security.hsts</span><span class="w"> </span><span class="kn">import</span> <span class="n">HSTSMiddleware</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">is_development</span><span class="p">():</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HSTSMiddleware</span><span class="p">())</span>
 </code></pre></div>
 <div class="admonition tip">
-<p class="admonition-title">Considerations for local development</p>
-<p>It is generally undesirable to enable <code>HSTS</code> during local development,
-since browsers get instructed to require <code>HTTPS</code> for all traffic on
-<code>localhost</code>. This is why the example above configures the middleware only
-if the application is not running in development mode.
-See <a href="/blacksheep/settings/#defining-application-environment"><em>Defining application environment</em></a>
+<p class="admonition-title">Considerations for local development.</p>
+<p>Enabling <code>HSTS</code> during local development is generally not recommended, as it
+instructs browsers to require <code>HTTPS</code> for all traffic on <code>localhost</code>. For this
+reason, the example above configures the middleware only when the application
+is not running in development mode. Refer to <a href="../settings/#defining-application-environment"><em>Defining application environment</em></a>
 for more information.</p>
 </div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">&para;</a></h2>
@@ -1570,9 +1568,10 @@ for more information.</p>
 </tbody>
 </table>
 <h2 id="for-more-information">For more information<a class="headerlink" href="#for-more-information" title="Permanent link">&para;</a></h2>
-<p>For more information on HTTP Strict Transport Security, it is recommended to
-refer to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security">developer.mozilla.org documentation</a>.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<p>For more information on HTTP Strict Transport Security, refer to the
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security">developer.mozilla.org
+documentation</a>.</p>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

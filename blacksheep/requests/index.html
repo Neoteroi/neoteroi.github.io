@@ -1690,86 +1690,86 @@ the creation of a new instance of <code>Request</code>.</p>
 <p>It is possible to read query and route parameters from an instance of
 <code>request</code>. The example below shows how the query string, route parameters, and
 request headers can be read from the request:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{something}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="n">client_accept</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get_first</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Accept&quot;</span><span class="p">)</span>
-    <span class="c1"># client_accept is None or bytes</span>
-
-    <span class="n">hello</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
-    <span class="c1"># hello is None or a List[str]</span>
-
-    <span class="n">something</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">route_values</span><span class="p">[</span><span class="s2">&quot;something&quot;</span><span class="p">]</span>
-    <span class="c1"># something is str</span>
-
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        Accept: </span><span class="si">{</span><span class="n">client_accept</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span>
-<span class="s2">        Hello: </span><span class="si">{</span><span class="n">hello</span><span class="si">}</span>
-<span class="s2">        Something: </span><span class="si">{</span><span class="n">something</span><span class="si">}</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-    <span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{something}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">client_accept</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get_first</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Accept&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="c1"># client_accept is None or bytes</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">hello</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="c1"># hello is None or a List[str]</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">something</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">route_values</span><span class="p">[</span><span class="s2">&quot;something&quot;</span><span class="p">]</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="c1"># something is str</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s2">        Accept: </span><span class="si">{</span><span class="n">client_accept</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s2">        Hello: </span><span class="si">{</span><span class="n">hello</span><span class="si">}</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s2">        Something: </span><span class="si">{</span><span class="n">something</span><span class="si">}</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="s2">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    <span class="p">)</span>
 </code></pre></div>
 <p>However, the recommended approach is to use automatic bindings, which enable a
 more accurate generation of OpenAPI Documentation, automatic parsing of values
 into the desired type, and improves the development experience and source code.</p>
 <p>The same example can be achieved in the following way:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">FromHeader</span><span class="p">,</span> <span class="n">FromQuery</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">FromAcceptHeader</span><span class="p">(</span><span class="n">FromHeader</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Accept&quot;</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{something}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span>
-    <span class="n">something</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">accept</span><span class="p">:</span> <span class="n">FromAcceptHeader</span><span class="p">,</span> <span class="n">hello</span><span class="p">:</span> <span class="n">FromQuery</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        Accept: </span><span class="si">{</span><span class="n">accept</span><span class="o">.</span><span class="n">value</span><span class="si">}</span>
-<span class="s2">        Hello: </span><span class="si">{</span><span class="n">hello</span><span class="o">.</span><span class="n">value</span><span class="si">}</span>
-<span class="s2">        Something: </span><span class="si">{</span><span class="n">something</span><span class="si">}</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-    <span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">FromHeader</span><span class="p">,</span> <span class="n">FromQuery</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">FromAcceptHeader</span><span class="p">(</span><span class="n">FromHeader</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Accept&quot;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{something}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">something</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">accept</span><span class="p">:</span> <span class="n">FromAcceptHeader</span><span class="p">,</span> <span class="n">hello</span><span class="p">:</span> <span class="n">FromQuery</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s2">        Accept: </span><span class="si">{</span><span class="n">accept</span><span class="o">.</span><span class="n">value</span><span class="si">}</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s2">        Hello: </span><span class="si">{</span><span class="n">hello</span><span class="o">.</span><span class="n">value</span><span class="si">}</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s2">        Something: </span><span class="si">{</span><span class="n">something</span><span class="si">}</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s2">        &quot;&quot;&quot;</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    <span class="p">)</span>
 </code></pre></div>
 <p>HTTP GET <code>/example?hello=World</code>:
-<div class="highlight"><pre><span></span><code>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,mage/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Hello: World
-Something: example
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,mage/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Hello: World
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Something: example
 </code></pre></div></p>
 <h3 id="reading-request-headers-and-cookies">Reading request headers and cookies<a class="headerlink" href="#reading-request-headers-and-cookies" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">FromHeader</span><span class="p">,</span> <span class="n">FromCookie</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">FromAcceptHeader</span><span class="p">(</span><span class="n">FromHeader</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Accept&quot;</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">FromFooCookie</span><span class="p">(</span><span class="n">FromCookie</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">accept</span><span class="p">:</span> <span class="n">FromAcceptHeader</span><span class="p">,</span> <span class="n">foo</span><span class="p">:</span> <span class="n">FromFooCookie</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        Accept: </span><span class="si">{</span><span class="n">accept</span><span class="o">.</span><span class="n">value</span><span class="si">}</span>
-<span class="s2">        Foo: </span><span class="si">{</span><span class="n">foo</span><span class="o">.</span><span class="n">value</span><span class="si">}</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-    <span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">FromHeader</span><span class="p">,</span> <span class="n">FromCookie</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">FromAcceptHeader</span><span class="p">(</span><span class="n">FromHeader</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Accept&quot;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">FromFooCookie</span><span class="p">(</span><span class="n">FromCookie</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]):</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">accept</span><span class="p">:</span> <span class="n">FromAcceptHeader</span><span class="p">,</span> <span class="n">foo</span><span class="p">:</span> <span class="n">FromFooCookie</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="k">return</span> <span class="n">text</span><span class="p">(</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="s2">        Accept: </span><span class="si">{</span><span class="n">accept</span><span class="o">.</span><span class="n">value</span><span class="si">}</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="s2">        Foo: </span><span class="si">{</span><span class="n">foo</span><span class="o">.</span><span class="n">value</span><span class="si">}</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="s2">        &quot;&quot;&quot;</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    <span class="p">)</span>
 </code></pre></div>
 <h3 id="reading-the-request-body">Reading the request body<a class="headerlink" href="#reading-the-request-body" title="Permanent link">&para;</a></h3>
 <p>The request class offers several methods to read request bodies of different
@@ -1778,23 +1778,23 @@ kinds.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Using binders (recommended)</label><label for="__tabbed_1_2">Directly from the request</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromJSON</span><span class="p">,</span> <span class="n">post</span>
-
-
-<span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">SomethingInput</span><span class="p">:</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">foo</span><span class="p">:</span> <span class="nb">bool</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">FromJSON</span><span class="p">[</span><span class="n">SomethingInput</span><span class="p">]):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">value</span>
-
-    <span class="c1"># data is already deserialized from JSON into an instance of</span>
-    <span class="c1"># `SomethingInput`</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromJSON</span><span class="p">,</span> <span class="n">post</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">SomethingInput</span><span class="p">:</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="n">foo</span><span class="p">:</span> <span class="nb">bool</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">FromJSON</span><span class="p">[</span><span class="n">SomethingInput</span><span class="p">]):</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="n">data</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">value</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="c1"># data is already deserialized from JSON into an instance of</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    <span class="c1"># `SomethingInput`</span>
 </code></pre></div>
 <p>The type parameter for the <code>FromJSON</code> binder can be a dataclass, a model from
 <a href="https://github.com/samuelcolvin/pydantic"><code>pydantic</code></a>, or a regular class
@@ -1806,19 +1806,19 @@ class. To gracefully handle a payload with extra properties, use <code>*args</co
 your class constructor: <code>__init__(one, two, three, *args)</code>.</p>
 <p>To read the JSON payload as a regular dictionary, use <code>dict</code> as the type
 argument:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">FromJSON</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">FromJSON</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="o">...</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>When the JSON is read from the request object, it is always treated as
 the raw deserialized object (usually a dictionary or a list).</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-
-    <span class="c1"># data is the deserialized object</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="c1"># data is the deserialized object</span>
 </code></pre></div>
 </div>
 </div>
@@ -1827,34 +1827,34 @@ the raw deserialized object (usually a dictionary or a list).</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Using binders (recommended)</label><label for="__tabbed_2_2">Directly from the request</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromForm</span><span class="p">,</span> <span class="n">post</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">SomethingInput</span><span class="p">:</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">foo</span><span class="p">:</span> <span class="nb">bool</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">foo</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">FromForm</span><span class="p">[</span><span class="n">SomethingInput</span><span class="p">]):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">value</span>
-
-    <span class="c1"># data is already deserialized from the form body into an instance</span>
-    <span class="c1"># of `SomethingInput` - however some properties need to be parsed</span>
-    <span class="c1"># from str into the desired type in the class definition -</span>
-    <span class="c1"># see __init__ above</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromForm</span><span class="p">,</span> <span class="n">post</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">SomethingInput</span><span class="p">:</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">foo</span><span class="p">:</span> <span class="nb">bool</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">foo</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">FromForm</span><span class="p">[</span><span class="n">SomethingInput</span><span class="p">]):</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="n">data</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">value</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>    <span class="c1"># data is already deserialized from the form body into an instance</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    <span class="c1"># of `SomethingInput` - however some properties need to be parsed</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>    <span class="c1"># from str into the desired type in the class definition -</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>    <span class="c1"># see __init__ above</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">()</span>
-
-    <span class="c1"># data is a dictionary</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_something</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">()</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="c1"># data is a dictionary</span>
 </code></pre></div>
 </div>
 </div>
@@ -1863,20 +1863,20 @@ the raw deserialized object (usually a dictionary or a list).</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Using binders (recommended)</label><label for="__tabbed_3_2">Directly from the request</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromText</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">store_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">FromText</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">value</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromText</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">store_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">FromText</span><span class="p">):</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">value</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/text&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_text</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
-
-    <span class="c1"># data is a string</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/text&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_text</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="c1"># data is a string</span>
 </code></pre></div>
 </div>
 </div>
@@ -1885,20 +1885,20 @@ the raw deserialized object (usually a dictionary or a list).</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Using binders (recommended)</label><label for="__tabbed_4_2">Directly from the request</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromBytes</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">payload</span><span class="p">:</span> <span class="n">FromBytes</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">value</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromBytes</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">payload</span><span class="p">:</span> <span class="n">FromBytes</span><span class="p">):</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">value</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/text&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-    <span class="c1"># data is bytes</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/text&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="c1"># data is bytes</span>
 </code></pre></div>
 </div>
 </div>
@@ -1908,24 +1908,24 @@ the raw deserialized object (usually a dictionary or a list).</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Using binders (recommended)</label><label for="__tabbed_5_2">Directly from the request</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromFiles</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">post_files</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="n">FromFiles</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">value</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromFiles</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/something&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">post_files</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="n">FromFiles</span><span class="p">):</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">value</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/upload-files&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_files</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="n">files</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="p">()</span>
-
-    <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-        <span class="n">file_bytes</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">data</span>
-        <span class="n">file_name</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">file_name</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/upload-files&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_files</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">files</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="p">()</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>        <span class="n">file_bytes</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">data</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>        <span class="n">file_name</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">file_name</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>    <span class="o">...</span>
 </code></pre></div>
 </div>
 </div>
@@ -1937,22 +1937,22 @@ the event loop:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Directly from the request</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">created</span><span class="p">,</span> <span class="n">post</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/upload&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">save_big_file</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./data/0001.dat&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">saved_file</span><span class="p">:</span>
-        <span class="k">async</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">stream</span><span class="p">():</span>
-            <span class="n">saved_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">created</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">created</span><span class="p">,</span> <span class="n">post</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/upload&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">save_big_file</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./data/0001.dat&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">saved_file</span><span class="p">:</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>        <span class="k">async</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">stream</span><span class="p">():</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>            <span class="n">saved_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>    <span class="k">return</span> <span class="n">created</span><span class="p">()</span>
 </code></pre></div>
 </div>
 </div>
 </div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

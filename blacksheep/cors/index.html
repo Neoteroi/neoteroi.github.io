@@ -1507,31 +1507,31 @@
 
 
 <h1 id="cross-origin-resource-sharing">Cross-Origin Resource Sharing<a class="headerlink" href="#cross-origin-resource-sharing" title="Permanent link">&para;</a></h1>
-<p>BlackSheep implements a strategy to handle <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">Cross-Origin Resource Sharing
+<p>BlackSheep provides a strategy to handle <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">Cross-Origin Resource Sharing
 (CORS)</a>. This page
-describes:</p>
+covers:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to enable CORS globally.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to enable CORS for specific endpoints.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Enabling CORS globally.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Enabling CORS for specific endpoints.</li>
 </ul>
 <h2 id="enabling-cors-globally">Enabling CORS globally<a class="headerlink" href="#enabling-cors-globally" title="Permanent link">&para;</a></h2>
-<p>The example below shows how to enable CORS globally on a BlackSheep application:</p>
-<div class="highlight"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">use_cors</span><span class="p">(</span>
-    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;GET POST DELETE&quot;</span><span class="p">,</span>
-    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;https://www.example.dev&quot;</span><span class="p">,</span>
-    <span class="n">allow_headers</span><span class="o">=</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span>
-    <span class="n">max_age</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-<span class="p">)</span>
+<p>The example below demonstrates how to enable CORS globally:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">app</span><span class="o">.</span><span class="n">use_cors</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;GET POST DELETE&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;https://www.example.dev&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">allow_headers</span><span class="o">=</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">max_age</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">)</span>
 </code></pre></div>
-<p>When enabled this way, the framework handles <code>CORS</code> requests, including
-preflight <code>OPTIONS</code> requests.</p>
+<p>When enabled this way, the framework handles <code>CORS</code> requests and preflight
+<code>OPTIONS</code> requests.</p>
 <p>It is possible to use <code>*</code> to enable any origin or any method:</p>
-<div class="highlight"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">use_cors</span><span class="p">(</span>
-    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-    <span class="n">allow_headers</span><span class="o">=</span><span class="s2">&quot;* Authorization&quot;</span><span class="p">,</span>
-    <span class="n">max_age</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">app</span><span class="o">.</span><span class="n">use_cors</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">allow_headers</span><span class="o">=</span><span class="s2">&quot;* Authorization&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">max_age</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -1567,74 +1567,75 @@ preflight <code>OPTIONS</code> requests.</p>
 </tr>
 </tbody>
 </table>
-<p>🗡️ The value can be a string of values separated by space, comma, or semi-colon, or a list.</p>
+<p>🗡️ The value can be a string of values separated by space, comma, or semi-colon,
+   or a list.</p>
 <h2 id="enabling-cors-for-specific-endpoints">Enabling CORS for specific endpoints<a class="headerlink" href="#enabling-cors-for-specific-endpoints" title="Permanent link">&para;</a></h2>
-<p>The example below shows how to enable CORS only for certain endpoints:</p>
-<div class="highlight"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">use_cors</span><span class="p">()</span>
-<span class="n">cors</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">cors</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">add_cors_policy</span><span class="p">(</span>
-    <span class="s2">&quot;example&quot;</span><span class="p">,</span>
-    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;GET POST&quot;</span><span class="p">,</span>
-    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="o">...</span>
-
-<span class="nd">@cors</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
-<span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/specific-rules&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">enabled</span><span class="p">():</span>
-    <span class="o">...</span>
+<p>The example below demonstrates how to enable CORS only for specific endpoints:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">app</span><span class="o">.</span><span class="n">use_cors</span><span class="p">()</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">cors</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">cors</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">app</span><span class="o">.</span><span class="n">add_cors_policy</span><span class="p">(</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="s2">&quot;example&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;GET POST&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="o">...</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="nd">@cors</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/specific-rules&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">enabled</span><span class="p">():</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>Explanation:</p>
 <ol>
-<li>the function call <code>app.use_cors()</code> activates built-in handling of CORS
-   requests and registers a global CORS rule that doesn't allow anything by
-   default</li>
-<li>the call <code>app.add_cors_policy(...)</code> registers a new set of rules for CORS,
-   associated to the key "example"</li>
-<li>the set of rules for CORS called "example" is associated to specific
-   request handlers using the <code>@cors</code> decorator</li>
+<li>The function call <code>app.use_cors()</code> activates the built-in handling of CORS
+   requests and registers a global CORS rule that denies all requests by
+   default.</li>
+<li>The call to <code>app.add_cors_policy(...)</code> registers a new set of CORS rules
+   associated with the key 'example'.</li>
+<li>The CORS rules associated with the key 'example' are applied to specific
+   request handlers using the <code>@cors</code> decorator.</li>
 </ol>
 <p>It is possible to register many sets of rules for CORS, each with its own key,
 and apply different rules to request handlers.
 It is also possible to define a global rule when calling <code>app.use_cors(...)</code>
-that enables certain operations for all request handlers, while defining
+that enables certain operations for all request handlers, while still defining
 specific rules.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># the following settings are applied by default to all request handlers:</span>
-<span class="n">app</span><span class="o">.</span><span class="n">use_cors</span><span class="p">(</span>
-    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;GET POST&quot;</span><span class="p">,</span>
-    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;https://www.foo.org&quot;</span><span class="p">,</span>
-    <span class="n">allow_headers</span><span class="o">=</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">add_cors_policy</span><span class="p">(</span>
-    <span class="s2">&quot;one&quot;</span><span class="p">,</span>
-    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;GET POST PUT DELETE&quot;</span><span class="p">,</span>
-    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-    <span class="n">allow_headers</span><span class="o">=</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">add_cors_policy</span><span class="p">(</span><span class="s2">&quot;deny&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="o">...</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">cors</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">)</span>
-<span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/specific-rules&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">enabled</span><span class="p">():</span>
-    <span class="o">...</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">cors</span><span class="p">(</span><span class="s2">&quot;deny&quot;</span><span class="p">)</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/disabled-for-cors&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">disabled</span><span class="p">():</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># the following settings are applied by default to all request handlers:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">app</span><span class="o">.</span><span class="n">use_cors</span><span class="p">(</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;GET POST&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;https://www.foo.org&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">allow_headers</span><span class="o">=</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">)</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">app</span><span class="o">.</span><span class="n">add_cors_policy</span><span class="p">(</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="s2">&quot;one&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">allow_methods</span><span class="o">=</span><span class="s2">&quot;GET POST PUT DELETE&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">allow_origins</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">allow_headers</span><span class="o">=</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">app</span><span class="o">.</span><span class="n">add_cors_policy</span><span class="p">(</span><span class="s2">&quot;deny&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    <span class="o">...</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="nd">@app</span><span class="o">.</span><span class="n">cors</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="nd">@route</span><span class="p">(</span><span class="s2">&quot;/specific-rules&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">enabled</span><span class="p">():</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    <span class="o">...</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="nd">@app</span><span class="o">.</span><span class="n">cors</span><span class="p">(</span><span class="s2">&quot;deny&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/disabled-for-cors&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">disabled</span><span class="p">():</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>    <span class="o">...</span>
 </code></pre></div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

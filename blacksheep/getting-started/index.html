@@ -1650,7 +1650,7 @@
 
 <h1 id="getting-started-with-blacksheep">Getting started with BlackSheep<a class="headerlink" href="#getting-started-with-blacksheep" title="Permanent link">&para;</a></h1>
 <p>This tutorial explains how to create and start a minimal BlackSheep web
-application. <br> It provides a general view, covering the following topics:</p>
+application. It provides an overview of the following topics:</p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Creating a web application from scratch.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Running the web application.</li>
@@ -1661,53 +1661,54 @@ application. <br> It provides a general view, covering the following topics:</p>
 <h3 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="https://www.python.org">Python</a> version &gt;= <strong>3.10</strong> (3.8 and 3.9 are
-  supported but not recommended to follow this tutorial)</li>
-<li>path to the python executable configured in the environment <code>$PATH</code> variable
+  supported but not recommended for this tutorial)</li>
+<li>Ensure the Python executable is included in the <code>$PATH</code> environment variable.
   (tip: if you install Python on Windows using the official installer, enable
   the checkbox to update your <code>$PATH</code> variable during the installation)</li>
 </ul>
 <h3 id="preparing-a-development-environment">Preparing a development environment<a class="headerlink" href="#preparing-a-development-environment" title="Permanent link">&para;</a></h3>
-<p>Create a folder in the desired location on your file system, then open a
-command line terminal and navigate to the new folder.
-Create a virtual environment using the following command:</p>
-<div class="highlight"><pre><span></span><code>python -m venv venv
+<ol>
+<li>Create a folder in your desired location, open a terminal, and navigate to it.</li>
+<li>Create a virtual environment using the following command:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python -m venv venv
 </code></pre></div>
-<p>and activate it:</p>
+<ol>
+<li>Activate the virtual environment:</li>
+</ol>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">On Linux or Mac</label><label for="__tabbed_1_2">On Windows</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>source venv/bin/activate
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>source venv/bin/activate
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>venv\Scripts\activate
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>venv\Scripts\activate
 </code></pre></div>
 </div>
 </div>
 </div>
-<p>BlackSheep belongs to the category of
-<a href="https://asgi.readthedocs.io/en/latest/">ASGI</a> web frameworks, therefore it
-requires an ASGI HTTP server to run, such as
-<a href="http://www.uvicorn.org/">uvicorn</a>, or
-<a href="https://pgjones.gitlab.io/hypercorn/">hypercorn</a>. For this tutorial, install
-<code>uvicorn</code> together with <code>blacksheep</code>:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>blacksheep<span class="w"> </span>uvicorn
+<p>BlackSheep is an <a href="https://asgi.readthedocs.io/en/latest/">ASGI</a> web framework,
+so it requires an ASGI HTTP server like <a href="http://www.uvicorn.org/">uvicorn</a>, or
+<a href="https://pgjones.gitlab.io/hypercorn/">hypercorn</a>. Install <code>uvicorn</code> and
+<code>blacksheep</code> for this tutorial:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>blacksheep<span class="w"> </span>uvicorn
 </code></pre></div>
 <h3 id="creating-and-running-a-web-application">Creating and running a web application<a class="headerlink" href="#creating-and-running-a-web-application" title="Permanent link">&para;</a></h3>
 <p>Create a file <code>server.py</code>, and paste the following contents into it:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, World! </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, World! </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre></div>
 <p>Use the command below to start the application using port <code>44777</code>, with
 automatic reload on file change:</p>
-<div class="highlight"><pre><span></span><code>uvicorn server:app --port 44777 --reload
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>uvicorn server:app --port 44777 --reload
 </code></pre></div>
 <p>The terminal should display information like in the picture below:</p>
 <p><img alt="Run application" src="../img/start-reload.png" /></p>
@@ -1716,37 +1717,36 @@ target="_blank">http://127.0.0.1:44777</a>. The web browser will display the
 text answer from the web application:</p>
 <p><img alt="Hello World" src="../img/hello-world.png" /></p>
 <h3 id="configuring-routes">Configuring routes<a class="headerlink" href="#configuring-routes" title="Permanent link">&para;</a></h3>
-<p>The current code configures a request handler for <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">HTTP GET</a>
-method at the root path of the application: <code>"/"</code>. Note how a function decorator
-is used to register the <code>home</code> function as a request handler:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="o">...</span>
+<p>The current code configures a request handler for the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">HTTP GET</a>
+method at the application's root path: <code>"/"</code>. Notice how a function decorator registers the home function as a request handler:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="hll"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>This means that whenever a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">HTTP GET</a> request is received at the root URL of
 the application (e.g. http://127.0.0.1:44777), the <code>home</code> function is used to
 handle the request and produce a response.</p>
 <p>Register more request handlers to handle more routes and
 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods">HTTP methods</a>.
-Update your <code>server.py</code> file to contain the following example, which includes
+Update your <code>server.py</code> file to contain the following code, which includes
 two request handlers: one for <code>HTTP GET /</code>, and one for <code>HTTP POST /</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s2">&quot;GET Example&quot;</span>
-
-
-<span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">post_example</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s2">&quot;POST Example&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="hll"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="k">return</span> <span class="s2">&quot;GET Example&quot;</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="hll"><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">post_example</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="k">return</span> <span class="s2">&quot;POST Example&quot;</span>
 </code></pre></div>
 <div class="admonition info">
-<p class="admonition-title">Info</p>
+<p class="admonition-title">Auto reload.</p>
 <p>Thanks to <code>uvicorn</code>'s auto reload feature (used with <code>--reload</code> argument),
 when the <code>server.py</code> file is updated, the application is automatically reloaded.
 This is extremely useful during development.</p>
@@ -1754,48 +1754,48 @@ This is extremely useful during development.</p>
 <p>Navigate again to <code>http://127.0.0.1:44777</code>, it should display the text:
 <code>"GET Example"</code>.</p>
 <p>To verify that the <code>post_example</code> request handler is handling <code>POST</code> requests,
-use a tool to generate a POST HTTP request at the server's address.
-For example, using <a href="https://curl.haxx.se"><code>curl</code></a>:</p>
+make a POST HTTP request at the server's address.
+For example, using <a href="https://curl.haxx.se"><code>curl</code></a> or <a href="https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell">PowerShell</a>:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">PowerShell</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:44777
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:44777
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="n">http</span><span class="p">://</span><span class="n">localhost</span><span class="p">:</span><span class="n">44777</span> <span class="n">-Method</span> <span class="n">POST</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="n">http</span><span class="p">://</span><span class="n">localhost</span><span class="p">:</span><span class="n">44777</span> <span class="n">-Method</span> <span class="n">POST</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>The application automatically handles requests for any path that
-is not handled by the router, returning an <code>HTTP 404 Not Found</code> response;
-and produces <code>HTTP 500 Internal Server Error</code> responses in case of
-unhandled exceptions happening during code execution.</p>
+<p>The application automatically handles requests for any path that is not handled
+by the router, returning an <code>HTTP 404 Not Found</code> response and producing <code>HTTP
+500 Internal Server Error</code> responses in case of unhandled exceptions happening
+during code execution.</p>
 </div>
 <h3 id="handling-route-parameters">Handling route parameters<a class="headerlink" href="#handling-route-parameters" title="Permanent link">&para;</a></h3>
 <p>So far the examples only showed request handlers that didn't use any input
 parameter. To define a request handler that uses a route parameter, define
 dynamic routes using the following syntax:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">greetings</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">greetings</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
 </code></pre></div>
 <p>Route parameters and function parameters are bound by matching names.
-Add the fragment of code above to <code>server.py</code> and try navigating to
+Add the fragment of code above to <code>server.py</code> and navigate to
 <code>http://127.0.0.1:44777/World</code>.</p>
 <p>A route can contain several named parameters, separated by slashes, and
 dynamic fragments mixed with static fragments:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{one}</span><span class="s2">/</span><span class="si">{two}</span><span class="s2">/</span><span class="si">{three}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">multiple_parameters</span><span class="p">(</span><span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">,</span> <span class="n">three</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;1: </span><span class="si">{</span><span class="n">one</span><span class="si">}</span><span class="s2">, 2: </span><span class="si">{</span><span class="n">two</span><span class="si">}</span><span class="s2">, 3: </span><span class="si">{</span><span class="n">three</span><span class="si">}</span><span class="s2">!&quot;</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/movies/</span><span class="si">{movie_id}</span><span class="s2">/actors/</span><span class="si">{actor_id}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">mix</span><span class="p">(</span><span class="n">movie_id</span><span class="p">,</span> <span class="n">actor_id</span><span class="p">):</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{one}</span><span class="s2">/</span><span class="si">{two}</span><span class="s2">/</span><span class="si">{three}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">multiple_parameters</span><span class="p">(</span><span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">,</span> <span class="n">three</span><span class="p">):</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;1: </span><span class="si">{</span><span class="n">one</span><span class="si">}</span><span class="s2">, 2: </span><span class="si">{</span><span class="n">two</span><span class="si">}</span><span class="s2">, 3: </span><span class="si">{</span><span class="n">three</span><span class="si">}</span><span class="s2">!&quot;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/movies/</span><span class="si">{movie_id}</span><span class="s2">/actors/</span><span class="si">{actor_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">mix</span><span class="p">(</span><span class="n">movie_id</span><span class="p">,</span> <span class="n">actor_id</span><span class="p">):</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="o">...</span>
 </code></pre></div>
 <p>Route parameters are by default treated as strings, but BlackSheep supports
 automatic parsing of values when function arguments are annotated using
@@ -1803,29 +1803,35 @@ built-in <a href="https://docs.python.org/3/library/typing.html"><code>typing</c
 For example, to define a route that handles integer route parameters and
 returns <code>HTTP 400 Bad Request</code> for invalid values, it is sufficient to decorate
 the function argument this way:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/lucky-number/</span><span class="si">{number}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">only_numbers_here</span><span class="p">(</span><span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Lucky number: </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+<p>By default, route parameters are treated as strings. However, BlackSheep
+supports automatic value parsing when function arguments are annotated with
+<a href="https://docs.python.org/3/library/typing.html">type annotations</a>. For instance,
+to define a route that handles integer parameters and returns an <code>HTTP 400 Bad Request</code>
+for invalid values, it is sufficient to decorate the function argument as
+follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/lucky-number/</span><span class="si">{number}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">only_numbers_here</span><span class="p">(</span><span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Lucky number: </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 </code></pre></div>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">PowerShell</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>curl http://127.0.0.1:44777/lucky-number/777
-Lucky number: 777
-
-curl http://127.0.0.1:44777/lucky-number/x
-Bad Request: Invalid value [&#39;x&#39;] for parameter `number`; expected a valid int.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>curl http://127.0.0.1:44777/lucky-number/777
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>Lucky number: 777
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>curl http://127.0.0.1:44777/lucky-number/x
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>Bad Request: Invalid value [&#39;x&#39;] for parameter `number`; expected a valid int.
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">44777</span><span class="p">/</span><span class="n">lucky-number</span><span class="p">/</span><span class="n">777</span>
-
-<span class="n">StatusCode</span>        <span class="p">:</span> <span class="n">200</span>
-<span class="n">StatusDescription</span> <span class="p">:</span> <span class="n">OK</span>
-<span class="n">Content</span>           <span class="p">:</span> <span class="n">Lucky</span> <span class="n">number</span><span class="p">:</span> <span class="n">777</span>
-
-<span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">44777</span><span class="p">/</span><span class="n">lucky-number</span><span class="p">/</span><span class="n">x</span>
-<span class="nb">Invoke-WebRequest</span><span class="p">:</span> <span class="n">Bad</span> <span class="n">Request</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">value</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="k">parameter</span> <span class="p">`</span><span class="n">number</span><span class="p">`;</span> <span class="n">expected</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">int</span><span class="p">.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">44777</span><span class="p">/</span><span class="n">lucky-number</span><span class="p">/</span><span class="n">777</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">StatusCode</span>        <span class="p">:</span> <span class="n">200</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">StatusDescription</span> <span class="p">:</span> <span class="n">OK</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">Content</span>           <span class="p">:</span> <span class="n">Lucky</span> <span class="n">number</span><span class="p">:</span> <span class="n">777</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">44777</span><span class="p">/</span><span class="n">lucky-number</span><span class="p">/</span><span class="n">x</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="nb">Invoke-WebRequest</span><span class="p">:</span> <span class="n">Bad</span> <span class="n">Request</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">value</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="k">parameter</span> <span class="p">`</span><span class="n">number</span><span class="p">`;</span> <span class="n">expected</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">int</span><span class="p">.</span>
 </code></pre></div>
 </div>
 </div>
@@ -1833,102 +1839,99 @@ Bad Request: Invalid value [&#39;x&#39;] for parameter `number`; expected a vali
 <p>Several built-in types are handled automatically, like <code>str</code>, <code>bool</code>, <code>int</code>,
 <code>float</code>, <code>uuid.UUID</code>, <code>datetime.date</code>, <code>datetime.datetime</code>, <code>list[T]</code>, <code>set[T]</code>.</p>
 <h3 id="handling-query-string-parameters">Handling query string parameters<a class="headerlink" href="#handling-query-string-parameters" title="Permanent link">&para;</a></h3>
-<p>In the same way, route parameters are injected automatically into request
-handlers by route parameters with matching names, <code>blacksheep</code> can handle
-query string parameters automatically. Add this new fragment to your
-application:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/query&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">query_greetings</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+<p>BlackSheep can handle query string parameters automatically. Add this new
+fragment to your application:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/query&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">query_greetings</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
 </code></pre></div>
 <p>Then navigate to <a href="http://localhost:44777/query?name=World">http://localhost:44777/query?name=World</a>.</p>
 <hr />
-<p>A request handler can use different query strings, and query string parameters
-support lists.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/query-list&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">greetings_many</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">!&quot;</span>
-
-<span class="c1"># example:</span>
-<span class="c1"># http://localhost:44777/query-list?name=Charlie&amp;name=Lisa&amp;name=Snoopy</span>
-<span class="c1"># --&gt; Hello, Charlie, Lisa, Snoopy!</span>
+<p>Request handlers can work with various query strings, and query string
+parameters also support lists.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/query-list&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">greetings_many</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+</span><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">!&quot;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="c1"># example:</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="hll"><span class="c1"># http://localhost:44777/query-list?name=Charlie&amp;name=Lisa&amp;name=Snoopy</span>
+</span><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># --&gt; Hello, Charlie, Lisa, Snoopy!</span>
 </code></pre></div>
 <p>Every handler can have many input parameters from different sources: request
 headers, cookies, query, route, request body, and configured application
 services. These are treated in more detail in the dedicated page about
-<a href="./binders">Binders</a>.</p>
+<a href="../binders/">Binders</a>.</p>
 <h3 id="accessing-the-request-object">Accessing the request object<a class="headerlink" href="#accessing-the-request-object" title="Permanent link">&para;</a></h3>
 <p>To access the HTTP Request object directly, add a parameter called "request" to
 the signature of a request handler (type annotation is optional):</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/request-object&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">request_object</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="c1"># the request object exposes methods to read headers, cookies,</span>
-    <span class="c1"># body, route parameters</span>
-    <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/request-object&quot;</span><span class="p">)</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">request_object</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>    <span class="c1"># the request object exposes methods to read headers, cookies,</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>    <span class="c1"># body, route parameters</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="o">...</span>
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p>You can name the request parameter any way you like (e.g. <code>request</code>, <code>req</code>, <code>foo</code>, etc.),
 as long as you keep the correct type annotation (<code>blacksheep.Request</code>).</p>
 </div>
-<p>This subject will be treated in more detail in a different section.</p>
 <h3 id="handling-responses">Handling responses<a class="headerlink" href="#handling-responses" title="Permanent link">&para;</a></h3>
-<p>Generally speaking, request handlers in BlackSheep must return an instance of
-<code>blacksheep.messages.Response</code> class. The framework provides several functions
-to produce responses for various use cases, defined in the
+<p>Generally, request handlers in BlackSheep must return an instance of
+<code>blacksheep.messages.Response</code> class. The framework offers several functions
+for generating responses for various use cases, which are defined in the
 <code>blacksheep.server.responses</code> namespace.</p>
-<p>The following example shows how to serve a JSON response, using a class defined
-with <a href="https://docs.python.org/3/library/dataclasses.html"><code>dataclass</code></a>. Delete
-all contents from the current <code>server.py</code> file and paste the following code:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">uuid4</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
-
-
-<span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Cat</span><span class="p">:</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">active</span><span class="p">:</span> <span class="nb">bool</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_cats</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">json</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Lampo&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Milady&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Meatball&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Pilou&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
+<p>The following example demonstrates how to serve a JSON response using a class
+defined with <a href="https://docs.python.org/3/library/dataclasses.html"><code>dataclass</code></a>.
+Replace the contents of <code>server.py</code> with the following code:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">uuid4</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span>
+</span><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">Cat</span><span class="p">:</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>    <span class="n">active</span><span class="p">:</span> <span class="nb">bool</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cats</span><span class="p">():</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="hll">    <span class="k">return</span> <span class="n">json</span><span class="p">(</span>
+</span><a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>        <span class="p">[</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Lampo&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Milady&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Meatball&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Pilou&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>        <span class="p">]</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a>    <span class="p">)</span>
 </code></pre></div>
-<p>Then navigate to <a href="http://127.0.0.1:44777/api/cats">http://127.0.0.1:44777/api/cats</a>
-to see the result, it will look like this:</p>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;9dea0080-0e92-46e0-b090-55454c23d37f&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;Lampo&quot;</span><span class="p">,</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span>
-<span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;3ce81720-de11-41b4-bad4-6fa63e00403d&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;Milady&quot;</span><span class="p">,</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span>
-<span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;2981d8a4-52c3-4ed9-96b8-30fafe62bc47&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;Meatball&quot;</span><span class="p">,</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span>
-<span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;b697358e-0f74-4449-840a-32c8db839244&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;Pilou&quot;</span><span class="p">,</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">}]</span>
+<p>Navigate to <a href="http://127.0.0.1:44777/api/cats">http://127.0.0.1:44777/api/cats</a>
+to view the result, which will look like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;9dea0080-0e92-46e0-b090-55454c23d37f&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;Lampo&quot;</span><span class="p">,</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;3ce81720-de11-41b4-bad4-6fa63e00403d&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;Milady&quot;</span><span class="p">,</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;2981d8a4-52c3-4ed9-96b8-30fafe62bc47&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;Meatball&quot;</span><span class="p">,</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;b697358e-0f74-4449-840a-32c8db839244&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;Pilou&quot;</span><span class="p">,</span><span class="s2">&quot;active&quot;</span><span class="o">:</span><span class="kc">true</span><span class="p">}]</span>
 </code></pre></div>
-<p>Note how the <code>json</code> function is used to create an instance of <code>Response</code> whose
-content is a payload serialized into a JSON string.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">json</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
-<span class="n">response</span><span class="o">.</span><span class="n">content</span>
-<span class="o">&lt;</span><span class="n">blacksheep</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">Content</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f4ebcf30720</span><span class="o">&gt;</span>
-
-<span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">body</span>
-<span class="sa">b</span><span class="s1">&#39;{&quot;example&quot;:1}&#39;</span>
-
-<span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">length</span>
-<span class="mi">13</span>
+<p>Notice how the <code>json</code> function creates an instance of <code>Response</code> with content
+serialized into a JSON string.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">json</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="hll"><span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</span><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="n">response</span><span class="o">.</span><span class="n">content</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="o">&lt;</span><span class="n">blacksheep</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">Content</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f4ebcf30720</span><span class="o">&gt;</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">body</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="hll"><span class="sa">b</span><span class="s1">&#39;{&quot;example&quot;:1}&#39;</span>
+</span><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">length</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="mi">13</span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -1937,63 +1940,62 @@ returns indented JSON.</p>
 </div>
 <p>For more granular control, it is possible to use the <code>blacksheep.messages.Response</code>
 class directly (read <code>blacksheep.server.responses</code> module for examples), and
-it is possible to modify the response before returning it to the client:
-for example to set a response header.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_cats</span><span class="p">():</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Lampo&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Milady&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Meatball&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Pilou&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
-
-    <span class="n">response</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;X-Foo&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;Foo!&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">response</span>
+it is possible to modify the response before returning it to the client.
+For instance, to set a response header:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats&quot;</span><span class="p">)</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cats</span><span class="p">():</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="p">(</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>        <span class="p">[</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Lampo&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Milady&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Meatball&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>            <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Pilou&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>        <span class="p">]</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>    <span class="p">)</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="hll">    <span class="n">response</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;X-Foo&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;Foo!&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>    <span class="k">return</span> <span class="n">response</span>
 </code></pre></div>
-<p>User-defined request handlers can also return arbitrary objects, which will
-be automatically converted to JSON responses. The example above could also be
-written this way:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_cats</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[</span>
-        <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Lampo&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-        <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Milady&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-        <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Meatball&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-        <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Pilou&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="p">]</span>
+<p>User-defined request handlers can return arbitrary objects, which will
+be automatically converted to JSON responses.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/cats&quot;</span><span class="p">)</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cats</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">]:</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>    <span class="k">return</span> <span class="p">[</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>        <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Lampo&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>        <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Milady&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>        <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Meatball&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>        <span class="n">Cat</span><span class="p">(</span><span class="n">uuid4</span><span class="p">(),</span> <span class="s2">&quot;Pilou&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>    <span class="p">]</span>
 </code></pre></div>
-<p>The rationale for this design choice is that JSON is the most commonly used
-format to serialize objects today, and this feature is useful to reduce code
-verbosity while making the return type explicit. Additionally, it enables
-better generation of OpenAI Documentation.</p>
+<p>The rationale behind this design choice is that JSON is the most widely used
+format for serializing objects today. This feature helps reduce code verbosity
+while making the return type explicit. Furthermore, it enables the automatic
+generation of OpenAPI documentation to describe the response body.</p>
 <h3 id="asynchronous-request-handlers">Asynchronous request handlers<a class="headerlink" href="#asynchronous-request-handlers" title="Permanent link">&para;</a></h3>
-<p>The examples so far showed synchronous request handlers. To define asynchronous
-request handlers, define <code>async</code> functions:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/movies&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_movies</span><span class="p">():</span>
-    <span class="c1"># ... do something async (example)</span>
-    <span class="n">movies</span> <span class="o">=</span> <span class="k">await</span> <span class="n">movies_provider</span><span class="o">.</span><span class="n">get_movies</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">movies</span><span class="p">)</span>
+<p>The examples so far have demonstrated synchronous request handlers. To create
+asynchronous request handlers, use <code>async</code> functions:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/movies&quot;</span><span class="p">)</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_movies</span><span class="p">():</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="hll">    <span class="c1"># ... do something async (example)</span>
+</span><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="hll">    <span class="n">movies</span> <span class="o">=</span> <span class="k">await</span> <span class="n">movies_provider</span><span class="o">.</span><span class="n">get_movies</span><span class="p">()</span>
+</span><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">movies</span><span class="p">)</span>
 </code></pre></div>
 <p>Asynchronous code is described more in other sections of the documentation.</p>
 <h3 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h3>
-<p>This tutorial covered the ABCs of creating a BlackSheep application. The
-general concepts presented here apply to any kind of web framework:</p>
+<p>This tutorial covered the basics of creating a BlackSheep application. The
+general concepts introduced here are applicable to any web framework:</p>
 <ul>
-<li>server side routing</li>
+<li>server-side routing</li>
 <li>handling query strings and route parameters</li>
 <li>handling requests and responses</li>
 </ul>
-<p>The next page will describe a more articulated scenario, including handling
-HTML views on the server side, serving static files, and more.</p>
+<p>The next page will explore a more advanced scenario, including server-side
+rendering of HTML views, serving static files, and more features.</p>
 <ul>
 <li><a href="../mvc-project-template/">Getting started with the MVC project template</a></li>
 </ul>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

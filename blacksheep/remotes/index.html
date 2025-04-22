@@ -116,7 +116,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#remotes" class="md-skip">
+        <a href="#handling-x-forwarded-headers" class="md-skip">
           Skip to content
         </a>
       
@@ -880,8 +880,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -911,8 +909,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -1498,8 +1494,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1578,34 +1572,36 @@
                   
 
 
-<h1 id="remotes">Remotes<a class="headerlink" href="#remotes" title="Permanent link">&para;</a></h1>
+  <h1>Remotes</h1>
+
 <p>The <code>blacksheep.server.remotes</code> namespace provides classes and functions to
 handle information related to remote proxies and clients.</p>
-<p>Web applications in production environments are commonly hosted behind other
-kinds of servers, such as Apache, IIS, or NGINX. Proxy servers usually obscure
-some of the information of the original web request before it reaches the web
-applications.</p>
+<p>Web applications in production environments are often hosted behind servers
+such as Apache, IIS, or NGINX. Proxy servers typically obscure some information
+from the original web request before it reaches the web application.</p>
 <p>For example:</p>
 <ul>
-<li>when HTTPS requests are proxied over HTTP, the original scheme (HTTPS) is
+<li>When HTTPS requests are proxied over HTTP, the original scheme (HTTPS) is
   lost and must be forwarded in a header.</li>
-<li>when an app receives a request from a proxy and not its true source, the
-  original client IP address must also be forwarded in a header.</li>
-<li>the <em>path</em> of web requests can be changed while being proxied (e.g. NGINX
-  configured to proxy requests to <code>/example</code> to the root <code>/</code> of a web
+<li>When an application receives a request from a proxy instead of its true
+  source, the original client IP address must also be forwarded in a header.</li>
+<li>The path of web requests can be altered during proxying (e.g., NGINX
+  configured to proxy requests from <code>/example</code> to the root <code>/</code> of a web
   application).</li>
 </ul>
-<p>This information may be important in request processing, for example in
-redirects, authentication, link generation when absolute URLs are needed, and
-client geolocation.</p>
-<p>This page documents how to configure BlackSheep to work with proxy servers and
-load balancers, using the provided classes to handle:</p>
+<p>This information is often critical for request processing, such as in
+redirects, authentication, link generation (when absolute URLs are required),
+and client geolocation. This page documents how to configure BlackSheep to work
+with proxy servers and load balancers, using the provided classes to handle:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> X-Forwarded headers</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Forwarded header</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Trusted hosts</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to read information about the original clients in web requests</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> X-Forwarded headers.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Forwarded header.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Trusted hosts.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to read information about the original clients in web requests.</li>
 </ul>
+<p>For information on how to handle the prefix of routes when exposing a web
+application behind a proxy, refer to the dedicated page
+<a href="../behind-proxies/"><em>Behind Proxies</em></a>.</p>
 <h2 id="handling-x-forwarded-headers">Handling X-Forwarded headers<a class="headerlink" href="#handling-x-forwarded-headers" title="Permanent link">&para;</a></h2>
 <p><code>X-Forwarded</code> headers are the <em>de-facto</em> standard headers to propagate
 information about original web requests to web applications.</p>
@@ -1634,26 +1630,26 @@ information about original web requests to web applications.</p>
 <p>BlackSheep provides an <code>XForwardedHeadersMiddleware</code> class to handle these
 headers, providing:</p>
 <ul>
-<li>optional validation of trusted hosts</li>
-<li>optional validation of proxies count and IP addresses by known IPs or known
-  networks</li>
+<li>Optional validation of trusted hosts.</li>
+<li>Optional validation of proxies count and IP addresses by known IPs or known
+  networks.</li>
 </ul>
 <p>To configure a BlackSheep web application to handle <code>X-Forwarded</code> headers and
 configure incoming web requests to expose the correct information about source
 protocol, client IP, and host:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.remotes.forwarding</span><span class="w"> </span><span class="kn">import</span> <span class="n">XForwardedHeadersMiddleware</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_middlewares_configuration</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">configure_forwarded_headers</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-        <span class="mi">0</span><span class="p">,</span>
-        <span class="n">XForwardedHeadersMiddleware</span><span class="p">(),</span>
-    <span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.remotes.forwarding</span><span class="w"> </span><span class="kn">import</span> <span class="n">XForwardedHeadersMiddleware</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nd">@app</span><span class="o">.</span><span class="n">on_middlewares_configuration</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">configure_forwarded_headers</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="n">XForwardedHeadersMiddleware</span><span class="p">(),</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="p">)</span>
 </code></pre></div>
 <p>Options of the <code>XForwardedHeadersMiddleware</code> class:</p>
 <table>
@@ -1693,19 +1689,19 @@ protocol, client IP, and host:</p>
 <p>The <code>Forwarded</code> header is a standard header to propagate information about
 original web requests to web applications.</p>
 <p>To configure a BlackSheep web application to handle <code>Forwarded</code> headers:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.remotes.forwarding</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForwardedHeadersMiddleware</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_middlewares_configuration</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">configure_forwarded_headers</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-        <span class="mi">0</span><span class="p">,</span>
-        <span class="n">ForwardedHeadersMiddleware</span><span class="p">(),</span>
-    <span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.remotes.forwarding</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForwardedHeadersMiddleware</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nd">@app</span><span class="o">.</span><span class="n">on_middlewares_configuration</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">configure_forwarded_headers</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        <span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        <span class="n">ForwardedHeadersMiddleware</span><span class="p">(),</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="p">)</span>
 </code></pre></div>
 <p>Options of the <code>ForwardedHeadersMiddleware</code> class:</p>
 <table>
@@ -1744,30 +1740,30 @@ original web requests to web applications.</p>
 <h2 id="handling-trusted-hosts">Handling trusted hosts<a class="headerlink" href="#handling-trusted-hosts" title="Permanent link">&para;</a></h2>
 <p>When forwarded headers middlewares are not used, but it is necessary to
 validate hosts, it is possible to use the <code>TrustedHostsMiddleware</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.remotes.hosts</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustedHostsMiddleware</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_middlewares_configuration</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">configure_forwarded_headers</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-        <span class="mi">0</span><span class="p">,</span>
-        <span class="n">TrustedHostsMiddleware</span><span class="p">([</span><span class="s2">&quot;www.neoteroi.dev&quot;</span><span class="p">]),</span>
-    <span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.remotes.hosts</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustedHostsMiddleware</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nd">@app</span><span class="o">.</span><span class="n">on_middlewares_configuration</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">configure_forwarded_headers</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">app</span><span class="o">.</span><span class="n">middlewares</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>        <span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>        <span class="n">TrustedHostsMiddleware</span><span class="p">([</span><span class="s2">&quot;www.neoteroi.dev&quot;</span><span class="p">]),</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="p">)</span>
 </code></pre></div>
 <h2 id="reading-information-about-the-original-clients-in-web-requests">Reading information about the original clients in web requests<a class="headerlink" href="#reading-information-about-the-original-clients-in-web-requests" title="Permanent link">&para;</a></h2>
 <p>Web requests expose information about the original clients in the following
 properties, that are updated by forwarded header middlewares:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
-
-<span class="n">request</span><span class="p">:</span> <span class="n">Request</span>
-
-<span class="n">request</span><span class="o">.</span><span class="n">host</span>
-<span class="n">request</span><span class="o">.</span><span class="n">scheme</span>
-<span class="n">request</span><span class="o">.</span><span class="n">original_client_ip</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">request</span><span class="p">:</span> <span class="n">Request</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">request</span><span class="o">.</span><span class="n">host</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">request</span><span class="o">.</span><span class="n">scheme</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">request</span><span class="o">.</span><span class="n">original_client_ip</span>
 </code></pre></div>
 <table>
 <thead>
@@ -1794,24 +1790,19 @@ properties, that are updated by forwarded header middlewares:</p>
 <h2 id="obtaining-the-web-request-absolute-url">Obtaining the web request absolute URL<a class="headerlink" href="#obtaining-the-web-request-absolute-url" title="Permanent link">&para;</a></h2>
 <p>To obtain the original absolute URL of a web request, use the provided
 <code>get_absolute_url_to_path</code> and <code>get_request_absolute_url</code> functions:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_absolute_url_to_path</span><span class="p">,</span> <span class="n">get_request_absolute_url</span>
-
-
-<span class="c1"># examples</span>
-<span class="n">absolute_url</span> <span class="o">=</span> <span class="n">get_request_absolute_url</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-
-<span class="n">absolute_url_to_path</span> <span class="o">=</span> <span class="n">get_absolute_url_to_path</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;/example&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_absolute_url_to_path</span><span class="p">,</span> <span class="n">get_request_absolute_url</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># examples</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">absolute_url</span> <span class="o">=</span> <span class="n">get_request_absolute_url</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">absolute_url_to_path</span> <span class="o">=</span> <span class="n">get_absolute_url_to_path</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;/example&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>When configuring <a href="../authentication/#oidc">OpenID Connect</a> authentication,
-it can be necessary to handle forwarded headers, so that the application can
-generate correct <code>redirect_uri</code> for authorization servers.</p>
-</div>
 <h2 id="asgi-root_path">ASGI root_path<a class="headerlink" href="#asgi-root_path" title="Permanent link">&para;</a></h2>
 <p>When the <code>ASGI</code> scope includes the <code>root_path</code> information, it is automatically
-used for the request <code>base_path</code> property.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+used for the request <code>base_path</code> property. For more information on this
+subject, refer to the dedicated page <a href="../behind-proxies/"><em>Behind Proxies</em></a>.</p>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

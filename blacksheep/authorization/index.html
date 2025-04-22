@@ -742,9 +742,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#defining-an-authorization-policy-that-checks-a-users-claims" class="md-nav__link">
+  <a href="#defining-an-authorization-policy-that-checks-claims" class="md-nav__link">
     <span class="md-ellipsis">
-      Defining an authorization policy that checks a user's claims
+      Defining an authorization policy that checks claims
     </span>
   </a>
   
@@ -1506,9 +1506,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#defining-an-authorization-policy-that-checks-a-users-claims" class="md-nav__link">
+  <a href="#defining-an-authorization-policy-that-checks-claims" class="md-nav__link">
     <span class="md-ellipsis">
-      Defining an authorization policy that checks a user's claims
+      Defining an authorization policy that checks claims
     </span>
   </a>
   
@@ -1559,253 +1559,252 @@
 
 
 <h1 id="authorization-in-blacksheep">Authorization in BlackSheep<a class="headerlink" href="#authorization-in-blacksheep" title="Permanent link">&para;</a></h1>
-<p>The words "authorization strategy" in the context of a web application refer to
-the ability to determine whether the user is allowed to do certain operations.
-BlackSheep implements a built-in authorization strategy for request handlers.
-This page describes:</p>
+<p>The term 'authorization strategy' in the context of a web application refers to
+the process of determining whether a user is permitted to perform certain operations.
+BlackSheep provides a built-in authorization strategy for request handlers.
+This page covers:</p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to use the built-in authorization strategy.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to apply authorization rules to request handlers.</li>
 </ul>
-<p>It is recommended to read about <a href="../authentication">authentication</a> before
-reading this page.</p>
+<p>It is recommended to review the <a href="../authentication/">authentication documentation</a>
+before proceeding with this page.</p>
 <h2 id="how-to-use-built-in-authorization">How to use built-in authorization<a class="headerlink" href="#how-to-use-built-in-authorization" title="Permanent link">&para;</a></h2>
-<p>Examples of common strategies to authorize users in web applications include:</p>
+<p>Common strategies for authorizing users in web applications include:</p>
 <ul>
-<li>verifying that the user's context obtained from a <a href="https://jwt.io/introduction/">JWT includes certain
-  claims</a> (e.g. <code>scope</code>, <code>role</code>)</li>
-<li>verifying that a web request includes a certain key, like an instrumentation
-  key or a key signed by a private RSA key (owned by the user) that can be
-  verified by a public RSA key (used by the server to validate)</li>
+<li>Verifying that the user's context, obtained from a <a href="https://jwt.io/introduction/">JWT</a>,
+  includes certain claims (e.g., <code>scope</code>, <code>role</code>)</li>
+<li>Verifying that a web request contains a specific key, such as an
+  instrumentation key or a key signed by a private RSA key (owned by the user)
+  and validated by a public RSA key (used by the server).</li>
 </ul>
-<p>The example below shows how to configure an authorization handler that
-requires an authenticated user. It is modified from the example in the
-<a href="../authentication">authentication</a> page:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">ok</span><span class="p">,</span> <span class="n">get</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Policy</span><span class="p">,</span> <span class="n">auth</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.asynchronous.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticationHandler</span><span class="p">,</span> <span class="n">Identity</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticatedRequirement</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">ExampleAuthHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Identity</span><span class="p">]:</span>
-        <span class="n">header_value</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get_first_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Authorization&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">header_value</span><span class="p">:</span>
-            <span class="c1"># TODO: parse and validate the value of the authorization</span>
-            <span class="c1"># header to get an actual user&#39;s identity</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">},</span> <span class="s2">&quot;MOCK&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
-
-
-<span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ExampleAuthHandler</span><span class="p">())</span>
-
-<span class="n">Authenticated</span> <span class="o">=</span> <span class="s2">&quot;authenticated&quot;</span>
-
-<span class="c1"># enable authorization, and add a policy that requires an authenticated user</span>
-<span class="n">app</span><span class="o">.</span><span class="n">use_authorization</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Policy</span><span class="p">(</span><span class="n">Authenticated</span><span class="p">,</span> <span class="n">AuthenticatedRequirement</span><span class="p">()))</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]):</span>
-    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
-
-    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
-
-
-<span class="nd">@auth</span><span class="p">(</span><span class="n">Authenticated</span><span class="p">)</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/account&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">only_for_authenticated_users</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<p>The following example demonstrates how to configure an authorization handler
+that requires an authenticated user. It is adapted from the example on the
+<a href="../authentication/">authentication's documentation</a> page:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">ok</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Policy</span><span class="p">,</span> <span class="n">auth</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.asynchronous.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticationHandler</span><span class="p">,</span> <span class="n">Identity</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authentication</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticatedRequirement</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">ExampleAuthHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        <span class="k">pass</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Identity</span><span class="p">]:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="hll">        <span class="n">header_value</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get_first_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Authorization&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="hll">        <span class="k">if</span> <span class="n">header_value</span><span class="p">:</span>
+</span><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="hll">            <span class="c1"># TODO: parse and validate the value of the authorization</span>
+</span><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="hll">            <span class="c1"># header to get an actual user&#39;s identity</span>
+</span><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="hll">            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">},</span> <span class="s2">&quot;MOCK&quot;</span><span class="p">)</span>
+</span><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="hll">        <span class="k">else</span><span class="p">:</span>
+</span><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="hll">            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="kc">None</span>
+</span><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="hll">        <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
+</span><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ExampleAuthHandler</span><span class="p">())</span>
+</span><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="n">Authenticated</span> <span class="o">=</span> <span class="s2">&quot;authenticated&quot;</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="c1"># enable authorization, and add a policy that requires an authenticated user</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">use_authorization</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Policy</span><span class="p">(</span><span class="n">Authenticated</span><span class="p">,</span> <span class="n">AuthenticatedRequirement</span><span class="p">()))</span>
+</span><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]):</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="hll"><span class="nd">@auth</span><span class="p">(</span><span class="n">Authenticated</span><span class="p">)</span>
+</span><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/account&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">only_for_authenticated_users</span><span class="p">():</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Note:</p>
 <ul>
-<li>authorization is enabled using <code>app.use_authorization()</code></li>
-<li>this method returns an instance of <code>AuthorizationStrategy</code>, which handles
-  the authorization rules</li>
-<li>the method <code>.add(Policy(Authenticated, AuthenticatedRequirement()))</code>
+<li>Authorization is enabled by calling <code>app.use_authorization()</code>. This method
+  returns an instance of <code>AuthorizationStrategy</code>, which manages the
+  authorization rules.</li>
+<li>The method <code>.add(Policy(Authenticated, AuthenticatedRequirement()))</code>
   configures an authorization policy with a single requirement, to have an
-  authenticated user</li>
-<li>the authorization policy is applied to request handlers using the <code>@auth</code>
+  authenticated user.</li>
+<li>The authorization policy is applied to request handlers using the <code>@auth</code>
   decorator from <code>blacksheep.server.authorization</code> with an argument that
-  specifies the policy to be used</li>
+  specifies the policy to be used.</li>
 </ul>
 <p>It is possible to define several authorization policies, each specifying one
-or more requirements to be satisfied in order for authorization to succeed.
-The next example explains how to configure an authorization policy that checks
-for user's roles from claims.</p>
-<h2 id="defining-an-authorization-policy-that-checks-a-users-claims">Defining an authorization policy that checks a user's claims<a class="headerlink" href="#defining-an-authorization-policy-that-checks-a-users-claims" title="Permanent link">&para;</a></h2>
-<p>The example below shows how to configure an authorization handler that
-validates a user's claims (looking for a "role" claim that might be coming from
-a JWT).</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Policy</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthorizationContext</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Requirement</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">AdminRequirement</span><span class="p">(</span><span class="n">Requirement</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">AuthorizationContext</span><span class="p">):</span>
-        <span class="n">identity</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
-
-        <span class="k">if</span> <span class="n">identity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">identity</span><span class="o">.</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">succeed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">AdminsPolicy</span><span class="p">(</span><span class="n">Policy</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="n">AdminRequirement</span><span class="p">())</span>
+or more requirements to be satisfied in order for authorization to succeed.</p>
+<h2 id="defining-an-authorization-policy-that-checks-claims">Defining an authorization policy that checks claims<a class="headerlink" href="#defining-an-authorization-policy-that-checks-claims" title="Permanent link">&para;</a></h2>
+<p>The following example demonstrates how to configure an authorization handler
+that validates a user's claims, such as checking for a <code>role</code> claim that may
+originate from a JWT.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Policy</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthorizationContext</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Requirement</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">AdminRequirement</span><span class="p">(</span><span class="n">Requirement</span><span class="p">):</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">AuthorizationContext</span><span class="p">):</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        <span class="n">identity</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        <span class="k">if</span> <span class="n">identity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">identity</span><span class="o">.</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>            <span class="n">context</span><span class="o">.</span><span class="n">succeed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="k">class</span><span class="w"> </span><span class="nc">AdminsPolicy</span><span class="p">(</span><span class="n">Policy</span><span class="p">):</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="n">AdminRequirement</span><span class="p">())</span>
 </code></pre></div>
 <p>Full example:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">ok</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Policy</span><span class="p">,</span> <span class="n">auth</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">AuthenticationHandler</span><span class="p">,</span>
-    <span class="n">Identity</span><span class="p">,</span>
-    <span class="n">User</span><span class="p">,</span>
-    <span class="n">AuthorizationContext</span><span class="p">,</span>
-    <span class="n">Requirement</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticatedRequirement</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">ExampleAuthHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Identity</span><span class="p">]:</span>
-        <span class="n">header_value</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get_first_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Authorization&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">header_value</span><span class="p">:</span>
-            <span class="c1"># TODO: parse and validate the value of the authorization</span>
-            <span class="c1"># header to get an actual user&#39;s identity</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">},</span> <span class="s2">&quot;MOCK&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
-
-
-<span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ExampleAuthHandler</span><span class="p">())</span>
-
-<span class="n">Authenticated</span> <span class="o">=</span> <span class="s2">&quot;authenticated&quot;</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">AdminRequirement</span><span class="p">(</span><span class="n">Requirement</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">AuthorizationContext</span><span class="p">):</span>
-        <span class="n">identity</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
-
-        <span class="k">if</span> <span class="n">identity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">identity</span><span class="o">.</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">succeed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">AdminPolicy</span><span class="p">(</span><span class="n">Policy</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="n">AdminRequirement</span><span class="p">())</span>
-
-
-<span class="n">app</span><span class="o">.</span><span class="n">use_authorization</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Policy</span><span class="p">(</span><span class="n">Authenticated</span><span class="p">,</span> <span class="n">AuthenticatedRequirement</span><span class="p">()))</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="n">AdminPolicy</span><span class="p">()</span>
-<span class="p">)</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]):</span>
-    <span class="c1"># This method can be used by anybody</span>
-    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
-
-    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
-
-
-<span class="nd">@auth</span><span class="p">(</span><span class="n">Authenticated</span><span class="p">)</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/account&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">only_for_authenticated_users</span><span class="p">():</span>
-    <span class="c1"># This method can be used by any authenticated user</span>
-    <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@auth</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">only_for_administrators</span><span class="p">():</span>
-    <span class="c1"># This method requires &quot;admin&quot; role in user&#39;s claims</span>
-    <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">ok</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">Policy</span><span class="p">,</span> <span class="n">auth</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">AuthenticationHandler</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">Identity</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">User</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">AuthorizationContext</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">Requirement</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticatedRequirement</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="k">class</span><span class="w"> </span><span class="nc">ExampleAuthHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        <span class="k">pass</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Identity</span><span class="p">]:</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>        <span class="n">header_value</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get_first_header</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;Authorization&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>        <span class="k">if</span> <span class="n">header_value</span><span class="p">:</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>            <span class="c1"># TODO: parse and validate the value of the authorization</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>            <span class="c1"># header to get an actual user&#39;s identity</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jan Kowalski&quot;</span><span class="p">},</span> <span class="s2">&quot;MOCK&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>        <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ExampleAuthHandler</span><span class="p">())</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="n">Authenticated</span> <span class="o">=</span> <span class="s2">&quot;authenticated&quot;</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="k">class</span><span class="w"> </span><span class="nc">AdminRequirement</span><span class="p">(</span><span class="n">Requirement</span><span class="p">):</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">AuthorizationContext</span><span class="p">):</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>        <span class="n">identity</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">identity</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>        <span class="k">if</span> <span class="n">identity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">identity</span><span class="o">.</span><span class="n">claims</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>            <span class="n">context</span><span class="o">.</span><span class="n">succeed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a><span class="k">class</span><span class="w"> </span><span class="nc">AdminPolicy</span><span class="p">(</span><span class="n">Policy</span><span class="p">):</span>
+<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="n">AdminRequirement</span><span class="p">())</span>
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>
+<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>
+<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a><span class="n">app</span><span class="o">.</span><span class="n">use_authorization</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Policy</span><span class="p">(</span><span class="n">Authenticated</span><span class="p">,</span> <span class="n">AuthenticatedRequirement</span><span class="p">()))</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>    <span class="n">AdminPolicy</span><span class="p">()</span>
+<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a><span class="p">)</span>
+<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a>
+<a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a>
+<a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]):</span>
+<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a>    <span class="c1"># This method can be used by anybody</span>
+<a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a>    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a>
+<a id="__codelineno-2-61" name="__codelineno-2-61" href="#__codelineno-2-61"></a>    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+<a id="__codelineno-2-62" name="__codelineno-2-62" href="#__codelineno-2-62"></a>
+<a id="__codelineno-2-63" name="__codelineno-2-63" href="#__codelineno-2-63"></a>
+<a id="__codelineno-2-64" name="__codelineno-2-64" href="#__codelineno-2-64"></a><span class="nd">@auth</span><span class="p">(</span><span class="n">Authenticated</span><span class="p">)</span>
+<a id="__codelineno-2-65" name="__codelineno-2-65" href="#__codelineno-2-65"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/account&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-66" name="__codelineno-2-66" href="#__codelineno-2-66"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">only_for_authenticated_users</span><span class="p">():</span>
+<a id="__codelineno-2-67" name="__codelineno-2-67" href="#__codelineno-2-67"></a>    <span class="c1"># This method can be used by any authenticated user</span>
+<a id="__codelineno-2-68" name="__codelineno-2-68" href="#__codelineno-2-68"></a>    <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-69" name="__codelineno-2-69" href="#__codelineno-2-69"></a>
+<a id="__codelineno-2-70" name="__codelineno-2-70" href="#__codelineno-2-70"></a>
+<a id="__codelineno-2-71" name="__codelineno-2-71" href="#__codelineno-2-71"></a><span class="nd">@auth</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-72" name="__codelineno-2-72" href="#__codelineno-2-72"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-73" name="__codelineno-2-73" href="#__codelineno-2-73"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">only_for_administrators</span><span class="p">():</span>
+<a id="__codelineno-2-74" name="__codelineno-2-74" href="#__codelineno-2-74"></a>    <span class="c1"># This method requires &quot;admin&quot; role in user&#39;s claims</span>
+<a id="__codelineno-2-75" name="__codelineno-2-75" href="#__codelineno-2-75"></a>    <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="using-the-default-policy">Using the default policy<a class="headerlink" href="#using-the-default-policy" title="Permanent link">&para;</a></h2>
-<p>The method <code>app.use_authorization()</code>, when used without arguments, returns an
-instance of <code>AuthorizationStrategy</code> from the <code>guardpost</code> library. This object
-can be configured to use a default policy, for example to require an
-authenticated user by default for all request handlers.</p>
-<div class="highlight"><pre><span></span><code><span class="n">authorization</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">use_authorization</span><span class="p">()</span>
-
-<span class="c1"># configure a default policy to require an authenticated user for all handlers</span>
-<span class="n">authorization</span><span class="o">.</span><span class="n">default_policy</span> <span class="o">=</span> <span class="n">Policy</span><span class="p">(</span><span class="s2">&quot;authenticated&quot;</span><span class="p">,</span> <span class="n">AuthenticatedRequirement</span><span class="p">())</span>
+<p>The <code>app.use_authorization()</code> method returns an instance of
+<code>AuthorizationStrategy</code> from the <code>guardpost</code> library. This object can be
+configured to use a default policy, such as requiring an authenticated user by
+default for all request handlers.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">authorization</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">use_authorization</span><span class="p">()</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># configure a default policy to require an authenticated user for all handlers</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">authorization</span><span class="o">.</span><span class="n">default_policy</span> <span class="o">=</span> <span class="n">Policy</span><span class="p">(</span><span class="s2">&quot;authenticated&quot;</span><span class="p">,</span> <span class="n">AuthenticatedRequirement</span><span class="p">())</span>
 </code></pre></div>
 <p>The default policy is used when the <code>@auth</code> decorator is used without arguments.</p>
 <p>To enable anonymous access for certain handlers in this scenario, use the
 <code>allow_anonymous</code> decorator from <code>blacksheep.server.authorization</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">allow_anonymous</span>
-
-
-<span class="nd">@allow_anonymous</span><span class="p">()</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]):</span>
-    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
-
-    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.authorization</span><span class="w"> </span><span class="kn">import</span> <span class="n">allow_anonymous</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nd">@allow_anonymous</span><span class="p">()</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">for_anybody</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]):</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="k">return</span> <span class="n">json</span><span class="p">({</span><span class="s2">&quot;anonymous&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="specifying-authentication-schemes-for-request-handlers">Specifying authentication schemes for request handlers<a class="headerlink" href="#specifying-authentication-schemes-for-request-handlers" title="Permanent link">&para;</a></h2>
 <p>In some scenarios it is necessary to specify multiple authentication schemes
 for web applications: for example, the same application might handle
-authentication obtained through the <code>GitHub</code> OAuth app and <code>Azure Active
-Directory (AAD)</code>. In such scenarios, it might be necessary to restrict access
-to some endpoints by authentication method, too.</p>
+authentication obtained through the <code>GitHub</code> OAuth app and <code>Microsoft Entra ID</code>.
+In such scenarios, it might be necessary to restrict access to some endpoints
+by authentication method, too.</p>
 <p>To do so:</p>
 <ol>
-<li>specify different authentication handlers, configuring schemes overriding
+<li>Specify different authentication handlers, configuring schemes overriding
    the <code>scheme</code> property as in the example below.</li>
-<li>use the <code>authentication_schemes</code> parameter in the <code>@auth</code> decorator</li>
+<li>Use the <code>authentication_schemes</code> parameter in the <code>@auth</code> decorator.</li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GitHubAuthHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">scheme</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-      <span class="k">return</span> <span class="s2">&quot;github&quot;</span>
-
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Identity</span><span class="p">]:</span>
-        <span class="o">...</span>
-
-
-<span class="nd">@auth</span><span class="p">(</span><span class="s2">&quot;authenticated&quot;</span><span class="p">,</span> <span class="n">authentication_schemes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;github&quot;</span><span class="p">])</span>
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">only_for_user_authenticated_with_github</span><span class="p">():</span>
-    <span class="c1"># This method only tries to authenticate users using the &quot;github&quot;</span>
-    <span class="c1"># authentication scheme, defined overriding the scheme @property</span>
-    <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">GitHubAuthHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
+</span><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="hll">    <span class="nd">@property</span>
+</span><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="hll">    <span class="k">def</span><span class="w"> </span><span class="nf">scheme</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="hll">      <span class="k">return</span> <span class="s2">&quot;github&quot;</span>
+</span><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Identity</span><span class="p">]:</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="o">...</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="hll"><span class="nd">@auth</span><span class="p">(</span><span class="s2">&quot;authenticated&quot;</span><span class="p">,</span> <span class="n">authentication_schemes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;github&quot;</span><span class="p">])</span>
+</span><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">only_for_user_authenticated_with_github</span><span class="p">():</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="c1"># This method only tries to authenticate users using the &quot;github&quot;</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="c1"># authentication scheme, defined overriding the scheme @property</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="failure-response-codes">Failure response codes<a class="headerlink" href="#failure-response-codes" title="Permanent link">&para;</a></h2>
 <p>When a request fails because of authorization reasons, the web framework
 returns:</p>
 <ul>
-<li>status <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"><code>401 Unauthorized</code></a> if authentication failed, and no valid credentials were provided</li>
-<li>status <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"><code>403 Forbidden</code></a> if
+<li>Status <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"><code>401
+  Unauthorized</code></a>
+  if authentication failed and no valid credentials were provided.</li>
+<li>Status <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"><code>403 Forbidden</code></a> if
   authentication succeeded as valid credentials were provided, but the user is
-  not authorized to perform an action</li>
+  not authorized to perform an action.</li>
 </ul>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 

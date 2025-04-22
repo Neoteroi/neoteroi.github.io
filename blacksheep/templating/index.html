@@ -1559,158 +1559,159 @@
 
 
 <h1 id="server-side-rendering-ssr">Server Side Rendering (SSR)<a class="headerlink" href="#server-side-rendering-ssr" title="Permanent link">&para;</a></h1>
-<p>Server side templating refers to the ability of a web application to generate
-HTML pages from templates and dynamic variables. By default, BlackSheep does
-this using <a href="https://palletsprojects.com/p/jinja/"><code>Jinja2</code> library</a> by the
-<a href="https://palletsprojects.com">Pallets</a> team, but it supports custom renderers.</p>
-<p>This page describes:</p>
+<p>Server-side templating refers to a web application's ability to generate HTML
+pages using templates and dynamic variables. By default, BlackSheep uses the
+<a href="https://palletsprojects.com/p/jinja/"><code>Jinja2</code> library</a> library developed by
+the <a href="https://palletsprojects.com">Pallets</a> team, but it also supports custom
+renderers.</p>
+<p>This page covers:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> How to configure server side templating.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Configuring server-side templating.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Returning views using response functions.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Returning views using the MVC features.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Returning views with MVC features.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Using alternatives to <code>Jinja2</code>.</li>
 </ul>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>The <a href="https://github.com/RobertoPrevato/BlackSheepMVC">BlackSheep MVC project
+<p>The <a href="https://github.com/Neoteroi/BlackSheep-MVC">BlackSheep MVC project
 template</a> includes a
 ready-to-use solution having an application with templates and layout
 configured.</p>
 </div>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>This example shows how to use Jinja2 templating engine with BlackSheep:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">view</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
+<p>This example illustrates how to use Jinja2 templating engine with BlackSheep:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">view</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
 </code></pre></div>
 <p>The expected folder structure for this example:
-<div class="highlight"><pre><span></span><code>⬑ app
-     ⬑ views
-          home.jinja   &lt;-- template file loaded by `view` function
-     __init__.py
-
-server.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>⬑ app
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>     ⬑ views
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>          home.jinja   &lt;-- template file loaded by `view` function
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>     __init__.py
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>server.py
 </code></pre></div></p>
-<div class="highlight"><pre><span></span><code><span class="cp">&lt;!doctype html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{example}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{foo}}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cp">&lt;!doctype html&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{example}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{foo}}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></div>
 <h2 id="async-mode">Async mode<a class="headerlink" href="#async-mode" title="Permanent link">&para;</a></h2>
 <p>It is possible to enable Jinja2 <a href="http://jinja.pocoo.org/docs/2.10/api/#async-support">async
 mode</a>, in the following
 way:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.rendering.jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">JinjaRenderer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">view_async</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.html</span><span class="w"> </span><span class="kn">import</span> <span class="n">html_settings</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
-<span class="n">html_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">JinjaRenderer</span><span class="p">(</span><span class="n">enable_async</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
-    <span class="k">return</span> <span class="k">await</span> <span class="n">view_async</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.rendering.jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">JinjaRenderer</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">view_async</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.html</span><span class="w"> </span><span class="kn">import</span> <span class="n">html_settings</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">html_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">JinjaRenderer</span><span class="p">(</span><span class="n">enable_async</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="k">return</span> <span class="k">await</span> <span class="n">view_async</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
 </code></pre></div>
 <h2 id="loading-templates">Loading templates<a class="headerlink" href="#loading-templates" title="Permanent link">&para;</a></h2>
-<p>It is possible to load templates by name including '.jinja', or without file
-extension; '.jinja' extension is added automatically. The extension must be
-lowercase.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home.jinja&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
-
-
-<span class="c1"># or...</span>
-
-
-<span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
+<p>It is possible to load templates by name including <code>.jinja</code>, or without file
+extension; <code>.jinja</code> extension is added automatically if no extension is
+specified. The extension must be lowercase.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home.jinja&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># or...</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;World&quot;</span><span class="p">})</span>
 </code></pre></div>
 <h2 id="helpers-and-filters">Helpers and filters<a class="headerlink" href="#helpers-and-filters" title="Permanent link">&para;</a></h2>
 <p>To configure custom helpers and filters for Jinja, access the renderer through
 <code>blacksheep.settings.html.html_settings</code>:</p>
-<div class="highlight"><pre><span></span><code>.
-├── app
-│   ├── __init__.py
-│   └── views
-│       └── index.jinja
-└── server.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>.
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>├── app
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>│   ├── __init__.py
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>│   └── views
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│       └── index.jinja
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>└── server.py
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.rendering.jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">JinjaRenderer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.html</span><span class="w"> </span><span class="kn">import</span> <span class="n">html_settings</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">configure_templating</span><span class="p">(</span>
-    <span class="n">application</span><span class="p">:</span> <span class="n">Application</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Configures server side rendering for HTML views.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">renderer</span> <span class="o">=</span> <span class="n">html_settings</span><span class="o">.</span><span class="n">renderer</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">JinjaRenderer</span><span class="p">)</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_copy</span><span class="p">():</span>
-        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">now</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="s2">&quot;Example&quot;</span><span class="p">)</span>
-
-    <span class="n">helpers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">:</span> <span class="n">get_copy</span><span class="p">}</span>
-
-    <span class="n">env</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">env</span>
-    <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">helpers</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.rendering.jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">JinjaRenderer</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.html</span><span class="w"> </span><span class="kn">import</span> <span class="n">html_settings</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">configure_templating</span><span class="p">(</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="n">application</span><span class="p">:</span> <span class="n">Application</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="sd">    Configures server side rendering for HTML views.</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">renderer</span> <span class="o">=</span> <span class="n">html_settings</span><span class="o">.</span><span class="n">renderer</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">JinjaRenderer</span><span class="p">)</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_copy</span><span class="p">():</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">now</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="s2">&quot;Example&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>    <span class="n">helpers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">:</span> <span class="n">get_copy</span><span class="p">}</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>    <span class="n">env</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">env</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>    <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">helpers</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cm">&lt;!-- index.jinja --&gt;</span>
-<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello, World!<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-{{ copy() }}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="cm">&lt;!-- index.jinja --&gt;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello, World!<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>{{ copy() }}
 </code></pre></div>
 <h2 id="using-alternatives-to-jinja2">Using alternatives to Jinja2<a class="headerlink" href="#using-alternatives-to-jinja2" title="Permanent link">&para;</a></h2>
-<p>To use alternative classes for server side rendering:</p>
+<p>To use alternative classes for server-side rendering:</p>
 <ol>
 <li>Define an implementation of <code>blacksheep.server.rendering.abc.Renderer</code></li>
 <li>Configure it using <code>from blacksheep.settings.html import html_settings</code></li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.csrf</span><span class="w"> </span><span class="kn">import</span> <span class="n">AntiForgeryHandler</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.html</span><span class="w"> </span><span class="kn">import</span> <span class="n">html_settings</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.rendering.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">CustomRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders a view synchronously.&quot;&quot;&quot;</span>
-        <span class="o">...</span>
-
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">render_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders a view asynchronously.&quot;&quot;&quot;</span>
-        <span class="o">...</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">bind_anti_forgery_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">AntiForgeryHandler</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Applies extensions for an anti-forgery handler.</span>
-
-<span class="sd">        This method can be used to generate HTML fragments containing</span>
-<span class="sd">        anti-forgery tokens, for the built-in implementation of AF validation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-
-<span class="n">html_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">CustomRenderer</span><span class="p">())</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.csrf</span><span class="w"> </span><span class="kn">import</span> <span class="n">AntiForgeryHandler</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.settings.html</span><span class="w"> </span><span class="kn">import</span> <span class="n">html_settings</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep.server.rendering.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">CustomRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders a view synchronously.&quot;&quot;&quot;</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>        <span class="o">...</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">render_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders a view asynchronously.&quot;&quot;&quot;</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>        <span class="o">...</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bind_anti_forgery_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">AntiForgeryHandler</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="sd">        Applies extensions for an anti-forgery handler.</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="sd">        This method can be used to generate HTML fragments containing</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="sd">        anti-forgery tokens, for the built-in implementation of AF validation.</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="n">html_settings</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">CustomRenderer</span><span class="p">())</span>
 </code></pre></div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-17 07:04:37</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (1)"><span class="nt-initials">RP</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (2)"><span class="nt-initials">RP</span></div></div></div>
 
 
 
