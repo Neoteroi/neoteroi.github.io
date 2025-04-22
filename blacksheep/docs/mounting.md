@@ -1,11 +1,11 @@
 # Mounting applications
 
-The word "mounting" refers to the ability to plug ASGI applications into
-others, under specific routes. This enables reusing whole applications, or
-components, across web applications. This page describes:
+The term 'mounting' refers to the ability to integrate ASGI applications into others
+under specific routes. This enables reusing whole applications across web applications.
+This page covers:
 
-- [X] How to use the mount feature in BlackSheep.
-- [X] Details about mounting, and handling of application events.
+- [X] Using the mount feature.
+- [X] Details about mounting and handling of application events.
 - [X] Mounting and OpenAPI Documentation.
 - [X] An example using [Piccolo Admin](https://github.com/piccolo-orm/piccolo_admin).
 
@@ -50,18 +50,18 @@ In the example above, both `parent` and `child` are complete applications that
 can be started independently. If `child` is started alone, it replies to GET
 web requests at route "/" with the text "Hello, from the child app".
 
-Since `parent` mounts `child` under the path "/sub", when `parent` is started, it
-delegates requests starting with `/sub/*` to the mounted application, therefore when the
-`parent` is started, a GET request to the route "/sub" produces the greetings message
-from `child`. A GET request to the route "/" instead is replied with the text "Hello,
-from the parent app".
+Since `parent` mounts `child` under the path '/sub', it delegates requests starting with
+`/sub/*` to the mounted application. As a result, when parent is started, a GET request
+to the route '/sub' produces the greeting message from `child`. A GET request to the
+route "/" instead is replied with the text "Hello, from the parent app".
 
-!!! info
+///!!! info
     Try to create a file `server.py` like in the example above, and run the
     applications using `uvicorn`, to verify how they work in practice.
 
 ## Side effects of mounting
-Even though mounting can enable interesting scenarios, it comes at a price.
+
+Although mounting enables interesting scenarios, it comes at a cost.
 
 Applications that are supposed to be mounted by other applications need to be
 designed to be "mount-friendly", for example when they handle redirects or
@@ -115,9 +115,9 @@ app_b.mount("/a", app_a)
 
 ```
 
-This won't produce the expected result in real-life scenarios! `app_a` in this
+This won't produce the expected result in real-life scenarios. `app_a` in this
 case redirects to the absolute path "/", therefore a path that is handled by
-`app_b`! In general, mounted apps will be defined in dedicated packages with
+`app_b`. In general, mounted apps will be defined in dedicated packages with
 no knowledge of the applications that mount them. To fix this scenario, it is
 necessary to use a relative path for redirection, like:
 
@@ -128,6 +128,7 @@ def redirect_to_home():
 ```
 
 ### Handling of application events
+
 Applications often need to define actions that must happen when the application
 starts, and actions that must happen when the application stops.
 
@@ -173,11 +174,8 @@ events.
     web framework used to implement it. The example above is correct when `child`
     is an instance of BlackSheep Application.
 
-!!! danger "Note"
-    `APP_MOUNT_AUTO_EVENTS` is not the default to not introduce breaking changes.
-    This will be the default behavior in BlackSheep 2.x
-
 ## Mounting and OpenAPI Documentation
+
 Since version `1.2.5`, BlackSheep supports generating OpenAPI Documentation
 for mounted BlackSheep applications, meaning that parent applications can expose
 OpenAPI Documentation about all endpoints, including those of mounted apps and
@@ -307,6 +305,7 @@ Produces OpenAPI Documentation for all endpoints.
 ![Mount OAD](./img/mount-oad.png)
 
 ## Examples
+
 To see a working example where `mount` is used, see [the Piccolo Admin example
 at
 _BlackSheep-Examples_](https://github.com/Neoteroi/BlackSheep-Examples/tree/main/piccolo-admin).

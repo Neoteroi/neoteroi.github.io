@@ -76,11 +76,14 @@ The `ClientSession` owns by default a connections pool, if none is specified for
 it. The connections pool is automatically disposed of when the client is exited,
 if it was created for the client.
 
-!!! danger "Connection pooling is important"
-    Avoid instantiating a new `ClientSession` at each web request, unless the
-    same `ConnectionsPool` is reused among the instances. Instantiating a new
-    `ClientSession` without reusing the same TCP connections pool has
-    negative effects on the performance of the application.
+/// admonition | On the importance of connection pooling.
+
+Avoid instantiating a new `ClientSession` at each web request, unless the
+same `ConnectionsPool` is reused among the instances. Instantiating a new
+`ClientSession` without reusing the same TCP connections pool has
+negative effects on the performance of the application.
+
+///
 
 It is recommended to instantiate a single instance of HTTP client and
 register it as a service of the application, using the `@app.lifespan` method:
