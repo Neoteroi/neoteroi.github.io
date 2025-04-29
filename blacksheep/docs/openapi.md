@@ -1,15 +1,15 @@
 # OpenAPI Documentation
 
 BlackSheep implements automatic generation of OpenAPI Documentation for most
-common scenarios, and provides methods to enrich the documentation with
-details. This page describes the following:
+common **REST API** scenarios, and provides methods to fully control the
+OpenAPI Specification file. This page describes the following:
 
 - [X] An introduction to OpenAPI Documentation.
 - [X] Built-in support for OpenAPI Documentation.
 - [X] How to document endpoints.
 - [X] How to handle common responses.
 - [X] Expose the documentation for anonymous access.
-- [X] Support for [ReDoc UI](https://github.com/Redocly/redoc).
+- [X] Options to display OpenAPI Documentation.
 - [X] How to implement a custom `UIProvider`.
 
 ## Introduction to OpenAPI Documentation
@@ -25,7 +25,7 @@ time of this writing:
 > display the API, code generation tools to generate servers and clients in
 > various programming languages, testing tools, and many other use cases.
 
-Since a web application inherently knows the paths it handles, and a certain
+Since a web application inherently knows the paths it handles and a certain
 amount of metadata can be inferred from the source code, BlackSheep provides
 automatic generation of OpenAPI documentation. It also offers an API to enhance
 the documentation with additional information that cannot be inferred from the
@@ -51,14 +51,13 @@ from openapidocs.v3 import Info
 
 app = Application()
 
+docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 docs.bind_app(app)
-
 
 
 @dataclass
 class Foo:
     foo: str
-
 
 
 @get("/foo")
@@ -73,91 +72,123 @@ a Swagger UI like this:
 
 ---
 
-In this example, BlackSheep generates this specification file in JSON format,
-at `/openapi.json` path:
+In this example, BlackSheep generates the following specification and offers
+it in both **JSON** and **YAML** format:
 
-```json
-{
-    "openapi": "3.0.3",
-        "title": "Example API",
+=== "/openapi.yaml"
 
-        "version": "0.0.1"
-    },
-    "paths": {
-        "/foo": {
-            "get": {
+    ```yaml
+    openapi: 3.1.0
+    info:
+        title: Example API
+        version: 0.0.1
+    paths:
+        /foo:
+            get:
+                responses:
+                    '200':
+                        description: Success response
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/Foo'
+                operationId: get_foo
+    servers: []
+    components:
+        schemas:
+            Foo:
+                type: object
+                required:
+                - foo
+                properties:
+                    foo:
+                        type: string
+                        nullable: false
+    tags: []
+    ```
 
-                "responses": {
-                    "200": {
-                        "description": "Success response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Foo"
+=== "/openapi.json"
+
+    ```json
+    {
+        "openapi": "3.1.0",
+        "info": {
+            "title": "Example API",
+            "version": "0.0.1"
+        },
+        "paths": {
+            "/foo": {
+                "get": {
+                    "responses": {
+                        "200": {
+                            "description": "Success response",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Foo"
+                                    }
                                 }
                             }
                         }
-                    }
-                },
-                "operationId": "get_foo"
+                    },
+                    "operationId": "get_foo"
+                }
             }
-        }
-    },
-    "servers": [],
-    "components": {
-        "schemas": {
-            "Foo": {
-                "type": "object",
-                "required": [
-                    "foo"
-                ],
-                "properties": {
-                    "foo": {
-                        "type": "string",
-                        "nullable": false
+        },
+        "servers": [],
+        "components": {
+            "schemas": {
+                "Foo": {
+                    "type": "object",
+                    "required": [
+                        "foo"
+                    ],
+                    "properties": {
+                        "foo": {
+                            "type": "string",
+                            "nullable": false
+                        }
                     }
                 }
             }
-        }
+        },
+        "tags": []
     }
-}
+    ```
+
+### Supported types
+
+The framework provides built-in support for the following types:
+
+- Built-in `dataclasses`.
+- [Pydantic v2 `BaseModel`](https://docs.pydantic.dev/latest/).
+- [Pydantic v2 `dataclasses`](https://docs.pydantic.dev/latest/concepts/dataclasses/) (since version `2.2.0`).
+- [Pydantic v1 `BaseModel`](https://docs.pydantic.dev/1.10/).
+
+/// admonition | Pydantic is fully supported since version 2.2.0.
+    type: tip
+
+Support for Pydantic has been improved in `2.2.0`, now the framework uses the
+OpenAPI Specification generated by Pydantic when handling `BaseModel` and
+Pydantic `dataclasses`. It is recommended to upgrade to version `2.2.0`.
+
+///
+
+To support more types, define types implementing the `ObjectTypeHandler`
+interface and add it to the list of object_types_handlers:
+
+```python
+from blacksheep.server.openapi.v3 import OpenAPIHandler, ObjectTypeHandler
+
+
+class CustomTypeHandler(ObjectTypeHandler):
+    # TODO: implement the interface
+
+
+docs.object_types_handlers.append(CustomTypeHandler())
 ```
 
-Notice how the `Foo` component schema is automatically documented. BlackSheep
-supports both `@dataclass` and `Pydantic` models for the automatic generation
-of documentation, however support for `Pydantic` is limited.
-
-And also YAML format at `/openapi.yaml` path:
-
-```yaml
-openapi: 3.0.3
-    title: Example API
-
-version: 0.0.1
-paths:
-    /foo:
-        get:
-            responses:
-
-                '200':
-                    description: Success response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Foo'
-            operationId: get_foo
-servers: []
-components:
-    schemas:
-        Foo:
-            type: object
-            required:
-            - foo
-            properties:
-                foo:
-                    type: string
-                    nullable: false
-```
+---
 
 To provide more details for api routes, decorate request handlers using the
 instance of `OpenAPIHandler` as a decorator:
@@ -173,19 +204,20 @@ def home():
 After this change, the specification file includes the new information:
 
 ```yaml
-openapi: 3.0.3
+openapi: 3.1.0
+info:
     title: Example API
-
-version: 0.0.1
+    version: 0.0.1
 paths:
-    /:
+    /foo:
         get:
             responses:
-
                 '200':
                     description: Returns a text saying OpenAPI Example
-            operationId: home
+            operationId: get_foo
+servers: []
 components: {}
+tags: []
 ```
 
 ### Adding description and summary
@@ -204,6 +236,7 @@ async def home():
 ```
 
 Or in the `@docs` decorator:
+
 ```python
 @docs(
     summary="This example is used to demonstrate support for OpenAPI in BlackSheep.",
@@ -220,14 +253,12 @@ and the whole docstring as the description.
 
 ![OpenAPI description and summary](./img/openapi-description-summary.png)
 
-    Most of the BlackSheep code base is typed using the `typing` module,
-
-    thus IDEs and text editors like Visual Studio Code and PyCharm can provide
-    user's friendly hints for code completion (see the screenshot below).
-    ![Type hints](./img/openapi-docs-type-hints.png)
+Most of the BlackSheep code base is typed using the `typing` module, thus IDEs
+and text editors like Visual Studio Code and PyCharm can provide user's
+friendly hints for code completion (see the screenshot below). ![Type
+hints](./img/openapi-docs-type-hints.png)
 
 ### Ignoring endpoints
-
 
 To exclude certain endpoints from the API documentation, use `@docs.ignore()`:
 
@@ -238,20 +269,17 @@ async def hidden_endpoint():
     return "This endpoint won't appear in documentation"
 ```
 
-### Document only certain routes
+### Documenting only certain routes
 
-To document only certain routes, use an include function like in the example below.
-For example, to include only those routes that start with "/api":
+To document only certain routes, use an include function like in the example
+below. For example, to include only those routes that contain "/api":
 
 ```python
-
-
-# include only endpoints whose path starts with "/api/"
-docs.include = lambda path, _: path.startswith("/api/")
+# include only endpoints whose path contains "/api/"
+docs.include = lambda path, _: "/api/" in path
 ```
 
 ### Documenting response examples
-
 
 The following example shows how to describe examples for responses:
 
@@ -260,15 +288,15 @@ from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
 
-from blacksheep import Application, json
+from blacksheep import Application, get, json
 from blacksheep.server.openapi.common import ContentInfo, ResponseExample, ResponseInfo
 from blacksheep.server.openapi.v3 import OpenAPIHandler
 from openapidocs.v3 import Info
 
 app = Application()
 
+docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 docs.bind_app(app)
-
 
 
 @dataclass
@@ -306,9 +334,7 @@ class Cat:
 )
 @get("/api/cats/{cat_id}")
 def get_cat_by_id(cat_id: UUID):
-    cat = ...  # TODO: implement the logic that fetches a cat by id
-    return json(cat)
-
+    ...
 ```
 
 If the code seems excessively verbose, consider that OpenAPI specification is
@@ -320,6 +346,64 @@ BlackSheep automatically generates component schemas by type (in this example,
 `Cat`) and reuses them in all API endpoints that use them:
 
 ![OpenAPI Response Examples](./img/openapi-response-examples.png)
+
+/// details | Reusable components schemas.
+
+```yaml {linenums="1" hl_lines="14 31-33"}
+openapi: 3.1.0
+info:
+    title: Example API
+    version: 0.0.1
+paths:
+    /api/cats/{cat_id}:
+        get:
+            responses:
+                '200':
+                    description: A cat
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Cat'
+                '404':
+                    description: Cat not found
+            summary: Gets a cat by id
+            description: "A sample API that uses a pet store as an\n          example\
+                \ to demonstrate features in the OpenAPI 3 specification"
+            operationId: get_cat_by_id
+            parameters:
+            -   name: cat_id
+                in: path
+                schema:
+                    type: string
+                    format: uuid
+                    nullable: false
+                description: ''
+                required: true
+servers: []
+components:
+    schemas:
+        Cat:
+            type: object
+            required:
+            - id
+            - name
+            - creation_time
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                    nullable: false
+                name:
+                    type: string
+                    nullable: false
+                creation_time:
+                    type: string
+                    format: date-time
+                    nullable: false
+tags: []
+```
+
+///
 
 ### Avoid code pollution using EndpointDocs
 
@@ -339,8 +423,7 @@ from apidocs.cats import get_cat_docs
 @docs(get_cat_docs)
 @get("/api/cats/{cat_id}")
 def get_cat_by_id(cat_id: UUID):
-    cat = ...  # TODO: implement the logic that fetches a cat by id
-    return json(cat)
+    ...
 ```
 
 To see a complete example, refer to the source code of the [MVC project
@@ -379,23 +462,46 @@ class MyOpenAPIHandler(OpenAPIHandler):
         ]
 
 
+docs = MyOpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 docs.bind_app(app)
+```
 
+To fully control the specification upon its creation as Python `dict`,
+either override the `build_docs` method of your custom-defined `OpenAPIHandler`,
+or specify a custom `Serializer` like in the example below (this second option
+is only available since version `2.2.0`).
+
+```python
+from openapidocs.common import Serializer
+
+
+class CustomSerializer(Serializer):
+    def to_obj(self, item: Any) -> Any:
+        obj = super().to_obj(item)
+        # Fully control for the specification dictionary here
+        return obj
+
+
+docs = OpenAPIHandler(
+    info=Info(title="Example API", version="0.0.1"), serializer=CustomSerializer()
+)
 ```
 
 ### Handling common responses
 
 APIs often implement a common way to handle failures, to provide clients with
-
 details for web requests that cannot be completed successfully. For example, an
 API might return a response body like the following, in case of a bad request
 for a certain endpoint:
 
 ```json
-{"error": "The provided country code is not supported", "code": "InvalidCountryCode"}
+{
+    "error": "The provided country code is not supported",
+    "code": "InvalidCountryCode"
+}
 ```
 
-Such response body can be handled using a `dataclass`:
+Such response body can be handled using a `dataclass` or Pydantic model:
 
 ```python
 from dataclasses import dataclass
@@ -409,7 +515,7 @@ class ErrorInfo:
 
 Common responses can be documented this way:
 
-```python
+```python {linenums="1" hl_lines="4 12 23"}
 from openapidocs.v3 import MediaType, Response as ResponseDoc, Schema
 
 
@@ -422,7 +528,7 @@ docs.common_responses = {
             "application/json": MediaType(
                 schema=Schema(
                     any_of=[error_info],
-                    example=SafeException(error="Invalid argument", code=1001),
+                    example=ErrorInfo(error="Invalid argument", code=1001),
                 )
             )
         },
@@ -433,9 +539,7 @@ docs.common_responses = {
             "application/json": MediaType(
                 schema=Schema(
                     any_of=[error_info],
-                    example=SafeException(
-                        error="The user is not authorized", code=3
-                    ),
+                    example=ErrorInfo(error="The user is not authorized", code=3),
                 )
             )
         },
@@ -526,7 +630,7 @@ In the example below, the generic type is handled properly and produces the
 following OpenAPI Documentation:
 
 ```yaml {linenums="1" hl_lines="9 11-14 40-41 61 71"}
-openapi: 3.0.3
+openapi: 3.1.0
     title: Example
 
 version: 0.0.1
@@ -603,7 +707,7 @@ components:
                     nullable: false
 ```
 
-/// admonition | Generic types names.
+/// details | Generic types names.
     type: info
 
 Generic types, expressed in Python using `GenericType[T]`, are
@@ -624,21 +728,9 @@ To document parameters explicitly, use the `@docs` like in the following
 example (elaborating on the previous example about generics):
 
 ```python
-from blacksheep.server.openapi.common import ParameterInfo
-
-
-app = Application()
-
-
-# enable OpenAPI Documentation
-docs.bind_app(app)
-
-
-
 @router.get("/api/orders")
 @docs(
     parameters={
-
         "page": ParameterInfo(description="Page number"),
         "page_size": ParameterInfo(
             description="The number of items to display per page"
@@ -722,7 +814,6 @@ The following sections show the previous example re-written to use docstrings.
         """
     ```
 
-
 The logic that parses docstrings can also extract types information, but this
 is not documented because the recommended way is to use type annotations.
 Refer to the file `test_openapi_docstrings.py` for more examples on the
@@ -740,36 +831,45 @@ from blacksheep.server.openapi.v3 import OpenAPIHandler
 from openapidocs.v3 import Info
 
 docs = OpenAPIHandler(
+    info=Info(title="Example API", version="0.0.1"), anonymous_access=True
 )
-
-
-# include only endpoints whose path starts with "/api/"
-docs.include = lambda path, _: path.startswith("/api/")
 ```
 
+### Support for ReDoc UI and Scalar UI
 
-### Support for ReDoc UI
+BlackSheep includes built-in support for three systems to display OpenAPI
+documentation:
 
-BlackSheep supports [ReDoc UI](https://github.com/Redocly/redoc), although
-this is disabled by default. It is also possible to implement custom UIs for
-the documentation endpoints, using the `ui_providers` property of the
-`OpenAPIHandler` class, and implementing a custom `UIProvider`.
+- [Swagger UI](https://swagger.io/tools/swagger-ui/) (default)
+- [ReDoc UI](https://github.com/Redocly/redoc)
+- [Scalar UI](https://github.com/scalar/scalar) (since version `2.2.0`)
 
-```python
-from blacksheep.server.openapi.v3 import OpenAPIHandler
-from blacksheep.server.openapi.ui import ReDocUIProvider
-from openapidocs.v3 import Info
+To enable different ways to display OpenAPI Documentation, use the
+`OpenAPIHandler.ui_providers` property.
 
-docs = OpenAPIHandler(
-)
+=== "ReDoc UI"
 
+    ```python
+    from blacksheep.server.openapi.v3 import OpenAPIHandler
+    from blacksheep.server.openapi.ui import ReDocUIProvider
+    from openapidocs.v3 import Info
 
-docs.ui_providers.append(ReDocUIProvider())
+    docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
 
-# include only endpoints whose path starts with "/api/"
-docs.include = lambda path, _: path.startswith("/api/")
+    docs.ui_providers.append(ReDocUIProvider())
+    ```
 
-```
+=== "Scalar UI"
+
+    ```python
+    from blacksheep.server.openapi.v3 import OpenAPIHandler
+    from blacksheep.server.openapi.ui import ScalarUIProvider
+    from openapidocs.v3 import Info
+
+    docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
+
+    docs.ui_providers.append(ScalarUIProvider())
+    ```
 
 ### How to implement a custom UIProvider
 
@@ -786,7 +886,6 @@ recommended to:
 - maintain the desired HTML file
 
 Example:
-
 
 ```python
 from dataclasses import dataclass
@@ -855,27 +954,6 @@ _example.html_:
 </html>
 ```
 
-Python code highlight:
-
-```diff
-+from blacksheep.server.openapi.ui import SwaggerUIProvider, UIOptions
-from openapidocs.v3 import Info
-
-app = Application()
-
-
-+class CustomUIProvider(SwaggerUIProvider):
-+    def get_openapi_ui_html(self, options: UIOptions) -> str:
-+        _template = Path("example.html").read_text()
-+        return _template.replace("{options.spec_url}", options.spec_url)
-
-
-# Set the UI provider as desired:
-
-+docs.ui_providers = [CustomUIProvider()]
-docs.bind_app(app)
-```
-
 ### Changing operations ids
 
 When OpenAPI Documentation is generated, operation ids are obtained from the
@@ -913,6 +991,7 @@ class CustomOpenAPIHandler(OpenAPIHandler):
 
 
 ### For more details
+
 For more details on the OpenAPI specification and to understand some details
 such as security settings, refer to the official [swagger.io
 website](https://swagger.io/specification/), and the dedicated library to
