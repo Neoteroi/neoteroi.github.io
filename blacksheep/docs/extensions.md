@@ -40,3 +40,11 @@ ARM templates. It includes an example integration with
 [Azure Application Insights](https://github.com/Neoteroi/Venezia/blob/dev/server/app/logs.py).
 
 <span class="small">[🏠 Homepage](https://github.com/Neoteroi/Venezia)</span>
+
+## Apitally
+[Apitally](https://apitally.io/blacksheep) is a lightweight monitoring and
+analytics tool for APIs, with built-in support for BlackSheep. It tracks
+API usage, errors, and performance, and includes request logging and alerting
+features.
+
+<span class="small">[🏠 Homepage](https://github.com/apitally/apitally-py)</span>
