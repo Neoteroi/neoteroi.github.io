@@ -14,7 +14,7 @@ features.
 <span class="small">[🏠 Homepage](https://github.com/apitally/apitally-py)</span>
 
 ## Piccolo-ORM
-Piccolo is a fast, user-friendly ORM and query builder which supports asyncio.
+[Piccolo](https://github.com/piccolo-orm/piccolo) is a fast, user-friendly ORM and query builder which supports asyncio.
 Piccolo provides a CLI that lets you scaffold new ASGI applications, including
 support for BlackSheep.
 
