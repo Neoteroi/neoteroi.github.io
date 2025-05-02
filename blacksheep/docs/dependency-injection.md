@@ -759,7 +759,7 @@ In the example above, the name of the properties must match the type names
 simply because `DependencyInjectorConnector` is obtaining `providers` by exact
 type names. We could easily follow the convention of using **snake_case** or
 a more robust approach of obtaining providers by types by changing the
-connector's logic. Expand the sections below to show different examples.
+connector's logic.
 
 The connector can resolve types for controllers' `__init__` methods:
 
