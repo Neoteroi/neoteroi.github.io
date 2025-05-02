@@ -36,9 +36,8 @@ def home() -> Response:
 
 ## How to configure background tasks
 
-The following example shows how to configure a background task, including
-the activation of a service resolved by the DI container, running periodically
-once every second:
+The following example shows how to configure a background task, running
+periodically once every second:
 
 ```python
 import asyncio
@@ -58,26 +57,16 @@ def get_current_timestamp():
     return datetime.now().isoformat()
 
 
-class Foo:
-    def __init__(self) -> None:
-        pass
-
-
-async def task_example(app: Application) -> None:
+async def task_example() -> None:
     # example background task, running once every second,
     # this example also shows how to activate a service using the DI container
     while True:
         print(get_current_timestamp())
-
-        my_foo = app.service_provider.get(Foo)
-        assert isinstance(my_foo, Foo)
-        print("Foo id: ", id(my_foo))
-
         await asyncio.sleep(1)
 
 
 async def configure_background_tasks(app):
-    asyncio.get_event_loop().create_task(task_example(app))
+    asyncio.get_event_loop().create_task(task_example())
 
 
 app.on_start += configure_background_tasks

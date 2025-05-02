@@ -471,6 +471,8 @@ class Example:
 async def configure_something(app: Application):
     await asyncio.sleep(0.5)  # simulate 500 ms delay
 
+    # Note: this works with Rodi! If you use a different kind of DI,
+    # implement the desired logic in your connector object / ContainerProtocor
     app.services.add_instance(Example("Hello World"))
 
 
@@ -487,7 +489,7 @@ Services that require disposal can be disposed of in the `on_stop` callback:
 
 ```python {hl_lines="3 6"}
 async def dispose_example(app: Application):
-    service = app.service_provider[Example]
+    service = app.services.resolve(Example)
     await service.dispose()
 
 
