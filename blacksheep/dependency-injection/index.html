@@ -544,6 +544,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="The container protocol">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-punq-instead-of-rodi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Punq instead of Rodi
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-dependency-injector-instead-of-rodi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Dependency Injector instead of Rodi
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1707,6 +1731,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="The container protocol">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-punq-instead-of-rodi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Punq instead of Rodi
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-dependency-injector-instead-of-rodi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Dependency Injector instead of Rodi
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2206,6 +2254,7 @@ to the following container protocol:</p>
 <a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="sd">        Returns a value indicating whether a given type is configured in this container.</span>
 <a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a><span class="sd">        &quot;&quot;&quot;</span>
 </code></pre></div>
+<h3 id="using-punq-instead-of-rodi">Using Punq instead of Rodi<a class="headerlink" href="#using-punq-instead-of-rodi" title="Permanent link">&para;</a></h3>
 <p>The following example demonstrates how to use
 <a href="https://github.com/bobthemighty/punq"><code>punq</code></a> for dependency injection as an
 alternative to <code>rodi</code>.</p>
@@ -2302,7 +2351,274 @@ because not all libraries for dependency injection implement the notion of
 <code>singleton</code>, <code>scoped</code>, and <code>transient</code> (most only implement <code>singleton</code> and
 <code>transient</code>).</p>
 </div>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (6)"><span class="nt-initials">RP</span></div><div class="nt-contributor nt-group-1" title="Elliot Waite &lt;elliot@elliotwaite.com&gt; (1)"><span class="nt-initials">EW</span></div><div class="nt-contributor nt-group-2" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div><div class="nt-contributor nt-group-3" title="techntools &lt;71767293+techntools@users.noreply.github.com&gt; (1)"><span class="nt-initials">T</span></div></div></div>
+<h3 id="using-dependency-injector-instead-of-rodi">Using Dependency Injector instead of Rodi<a class="headerlink" href="#using-dependency-injector-instead-of-rodi" title="Permanent link">&para;</a></h3>
+<p>The following example illustrates how to use <a href="https://python-dependency-injector.ets-labs.org/">Dependency Injector</a> instead of Rodi.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">  1</a></span>
+<span class="normal"><a href="#__codelineno-23-2">  2</a></span>
+<span class="normal"><a href="#__codelineno-23-3">  3</a></span>
+<span class="normal"><a href="#__codelineno-23-4">  4</a></span>
+<span class="normal"><a href="#__codelineno-23-5">  5</a></span>
+<span class="normal"><a href="#__codelineno-23-6">  6</a></span>
+<span class="normal"><a href="#__codelineno-23-7">  7</a></span>
+<span class="normal"><a href="#__codelineno-23-8">  8</a></span>
+<span class="normal"><a href="#__codelineno-23-9">  9</a></span>
+<span class="normal"><a href="#__codelineno-23-10"> 10</a></span>
+<span class="normal"><a href="#__codelineno-23-11"> 11</a></span>
+<span class="normal"><a href="#__codelineno-23-12"> 12</a></span>
+<span class="normal"><a href="#__codelineno-23-13"> 13</a></span>
+<span class="normal"><a href="#__codelineno-23-14"> 14</a></span>
+<span class="normal"><a href="#__codelineno-23-15"> 15</a></span>
+<span class="normal"><a href="#__codelineno-23-16"> 16</a></span>
+<span class="normal"><a href="#__codelineno-23-17"> 17</a></span>
+<span class="normal"><a href="#__codelineno-23-18"> 18</a></span>
+<span class="normal"><a href="#__codelineno-23-19"> 19</a></span>
+<span class="normal"><a href="#__codelineno-23-20"> 20</a></span>
+<span class="normal"><a href="#__codelineno-23-21"> 21</a></span>
+<span class="normal"><a href="#__codelineno-23-22"> 22</a></span>
+<span class="normal"><a href="#__codelineno-23-23"> 23</a></span>
+<span class="normal"><a href="#__codelineno-23-24"> 24</a></span>
+<span class="normal"><a href="#__codelineno-23-25"> 25</a></span>
+<span class="normal"><a href="#__codelineno-23-26"> 26</a></span>
+<span class="normal"><a href="#__codelineno-23-27"> 27</a></span>
+<span class="normal"><a href="#__codelineno-23-28"> 28</a></span>
+<span class="normal"><a href="#__codelineno-23-29"> 29</a></span>
+<span class="normal"><a href="#__codelineno-23-30"> 30</a></span>
+<span class="normal"><a href="#__codelineno-23-31"> 31</a></span>
+<span class="normal"><a href="#__codelineno-23-32"> 32</a></span>
+<span class="normal"><a href="#__codelineno-23-33"> 33</a></span>
+<span class="normal"><a href="#__codelineno-23-34"> 34</a></span>
+<span class="normal"><a href="#__codelineno-23-35"> 35</a></span>
+<span class="normal"><a href="#__codelineno-23-36"> 36</a></span>
+<span class="normal"><a href="#__codelineno-23-37"> 37</a></span>
+<span class="normal"><a href="#__codelineno-23-38"> 38</a></span>
+<span class="normal"><a href="#__codelineno-23-39"> 39</a></span>
+<span class="normal"><a href="#__codelineno-23-40"> 40</a></span>
+<span class="normal"><a href="#__codelineno-23-41"> 41</a></span>
+<span class="normal"><a href="#__codelineno-23-42"> 42</a></span>
+<span class="normal"><a href="#__codelineno-23-43"> 43</a></span>
+<span class="normal"><a href="#__codelineno-23-44"> 44</a></span>
+<span class="normal"><a href="#__codelineno-23-45"> 45</a></span>
+<span class="normal"><a href="#__codelineno-23-46"> 46</a></span>
+<span class="normal"><a href="#__codelineno-23-47"> 47</a></span>
+<span class="normal"><a href="#__codelineno-23-48"> 48</a></span>
+<span class="normal"><a href="#__codelineno-23-49"> 49</a></span>
+<span class="normal"><a href="#__codelineno-23-50"> 50</a></span>
+<span class="normal"><a href="#__codelineno-23-51"> 51</a></span>
+<span class="normal"><a href="#__codelineno-23-52"> 52</a></span>
+<span class="normal"><a href="#__codelineno-23-53"> 53</a></span>
+<span class="normal"><a href="#__codelineno-23-54"> 54</a></span>
+<span class="normal"><a href="#__codelineno-23-55"> 55</a></span>
+<span class="normal"><a href="#__codelineno-23-56"> 56</a></span>
+<span class="normal"><a href="#__codelineno-23-57"> 57</a></span>
+<span class="normal"><a href="#__codelineno-23-58"> 58</a></span>
+<span class="normal"><a href="#__codelineno-23-59"> 59</a></span>
+<span class="normal"><a href="#__codelineno-23-60"> 60</a></span>
+<span class="normal"><a href="#__codelineno-23-61"> 61</a></span>
+<span class="normal"><a href="#__codelineno-23-62"> 62</a></span>
+<span class="normal"><a href="#__codelineno-23-63"> 63</a></span>
+<span class="normal"><a href="#__codelineno-23-64"> 64</a></span>
+<span class="normal"><a href="#__codelineno-23-65"> 65</a></span>
+<span class="normal"><a href="#__codelineno-23-66"> 66</a></span>
+<span class="normal"><a href="#__codelineno-23-67"> 67</a></span>
+<span class="normal"><a href="#__codelineno-23-68"> 68</a></span>
+<span class="normal"><a href="#__codelineno-23-69"> 69</a></span>
+<span class="normal"><a href="#__codelineno-23-70"> 70</a></span>
+<span class="normal"><a href="#__codelineno-23-71"> 71</a></span>
+<span class="normal"><a href="#__codelineno-23-72"> 72</a></span>
+<span class="normal"><a href="#__codelineno-23-73"> 73</a></span>
+<span class="normal"><a href="#__codelineno-23-74"> 74</a></span>
+<span class="normal"><a href="#__codelineno-23-75"> 75</a></span>
+<span class="normal"><a href="#__codelineno-23-76"> 76</a></span>
+<span class="normal"><a href="#__codelineno-23-77"> 77</a></span>
+<span class="normal"><a href="#__codelineno-23-78"> 78</a></span>
+<span class="normal"><a href="#__codelineno-23-79"> 79</a></span>
+<span class="normal"><a href="#__codelineno-23-80"> 80</a></span>
+<span class="normal"><a href="#__codelineno-23-81"> 81</a></span>
+<span class="normal"><a href="#__codelineno-23-82"> 82</a></span>
+<span class="normal"><a href="#__codelineno-23-83"> 83</a></span>
+<span class="normal"><a href="#__codelineno-23-84"> 84</a></span>
+<span class="normal"><a href="#__codelineno-23-85"> 85</a></span>
+<span class="normal"><a href="#__codelineno-23-86"> 86</a></span>
+<span class="normal"><a href="#__codelineno-23-87"> 87</a></span>
+<span class="normal"><a href="#__codelineno-23-88"> 88</a></span>
+<span class="normal"><a href="#__codelineno-23-89"> 89</a></span>
+<span class="normal"><a href="#__codelineno-23-90"> 90</a></span>
+<span class="normal"><a href="#__codelineno-23-91"> 91</a></span>
+<span class="normal"><a href="#__codelineno-23-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-23-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-23-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-23-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-23-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-23-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-23-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-23-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-23-100">100</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">get_type_hints</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">dependency_injector</span><span class="w"> </span><span class="kn">import</span> <span class="n">containers</span><span class="p">,</span> <span class="n">providers</span>
+</span><a id="__codelineno-23-4" name="__codelineno-23-4"></a>
+<a id="__codelineno-23-5" name="__codelineno-23-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6"></a>
+<a id="__codelineno-23-7" name="__codelineno-23-7"></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8"></a>
+<a id="__codelineno-23-9" name="__codelineno-23-9"></a>
+<a id="__codelineno-23-10" name="__codelineno-23-10"></a><span class="k">class</span><span class="w"> </span><span class="nc">APIClient</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11"></a>
+<a id="__codelineno-23-12" name="__codelineno-23-12"></a>
+<a id="__codelineno-23-13" name="__codelineno-23-13"></a><span class="k">class</span><span class="w"> </span><span class="nc">SomeService</span><span class="p">:</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14"></a>
+<a id="__codelineno-23-15" name="__codelineno-23-15"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-23-16" name="__codelineno-23-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">api_client</span> <span class="o">=</span> <span class="n">api_client</span>
+<a id="__codelineno-23-17" name="__codelineno-23-17"></a>
+<a id="__codelineno-23-18" name="__codelineno-23-18"></a>
+<a id="__codelineno-23-19" name="__codelineno-23-19"></a><span class="hll"><span class="c1"># Define the Dependency Injector container</span>
+</span><a id="__codelineno-23-20" name="__codelineno-23-20"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">AppContainer</span><span class="p">(</span><span class="n">containers</span><span class="o">.</span><span class="n">DeclarativeContainer</span><span class="p">):</span>
+</span><a id="__codelineno-23-21" name="__codelineno-23-21"></a><span class="hll">    <span class="n">APIClient</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Singleton</span><span class="p">(</span><span class="n">APIClient</span><span class="p">)</span>
+</span><a id="__codelineno-23-22" name="__codelineno-23-22"></a><span class="hll">    <span class="n">SomeService</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span>
+</span><a id="__codelineno-23-23" name="__codelineno-23-23"></a><span class="hll">        <span class="n">SomeService</span><span class="p">,</span> <span class="n">api_client</span><span class="o">=</span><span class="n">APIClient</span>
+</span><a id="__codelineno-23-24" name="__codelineno-23-24"></a><span class="hll">    <span class="p">)</span>
+</span><a id="__codelineno-23-25" name="__codelineno-23-25"></a>
+<a id="__codelineno-23-26" name="__codelineno-23-26"></a>
+<a id="__codelineno-23-27" name="__codelineno-23-27"></a><span class="c1"># Create the container instance</span>
+<a id="__codelineno-23-28" name="__codelineno-23-28"></a><span class="n">container</span> <span class="o">=</span> <span class="n">AppContainer</span><span class="p">()</span>
+<a id="__codelineno-23-29" name="__codelineno-23-29"></a>
+<a id="__codelineno-23-30" name="__codelineno-23-30"></a>
+<a id="__codelineno-23-31" name="__codelineno-23-31"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">DependencyInjectorConnector</span><span class="p">:</span>
+</span><a id="__codelineno-23-32" name="__codelineno-23-32"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-23-33" name="__codelineno-23-33"></a><span class="sd">    This class connects a Dependency Injector container with a</span>
+<a id="__codelineno-23-34" name="__codelineno-23-34"></a><span class="sd">    BlackSheep application.</span>
+<a id="__codelineno-23-35" name="__codelineno-23-35"></a><span class="sd">    Dependencies are registered using the code API offered by</span>
+<a id="__codelineno-23-36" name="__codelineno-23-36"></a><span class="sd">    Dependency Injector. The BlackSheep application activates services</span>
+<a id="__codelineno-23-37" name="__codelineno-23-37"></a><span class="sd">    using the container when needed.</span>
+<a id="__codelineno-23-38" name="__codelineno-23-38"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-23-39" name="__codelineno-23-39"></a>
+<a id="__codelineno-23-40" name="__codelineno-23-40"></a><span class="hll">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">:</span> <span class="n">containers</span><span class="o">.</span><span class="n">Container</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><a id="__codelineno-23-41" name="__codelineno-23-41"></a><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">_container</span> <span class="o">=</span> <span class="n">container</span>
+</span><a id="__codelineno-23-42" name="__codelineno-23-42"></a>
+<a id="__codelineno-23-43" name="__codelineno-23-43"></a><span class="hll">    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><a id="__codelineno-23-44" name="__codelineno-23-44"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-23-45" name="__codelineno-23-45"></a><span class="sd">        Registers a type with the container.</span>
+<a id="__codelineno-23-46" name="__codelineno-23-46"></a><span class="sd">        The code below inspects the object&#39;s constructor&#39;s types annotations to</span>
+<a id="__codelineno-23-47" name="__codelineno-23-47"></a><span class="sd">        automatically configure the provider to activate the type.</span>
+<a id="__codelineno-23-48" name="__codelineno-23-48"></a>
+<a id="__codelineno-23-49" name="__codelineno-23-49"></a><span class="sd">        It is not necessary to use @inject or Provide core on the __init__ method. This</span>
+<a id="__codelineno-23-50" name="__codelineno-23-50"></a><span class="sd">        helps reducing code verbosity and keeping the source code not polluted by DI</span>
+<a id="__codelineno-23-51" name="__codelineno-23-51"></a><span class="sd">        specific code.</span>
+<a id="__codelineno-23-52" name="__codelineno-23-52"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-23-53" name="__codelineno-23-53"></a>        <span class="n">constructor</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="s2">&quot;__init__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<a id="__codelineno-23-54" name="__codelineno-23-54"></a>
+<a id="__codelineno-23-55" name="__codelineno-23-55"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">constructor</span><span class="p">:</span>
+<a id="__codelineno-23-56" name="__codelineno-23-56"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<a id="__codelineno-23-57" name="__codelineno-23-57"></a>                <span class="sa">f</span><span class="s2">&quot;Type </span><span class="si">{</span><span class="n">obj_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not have an __init__ method.&quot;</span>
+<a id="__codelineno-23-58" name="__codelineno-23-58"></a>            <span class="p">)</span>
+<a id="__codelineno-23-59" name="__codelineno-23-59"></a>
+<a id="__codelineno-23-60" name="__codelineno-23-60"></a>        <span class="c1"># Get the type hints for the constructor parameters</span>
+<a id="__codelineno-23-61" name="__codelineno-23-61"></a>        <span class="n">type_hints</span> <span class="o">=</span> <span class="n">get_type_hints</span><span class="p">(</span><span class="n">constructor</span><span class="p">)</span>
+<a id="__codelineno-23-62" name="__codelineno-23-62"></a>
+<a id="__codelineno-23-63" name="__codelineno-23-63"></a>        <span class="c1"># Exclude &#39;self&#39; from the parameters</span>
+<a id="__codelineno-23-64" name="__codelineno-23-64"></a>        <span class="n">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-23-65" name="__codelineno-23-65"></a>            <span class="n">param_name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="p">,</span> <span class="n">param_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<a id="__codelineno-23-66" name="__codelineno-23-66"></a>            <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_type</span> <span class="ow">in</span> <span class="n">type_hints</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<a id="__codelineno-23-67" name="__codelineno-23-67"></a>            <span class="k">if</span> <span class="n">param_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="s2">&quot;return&quot;</span><span class="p">}</span>
+<a id="__codelineno-23-68" name="__codelineno-23-68"></a>            <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="p">,</span> <span class="n">param_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<a id="__codelineno-23-69" name="__codelineno-23-69"></a>        <span class="p">}</span>
+<a id="__codelineno-23-70" name="__codelineno-23-70"></a>
+<a id="__codelineno-23-71" name="__codelineno-23-71"></a>        <span class="c1"># Create a provider for the type with its dependencies</span>
+<a id="__codelineno-23-72" name="__codelineno-23-72"></a>        <span class="n">provider</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="o">**</span><span class="n">dependencies</span><span class="p">)</span>
+<a id="__codelineno-23-73" name="__codelineno-23-73"></a>        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="p">,</span> <span class="n">obj_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">provider</span><span class="p">)</span>
+<a id="__codelineno-23-74" name="__codelineno-23-74"></a>
+<a id="__codelineno-23-75" name="__codelineno-23-75"></a><span class="hll">    <span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><a id="__codelineno-23-76" name="__codelineno-23-76"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolves an instance of the given type.&quot;&quot;&quot;</span>
+<a id="__codelineno-23-77" name="__codelineno-23-77"></a>        <span class="n">provider</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="p">,</span> <span class="n">obj_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<a id="__codelineno-23-78" name="__codelineno-23-78"></a>        <span class="k">if</span> <span class="n">provider</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-23-79" name="__codelineno-23-79"></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+<a id="__codelineno-23-80" name="__codelineno-23-80"></a>                <span class="sa">f</span><span class="s2">&quot;Type </span><span class="si">{</span><span class="n">obj_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is not registered in the container.&quot;</span>
+<a id="__codelineno-23-81" name="__codelineno-23-81"></a>            <span class="p">)</span>
+<a id="__codelineno-23-82" name="__codelineno-23-82"></a>        <span class="k">return</span> <span class="n">provider</span><span class="p">()</span>
+<a id="__codelineno-23-83" name="__codelineno-23-83"></a>
+<a id="__codelineno-23-84" name="__codelineno-23-84"></a><span class="hll">    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><a id="__codelineno-23-85" name="__codelineno-23-85"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a type is registered in the container.&quot;&quot;&quot;</span>
+<a id="__codelineno-23-86" name="__codelineno-23-86"></a>        <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<a id="__codelineno-23-87" name="__codelineno-23-87"></a>
+<a id="__codelineno-23-88" name="__codelineno-23-88"></a>
+<a id="__codelineno-23-89" name="__codelineno-23-89"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span>
+<a id="__codelineno-23-90" name="__codelineno-23-90"></a>    <span class="n">services</span><span class="o">=</span><span class="n">DependencyInjectorConnector</span><span class="p">(</span><span class="n">container</span><span class="p">),</span> <span class="n">show_error_details</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-23-91" name="__codelineno-23-91"></a><span class="p">)</span>
+<a id="__codelineno-23-92" name="__codelineno-23-92"></a>
+<a id="__codelineno-23-93" name="__codelineno-23-93"></a>
+<a id="__codelineno-23-94" name="__codelineno-23-94"></a><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-23-95" name="__codelineno-23-95"></a><span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">service</span><span class="p">:</span> <span class="n">SomeService</span><span class="p">):</span>
+</span><a id="__codelineno-23-96" name="__codelineno-23-96"></a><span class="hll">    <span class="nb">print</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+</span><a id="__codelineno-23-97" name="__codelineno-23-97"></a><span class="hll">    <span class="c1"># DependencyInjector resolved the dependencies</span>
+</span><a id="__codelineno-23-98" name="__codelineno-23-98"></a><span class="hll">    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">SomeService</span><span class="p">)</span>
+</span><a id="__codelineno-23-99" name="__codelineno-23-99"></a><span class="hll">    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">api_client</span><span class="p">,</span> <span class="n">APIClient</span><span class="p">)</span>
+</span><a id="__codelineno-23-100" name="__codelineno-23-100"></a><span class="hll">    <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>By using <strong>composition</strong>, we can integrate a third-party dependency injection
+  library like <code>dependency_injector</code> into BlackSheep without tightly coupling
+  the framework to the library.</li>
+<li>We need a class like <code>DependencyInjectorConnector</code> that acts as a
+  bridge between <code>dependency_injector</code> and BlackSheep.</li>
+<li>When wiring dependencies for your application, you use the code API offered
+  by <strong>Dependency Injector</strong>.</li>
+<li>BlackSheep remains agnostic about the specific dependency injection library
+  being used, but it needs the interface provided by the connector.</li>
+<li>In this case, <strong>Dependency Injector</strong> <em>Provide</em> and <em>@inject</em> constructs are
+  not needed on request handlers because BlackSheep handles the injection of
+  parameters into request handlers and infers when it needs to resolve a type
+  using the provided <em>connector</em>.</li>
+</ul>
+<p>In the example above, the name of the properties must match the type names
+simply because <code>DependencyInjectorConnector</code> is obtaining <code>providers</code> by exact
+type names. We could easily follow the convention of using <strong>snake_case</strong> or
+a more robust approach of obtaining providers by types by changing the
+connector's logic. Expand the sections below to show different examples.</p>
+<p>The connector can resolve types for controllers' <code>__init__</code> methods:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">APIClient</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">SomeService</span><span class="p">:</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">api_client</span> <span class="o">=</span> <span class="n">api_client</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="k">class</span><span class="w"> </span><span class="nc">AnotherService</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="c1"># Define the Dependency Injector container</span>
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">AppContainer</span><span class="p">(</span><span class="n">containers</span><span class="o">.</span><span class="n">DeclarativeContainer</span><span class="p">):</span>
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a>    <span class="n">APIClient</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Singleton</span><span class="p">(</span><span class="n">APIClient</span><span class="p">)</span>
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a>    <span class="n">SomeService</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">SomeService</span><span class="p">,</span> <span class="n">api_client</span><span class="o">=</span><span class="n">APIClient</span><span class="p">)</span>
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a>    <span class="n">AnotherService</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">AnotherService</span><span class="p">)</span>
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a>
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>
+<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a><span class="k">class</span><span class="w"> </span><span class="nc">TestController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a>
+<a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">another_dep</span><span class="p">:</span> <span class="n">AnotherService</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_another_dep</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a>            <span class="n">another_dep</span>  <span class="c1"># another_dep is resolved by Dependency Injector</span>
+<a id="__codelineno-24-26" name="__codelineno-24-26" href="#__codelineno-24-26"></a>        <span class="p">)</span>
+<a id="__codelineno-24-27" name="__codelineno-24-27" href="#__codelineno-24-27"></a>
+<a id="__codelineno-24-28" name="__codelineno-24-28" href="#__codelineno-24-28"></a>    <span class="nd">@app</span><span class="o">.</span><span class="n">controllers_router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/controller-test&quot;</span><span class="p">)</span>
+<a id="__codelineno-24-29" name="__codelineno-24-29" href="#__codelineno-24-29"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">controller_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="p">:</span> <span class="n">SomeService</span><span class="p">):</span>
+<a id="__codelineno-24-30" name="__codelineno-24-30" href="#__codelineno-24-30"></a>        <span class="c1"># DependencyInjector resolved the dependencies</span>
+<a id="__codelineno-24-31" name="__codelineno-24-31" href="#__codelineno-24-31"></a>        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_another_dep</span><span class="p">,</span> <span class="n">AnotherService</span><span class="p">)</span>
+<a id="__codelineno-24-32" name="__codelineno-24-32" href="#__codelineno-24-32"></a>
+<a id="__codelineno-24-33" name="__codelineno-24-33" href="#__codelineno-24-33"></a>        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">SomeService</span><span class="p">)</span>
+<a id="__codelineno-24-34" name="__codelineno-24-34" href="#__codelineno-24-34"></a>        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">service</span><span class="o">.</span><span class="n">api_client</span><span class="p">,</span> <span class="n">APIClient</span><span class="p">)</span>
+<a id="__codelineno-24-35" name="__codelineno-24-35" href="#__codelineno-24-35"></a>        <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+</code></pre></div>
+<p><em><a href="https://github.com/Neoteroi/BlackSheep-Examples/blob/main/dependency-injector/main.py">Full example</a>.</em></p>
+<div class="admonition hint">
+<p class="admonition-title"><img alt="🐍" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f40d.svg" title=":snake:" /> Examples.</p>
+<p>The <a href="https://github.com/Neoteroi/BlackSheep-Examples/blob/main/dependency-injector/"><em>BlackSheep-Examples</em></a>. repository contains examples for integrating with
+<em>Dependency Injector</em>, including an example illustrating how to use <code>snake_case</code> for providers in
+the Dependency Injector's container: <a href="https://github.com/Neoteroi/BlackSheep-Examples/blob/main/dependency-injector/docs/example2.py"><em>BlackSheep-Examples</em></a>.</p>
+</div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-05-02 09:02:35</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (7)"><span class="nt-initials">RP</span></div><div class="nt-contributor nt-group-1" title="Elliot Waite &lt;elliot@elliotwaite.com&gt; (1)"><span class="nt-initials">EW</span></div><div class="nt-contributor nt-group-2" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div><div class="nt-contributor nt-group-3" title="techntools &lt;71767293+techntools@users.noreply.github.com&gt; (1)"><span class="nt-initials">T</span></div></div></div>
 
 
 
