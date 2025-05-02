@@ -9,12 +9,16 @@ analytics tool for APIs, with built-in support for BlackSheep. It tracks
 API usage, errors, and performance, and includes request logging and alerting
 features.
 
+![Apitally](https://camo.githubusercontent.com/9f4ba2c60ba0e8d1c15beac2517415cf8f6ba1c1e5f12b18d947f4811264c45c/68747470733a2f2f6173736574732e61706974616c6c792e696f2f73637265656e73686f74732f6f766572766965772e706e67)
+
 <span class="small">[🏠 Homepage](https://github.com/apitally/apitally-py)</span>
 
 ## Piccolo-ORM
 Piccolo is a fast, user-friendly ORM and query builder which supports asyncio.
 Piccolo provides a CLI that lets you scaffold new ASGI applications, including
 support for BlackSheep.
+
+![Piccolo-ORM](https://raw.githubusercontent.com/piccolo-orm/piccolo/master/docs/logo_hero.png)
 
 <span class="small">[🏠 Homepage](https://github.com/piccolo-orm/piccolo)</span>
 
