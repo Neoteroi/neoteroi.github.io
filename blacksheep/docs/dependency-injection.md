@@ -524,6 +524,8 @@ class ContainerProtocol:
         """
 ```
 
+### Using Punq instead of Rodi
+
 The following example demonstrates how to use
 [`punq`](https://github.com/bobthemighty/punq) for dependency injection as an
 alternative to `rodi`.
@@ -626,5 +628,186 @@ Some features might not be supported when using a different kind of container,
 because not all libraries for dependency injection implement the notion of
 `singleton`, `scoped`, and `transient` (most only implement `singleton` and
 `transient`).
+
+///
+
+### Using Dependency Injector instead of Rodi
+
+The following example illustrates how to use [Dependency Injector](https://python-dependency-injector.ets-labs.org/) instead of Rodi.
+
+```python {linenums="1" hl_lines="3 19-24 31 40-41 43 75 84 95-100"}
+from typing import Type, TypeVar, get_type_hints
+
+from dependency_injector import containers, providers
+
+from blacksheep import Application, get
+
+T = TypeVar("T")
+
+
+class APIClient: ...
+
+
+class SomeService:
+
+    def __init__(self, api_client: APIClient) -> None:
+        self.api_client = api_client
+
+
+# Define the Dependency Injector container
+class AppContainer(containers.DeclarativeContainer):
+    APIClient = providers.Singleton(APIClient)
+    SomeService = providers.Factory(
+        SomeService, api_client=APIClient
+    )
+
+
+# Create the container instance
+container = AppContainer()
+
+
+class DependencyInjectorConnector:
+    """
+    This class connects a Dependency Injector container with a
+    BlackSheep application.
+    Dependencies are registered using the code API offered by
+    Dependency Injector. The BlackSheep application activates services
+    using the container when needed.
+    """
+
+    def __init__(self, container: containers.Container) -> None:
+        self._container = container
+
+    def register(self, obj_type: Type[T]) -> None:
+        """
+        Registers a type with the container.
+        The code below inspects the object's constructor's types annotations to
+        automatically configure the provider to activate the type.
+
+        It is not necessary to use @inject or Provide core on the __init__ method. This
+        helps reducing code verbosity and keeping the source code not polluted by DI
+        specific code.
+        """
+        constructor = getattr(obj_type, "__init__", None)
+
+        if not constructor:
+            raise ValueError(
+                f"Type {obj_type.__name__} does not have an __init__ method."
+            )
+
+        # Get the type hints for the constructor parameters
+        type_hints = get_type_hints(constructor)
+
+        # Exclude 'self' from the parameters
+        dependencies = {
+            param_name: getattr(self._container, param_type.__name__)
+            for param_name, param_type in type_hints.items()
+            if param_name not in {"self", "return"}
+            and hasattr(self._container, param_type.__name__)
+        }
+
+        # Create a provider for the type with its dependencies
+        provider = providers.Factory(obj_type, **dependencies)
+        setattr(self._container, obj_type.__name__, provider)
+
+    def resolve(self, obj_type: Type[T], _) -> T:
+        """Resolves an instance of the given type."""
+        provider = getattr(self._container, obj_type.__name__, None)
+        if provider is None:
+            raise TypeError(
+                f"Type {obj_type.__name__} is not registered in the container."
+            )
+        return provider()
+
+    def __contains__(self, item: Type[T]) -> bool:
+        """Checks if a type is registered in the container."""
+        return hasattr(self._container, item.__name__)
+
+
+app = Application(
+    services=DependencyInjectorConnector(container), show_error_details=True
+)
+
+
+@get("/")
+def home(service: SomeService):
+    print(service)
+    # DependencyInjector resolved the dependencies
+    assert isinstance(service, SomeService)
+    assert isinstance(service.api_client, APIClient)
+    return id(service)
+
+```
+
+**Notes:**
+
+- By using **composition**, we can integrate a third-party dependency injection
+  library like `dependency_injector` into BlackSheep without tightly coupling
+  the framework to the library.
+- We need a class like `DependencyInjectorConnector` that acts as a
+  bridge between `dependency_injector` and BlackSheep.
+- When wiring dependencies for your application, you use the code API offered
+  by **Dependency Injector**.
+- BlackSheep remains agnostic about the specific dependency injection library
+  being used, but it needs the interface provided by the connector.
+- In this case, **Dependency Injector** _Provide_ and _@inject_ constructs are
+  not needed on request handlers because BlackSheep handles the injection of
+  parameters into request handlers and infers when it needs to resolve a type
+  using the provided _connector_.
+
+In the example above, the name of the properties must match the type names
+simply because `DependencyInjectorConnector` is obtaining `providers` by exact
+type names. We could easily follow the convention of using **snake_case** or
+a more robust approach of obtaining providers by types by changing the
+connector's logic. Expand the sections below to show different examples.
+
+The connector can resolve types for controllers' `__init__` methods:
+
+```python
+class APIClient: ...
+
+
+class SomeService:
+
+    def __init__(self, api_client: APIClient) -> None:
+        self.api_client = api_client
+
+
+class AnotherService: ...
+
+
+# Define the Dependency Injector container
+class AppContainer(containers.DeclarativeContainer):
+    APIClient = providers.Singleton(APIClient)
+    SomeService = providers.Factory(SomeService, api_client=APIClient)
+    AnotherService = providers.Factory(AnotherService)
+
+
+class TestController(Controller):
+
+    def __init__(self, another_dep: AnotherService) -> None:
+        super().__init__()
+        self._another_dep = (
+            another_dep  # another_dep is resolved by Dependency Injector
+        )
+
+    @app.controllers_router.get("/controller-test")
+    def controller_test(self, service: SomeService):
+        # DependencyInjector resolved the dependencies
+        assert isinstance(self._another_dep, AnotherService)
+
+        assert isinstance(service, SomeService)
+        assert isinstance(service.api_client, APIClient)
+        return id(service)
+```
+
+_[Full example](https://github.com/Neoteroi/BlackSheep-Examples/blob/main/dependency-injector/main.py)._
+
+/// admonition | :snake: Examples.
+    type: hint
+
+The [_BlackSheep-Examples_](https://github.com/Neoteroi/BlackSheep-Examples/blob/main/dependency-injector/). repository contains examples for integrating with
+_Dependency Injector_, including an example illustrating how to use `snake_case` for providers in
+the Dependency Injector's container: [_BlackSheep-Examples_](https://github.com/Neoteroi/BlackSheep-Examples/blob/main/dependency-injector/docs/example2.py).
 
 ///
