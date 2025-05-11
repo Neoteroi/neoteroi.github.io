@@ -15,7 +15,7 @@ This page describes:
 It is recommended to follow the [MVC tutorial](mvc-project-template.md) before
 reading this page.
 
-/// admonition | For Flask users
+/// admonition | For Flask users.
     type: tip
 
 If you come from Flask, controllers in BlackSheep can be considered
@@ -101,6 +101,9 @@ The following example shows how dependency injection can be used in
 controller constructors, and an implementation of the `on_request` method:
 
 ```python
+from blacksheep import Application
+from blacksheep.server.controllers import Controller, get
+
 
 app = Application()
 
@@ -111,11 +114,12 @@ class Settings:
         self.greetings = greetings
 
 
+app.services.add_instance(Settings(value))
+
+
 class Home(Controller):
 
-    def __init__(self, settings: Settings):
-        # controllers are instantiated dynamically at every web request
-        self.settings = settings
+    settings: Settings
 
     async def on_request(self, request: Request):
         print("[*] Received a request!!")
@@ -126,13 +130,6 @@ class Home(Controller):
     @get("/")
     async def index(self, request: Request):
         return text(self.greet())
-
-# when configuring the application, register
-# a singleton of the application settings,
-# this service is automatically injected into request handlers
-# having a signature parameter type annotated `: Settings`, or
-# having name "settings", without type annotations
-app.services.add_instance(Settings(value))
 ```
 
 The dependency can also be described as class property:
@@ -149,13 +146,42 @@ If route methods (e.g. `head`, `get`, `post`, `put`, `patch`) from
 instance for controllers is used. It is also possible to use a specific router,
 as long as this router is bound to the application object:
 
-```py
+```python
 from blacksheep.server.routing import RoutesRegistry
 
 
 app = Application()
 app.controllers_router = RoutesRegistry()
 get = app.controllers_router.get
+```
+
+### route classmethod
+
+The `route` `classmethod` can be used to define base routes for all request
+handlers defined on a Controller class. In the following example, the actual
+routes become: `/home`  and  `/home/about`.
+
+```python
+from blacksheep import Application
+from blacksheep.server.controllers import Controller, get
+
+
+app = Application()
+
+
+class Home(Controller):
+
+    @classmethod
+    def route(cls):
+        return "/home/"
+
+    @get("/")
+    def home(self):
+        return self.ok({"message": "Hello!"})
+
+    @get("/about")
+    def about(self):
+        return self.ok({"message": "About..."})
 ```
 
 ## The APIController class
