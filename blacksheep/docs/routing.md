@@ -544,8 +544,7 @@ information, refer to [_Behind proxies_](./behind-proxies.md).
 ## How to track routes that matched a request
 
 BlackSheep by default does not track which _route_ matched a web request,
-because this is not always needed and it would cause a performance penalty in
-the overall request-response cycle. However, for logging purposes it can be
+because this is not always necessary. However, for logging purposes it can be
 useful to log the route pattern instead of the exact request URL, to reduce
 logs cardinality.
 
@@ -567,8 +566,8 @@ One option to keep track of the route that matches a request is to wrap the
     app.router.get_match = wrap_get_route_match(app.router.get_match)  # type: ignore
 ```
 
-If monkey-patching methods in Python looks ugly, you can
-define a specific `Router` class and set it in the application:
+If monkey-patching methods in Python looks ugly, a specific `Router` class can
+be used, like in the following example:
 
 ```python
 from blacksheep import Application, Router
