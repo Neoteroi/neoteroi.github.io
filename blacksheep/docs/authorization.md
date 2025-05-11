@@ -270,3 +270,80 @@ returns:
 - Status [`403 Forbidden`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403) if
   authentication succeeded as valid credentials were provided, but the user is
   not authorized to perform an action.
+
+
+## Dependency Injection in authorization requirements
+
+Dependency Injection is supported in authorization code. To use it:
+
+1. Configure `Requirement` objects as types (not instances)
+   associated to the policies of the `AuthorizationStrategy` object.
+2. Register dependencies in the DI container, and in the handler classes
+   according to the solution you are using for dependency injection.
+
+The code below illustrates and example using the built-in solution for DI.
+
+```python {linenums="1" hl_lines="13-14 17-18 21 41-42 45-46"}
+from blacksheep import Application, Request, json
+from guardpost import (
+    AuthenticationHandler,
+    AuthorizationContext,
+    Identity,
+    Policy,
+    Requirement,
+)
+
+app = Application(show_error_details=True)
+
+
+class ExampleDependency:
+    pass
+
+
+class MyInjectedRequirement(Requirement):
+    dependency: ExampleDependency
+
+    def handle(self, context: AuthorizationContext):  # Note: this can also be async!
+        assert isinstance(self.dependency, ExampleDependency)
+        #
+        # TODO: implement here the authorization logic
+        #
+        roles = context.identity.claims.get("roles", [])
+        if roles and "ADMIN" in roles:
+            context.succeed(self)
+        else:
+            context.fail("The user is not an ADMIN")
+
+
+class MyAuthenticationHandler(AuthenticationHandler):
+    def authenticate(self, context: Request) -> Identity | None:
+        # TODO: implement your own authentication logic
+        return Identity({"id": "example", "sub": "001", "roles": []}, self.scheme)
+
+
+authentication = app.use_authentication()
+authentication.add(MyAuthenticationHandler)
+
+authorization = app.use_authorization()
+authorization.with_default_policy(Policy("default", MyInjectedRequirement))
+
+# We need to register the types in the DI container!
+app.services.register(MyInjectedRequirement)
+app.services.register(ExampleDependency)
+app.services.register(MyAuthenticationHandler)
+
+
+@app.router.get("/")
+def home(request: Request):
+    assert request.user is not None
+    return json(request.user.claims)
+```
+
+/// admonition | ContainerProtocol.
+    type: tip
+
+As documented in [_Container Protocol_](./dependency-injection.md#the-container-protocol), BlackSheep
+supports the use of other DI containers as replacements for the built-in
+library used for dependency injection.
+
+///

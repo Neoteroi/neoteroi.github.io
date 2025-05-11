@@ -464,7 +464,7 @@ app = Application(router=router)
 
 ### Controllers dedicated router
 
-Controllers need a different kind of router, an instance of
+Controllers uses a different kind of router, an instance of
 `blacksheep.server.routing.RoutesRegistry`. If using a dedicated router for
 controllers is desired, do this instead:
 
@@ -509,11 +509,20 @@ app = Application()
 app.controllers_router = controllers_router
 ```
 
-/// admonition | About Router and RoutesRegistry
+/// admonition | About Router and RoutesRegistry.
+    type: warning
 
 Controller routes use a "RoutesRegistry" to support the dynamic generation
 of paths by controller class name. Controller routes are evaluated and
 merged into `Application.router` when the application starts.
+Since version `2.3.0`, all routes in BlackSheep behave this way and decorators
+in `app.router` and `app.router.controllers_routes` can be used
+interchangeably.
+Before version `2.3.0`, it is _necessary_ to use the correct methods when
+defining request handlers: the decorators of the `router.controllers_routes`
+for controllers' methods, and the decorators of the `router` for request
+handlers defined using functions.
+
 ///
 
 ## Routing prefix
@@ -531,3 +540,93 @@ To globally configure a prefix for all routes, use the environment variable
 
 This feature is intended for applications deployed behind proxies. For more
 information, refer to [_Behind proxies_](./behind-proxies.md).
+
+## How to track routes that matched a request
+
+BlackSheep by default does not track which _route_ matched a web request,
+because this is not always necessary. However, for logging purposes it can be
+useful to log the route pattern instead of the exact request URL, to reduce
+logs cardinality.
+
+One option to keep track of the route that matches a request is to wrap the
+`get_match` of the Application's router:
+
+```python
+    def wrap_get_route_match(
+        fn: Callable[[Request], Optional[RouteMatch]]
+    ) -> Callable[[Request], Optional[RouteMatch]]:
+        @wraps(fn)
+        def get_route_match(request: Request) -> Optional[RouteMatch]:
+            match = fn(request)
+            request.route = match.pattern.decode()  if match else "Not Found"  # type: ignore
+            return match
+
+        return get_route_match
+
+    app.router.get_match = wrap_get_route_match(app.router.get_match)  # type: ignore
+```
+
+If monkey-patching methods in Python looks ugly, a specific `Router` class can
+be used, like in the following example:
+
+```python
+from blacksheep import Application, Router
+from blacksheep.messages import Request
+from blacksheep.server.routing import RouteMatch
+
+
+class TrackingRouter(Router):
+
+    def get_match(self, request: Request) -> RouteMatch | None:
+        match = super().get_match(request)
+        request.route = match.pattern.decode() if match else "Not Found"  # type: ignore
+        return match
+
+
+app = Application(router=TrackingRouter())
+
+
+@app.router.get("/*")
+def home(request):
+    return (
+        f"Request path: {request.url.path.decode()}\n"
+        + f"Request route path: {request.route}\n"
+    )
+```
+
+If attaching additional properties to the request object also looks suboptimal,
+a `WeakKeyDictionary` can be used to store additional information about the
+request object, like in this example:
+
+```python
+import weakref
+
+from blacksheep import Application, Router
+from blacksheep.messages import Request
+from blacksheep.server.routing import RouteMatch
+
+
+class TrackingRouter(Router):
+
+    def __init__(self):
+        super().__init__()
+        self.requests_routes = weakref.WeakKeyDictionary()
+
+    def get_match(self, request: Request) -> RouteMatch | None:
+        match = super().get_match(request)
+        self.requests_routes[request] = match.pattern.decode() if match else "Not Found"
+        return match
+
+
+router = TrackingRouter()
+
+app = Application(router=router)
+
+
+@app.router.get("/*")
+def home(request):
+    return (
+        f"Request path: {request.url.path.decode()}\n"
+        + f"Request route path: {router.requests_routes[request]}\n"
+    )
+```

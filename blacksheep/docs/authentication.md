@@ -171,7 +171,7 @@ the future.
 
 /// admonition | 💡
 
-It is possible to configure several JWTBearerAuthentication handlers,
+It is possible to configure several `JWTBearerAuthentication` handlers,
 for applications that need to support more than one identity provider. For
 example, for applications that need to support sign-in through Auth0, Azure
 Active Directory, Azure Active Directory B2C.
@@ -308,6 +308,64 @@ The example below shows how a user's identity can be read from the web request:
         # user can be None or an instance of Identity (set in the authentication
         # handler)
     ```
+
+## Dependency Injection in authentication handlers
+
+Dependency Injection is supported in authentication handlers. To use it:
+
+1. Configure `AuthenticationHandler` objects as types (not instances)
+   associated to the `AuthenticationStrategy` object.
+2. Register dependencies in the DI container, and in the handler classes
+   according to the solution you are using for dependency injection.
+
+The code below illustrates and example using the built-in solution for DI.
+
+```python {linenums="1" hl_lines="7-8 11-13 23-26 28-30"}
+from blacksheep import Application, Request, json
+from guardpost import AuthenticationHandler, Identity
+
+app = Application()
+
+
+class ExampleDependency:
+    pass
+
+
+class MyAuthenticationHandler(AuthenticationHandler):
+    def __init__(self, dependency: ExampleDependency) -> None:
+        self.dependency = dependency
+
+    def authenticate(self, context: Request) -> Identity | None:
+        # TODO: implement your own authentication logic
+        assert isinstance(self.dependency, ExampleDependency)
+        return Identity({"id": "example", "sub": "001"}, self.scheme)
+
+
+auth = app.use_authentication()  # AuthenticationStrategy
+
+# The authentication handler will be instantiated by `app.services`,
+# which can be any object implementing the ContainerProtocol
+auth.add(MyAuthenticationHandler)
+
+# We need to register the types in the DI container!
+app.services.register(MyAuthenticationHandler)
+app.services.register(ExampleDependency)
+
+
+@app.router.get("/")
+def home(request: Request):
+    assert request.user is not None
+    return json(request.user.claims)
+```
+
+/// admonition | ContainerProtocol.
+    type: tip
+
+As documented in [_Container Protocol_](./dependency-injection.md#the-container-protocol), BlackSheep
+supports the use of other DI containers as replacements for the built-in
+library used for dependency injection.
+
+///
 
 ## Next
 
