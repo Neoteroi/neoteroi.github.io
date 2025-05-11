@@ -781,6 +781,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dependency-injection-in-authentication-handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency Injection in authentication handlers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next" class="md-nav__link">
     <span class="md-ellipsis">
       Next
@@ -1599,6 +1608,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dependency-injection-in-authentication-handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency Injection in authentication handlers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next" class="md-nav__link">
     <span class="md-ellipsis">
       Next
@@ -1788,7 +1806,7 @@ JWTs signed with symmetric keys. Support for symmetric keys might be added in
 the future.</p>
 <div class="admonition">
 <p class="admonition-title">💡</p>
-<p>It is possible to configure several JWTBearerAuthentication handlers,
+<p>It is possible to configure several <code>JWTBearerAuthentication</code> handlers,
 for applications that need to support more than one identity provider. For
 example, for applications that need to support sign-in through Auth0, Azure
 Active Directory, Azure Active Directory B2C.</p>
@@ -1897,12 +1915,97 @@ the following body:</p>
 </div>
 </div>
 </div>
+<h2 id="dependency-injection-in-authentication-handlers">Dependency Injection in authentication handlers<a class="headerlink" href="#dependency-injection-in-authentication-handlers" title="Permanent link">&para;</a></h2>
+<p>Dependency Injection is supported in authentication handlers. To use it:</p>
+<ol>
+<li>Configure <code>AuthenticationHandler</code> objects as types (not instances)
+   associated to the <code>AuthenticationStrategy</code> object.</li>
+<li>Register dependencies in the DI container, and in the handler classes
+   according to the solution you are using for dependency injection.</li>
+</ol>
+<p>The code below illustrates and example using the built-in solution for DI.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span>
+<span class="normal"><a href="#__codelineno-10-12">12</a></span>
+<span class="normal"><a href="#__codelineno-10-13">13</a></span>
+<span class="normal"><a href="#__codelineno-10-14">14</a></span>
+<span class="normal"><a href="#__codelineno-10-15">15</a></span>
+<span class="normal"><a href="#__codelineno-10-16">16</a></span>
+<span class="normal"><a href="#__codelineno-10-17">17</a></span>
+<span class="normal"><a href="#__codelineno-10-18">18</a></span>
+<span class="normal"><a href="#__codelineno-10-19">19</a></span>
+<span class="normal"><a href="#__codelineno-10-20">20</a></span>
+<span class="normal"><a href="#__codelineno-10-21">21</a></span>
+<span class="normal"><a href="#__codelineno-10-22">22</a></span>
+<span class="normal"><a href="#__codelineno-10-23">23</a></span>
+<span class="normal"><a href="#__codelineno-10-24">24</a></span>
+<span class="normal"><a href="#__codelineno-10-25">25</a></span>
+<span class="normal"><a href="#__codelineno-10-26">26</a></span>
+<span class="normal"><a href="#__codelineno-10-27">27</a></span>
+<span class="normal"><a href="#__codelineno-10-28">28</a></span>
+<span class="normal"><a href="#__codelineno-10-29">29</a></span>
+<span class="normal"><a href="#__codelineno-10-30">30</a></span>
+<span class="normal"><a href="#__codelineno-10-31">31</a></span>
+<span class="normal"><a href="#__codelineno-10-32">32</a></span>
+<span class="normal"><a href="#__codelineno-10-33">33</a></span>
+<span class="normal"><a href="#__codelineno-10-34">34</a></span>
+<span class="normal"><a href="#__codelineno-10-35">35</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">blacksheep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">json</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">guardpost</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticationHandler</span><span class="p">,</span> <span class="n">Identity</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">ExampleDependency</span><span class="p">:</span>
+</span><a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="hll">    <span class="k">pass</span>
+</span><a id="__codelineno-10-9" name="__codelineno-10-9"></a>
+<a id="__codelineno-10-10" name="__codelineno-10-10"></a>
+<a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">MyAuthenticationHandler</span><span class="p">(</span><span class="n">AuthenticationHandler</span><span class="p">):</span>
+</span><a id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="hll">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dependency</span><span class="p">:</span> <span class="n">ExampleDependency</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><a id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">dependency</span> <span class="o">=</span> <span class="n">dependency</span>
+</span><a id="__codelineno-10-14" name="__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Identity</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16"></a>        <span class="c1"># TODO: implement your own authentication logic</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17"></a>        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency</span><span class="p">,</span> <span class="n">ExampleDependency</span><span class="p">)</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18"></a>        <span class="k">return</span> <span class="n">Identity</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example&quot;</span><span class="p">,</span> <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="s2">&quot;001&quot;</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="p">)</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19"></a>
+<a id="__codelineno-10-20" name="__codelineno-10-20"></a>
+<a id="__codelineno-10-21" name="__codelineno-10-21"></a><span class="n">auth</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">use_authentication</span><span class="p">()</span>  <span class="c1"># AuthenticationStrategy</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22"></a>
+<a id="__codelineno-10-23" name="__codelineno-10-23"></a><span class="hll"><span class="c1"># The authentication handler will be instantiated by `app.services`,</span>
+</span><a id="__codelineno-10-24" name="__codelineno-10-24"></a><span class="hll"><span class="c1"># which can be any object implementing the ContainerProtocol</span>
+</span><a id="__codelineno-10-25" name="__codelineno-10-25"></a><span class="hll"><span class="n">auth</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MyAuthenticationHandler</span><span class="p">)</span>
+</span><a id="__codelineno-10-26" name="__codelineno-10-26"></a><span class="hll">
+</span><a id="__codelineno-10-27" name="__codelineno-10-27"></a><span class="c1"># We need to register the types in the DI container!</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28"></a><span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">MyAuthenticationHandler</span><span class="p">)</span>
+</span><a id="__codelineno-10-29" name="__codelineno-10-29"></a><span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ExampleDependency</span><span class="p">)</span>
+</span><a id="__codelineno-10-30" name="__codelineno-10-30"></a><span class="hll">
+</span><a id="__codelineno-10-31" name="__codelineno-10-31"></a>
+<a id="__codelineno-10-32" name="__codelineno-10-32"></a><span class="nd">@app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-10-34" name="__codelineno-10-34"></a>    <span class="k">assert</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35"></a>    <span class="k">return</span> <span class="n">json</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">claims</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition tip">
+<p class="admonition-title">ContainerProtocol.</p>
+<p>As documented in <a href="../dependency-injection/#the-container-protocol"><em>Container Protocol</em></a>, BlackSheep
+supports the use of other DI containers as replacements for the built-in
+library used for dependency injection.</p>
+</div>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
 <p>While authentication focuses on <em>identifying</em> users, authorization determines
 whether a user <em>is permitted</em> to perform the requested action. The next page
 describes the built-in <a href="../authorization/">authorization strategy</a> in
 BlackSheep.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (7)"><span class="nt-initials">RP</span></div><div class="nt-contributor nt-group-1" title="Elliot Waite &lt;elliot@elliotwaite.com&gt; (1)"><span class="nt-initials">EW</span></div><div class="nt-contributor nt-group-2" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-05-11 19:57:17</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (8)"><span class="nt-initials">RP</span></div><div class="nt-contributor nt-group-1" title="Elliot Waite &lt;elliot@elliotwaite.com&gt; (1)"><span class="nt-initials">EW</span></div><div class="nt-contributor nt-group-2" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div></div></div>
 
 
 
