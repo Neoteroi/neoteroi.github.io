@@ -10,15 +10,18 @@ This page describes:
 
 - [X] Controller methods.
 - [X] API Controllers.
+- [X] Controllers inheritance.
 
 It is recommended to follow the [MVC tutorial](mvc-project-template.md) before
 reading this page.
 
 /// admonition | For Flask users
     type: tip
+
 If you come from Flask, controllers in BlackSheep can be considered
 equivalent to Flask's Blueprints, as they allow to group request handlers
 in dedicated modules and classes.
+
 ///
 
 ## The Controller class
@@ -241,3 +244,120 @@ class Cats(APIController):
 
     ...
 ```
+
+## Controllers inheritance
+
+Since version `2.3.0`, the framework supports routes inheritance in controllers.
+Consider the following example:
+
+```python {linenums="1" hl_lines="8-9 12-13 15 21-21"}
+from blacksheep import Application
+from blacksheep.server.controllers import Controller, get
+
+
+app = Application()
+
+
+class BaseController(Controller):
+    path: ClassVar[str] = "base"
+
+    @classmethod
+    def route(cls) -> Optional[str]:
+        return f"/api/{cls.path}"
+
+    @get("/foo")  # /api/base/foo
+    def foo(self):
+        return self.ok(self.__class__.__name__)
+
+
+class Derived(BaseController):
+    path = "derived"
+
+    # /api/derived/foo (inherited from the base class)
+```
+
+In the example above, the following routes are configured:
+
+- `/api/base/foo`, defined in `BaseController`
+- `/api/derived/foo`, defined in `Derived`
+
+To exclude the routes registered in a base controller class, decorate the class
+using the `@abstract()` decorator imported from `blacksheep.server.controllers`.
+
+```python
+from blacksheep.server.controllers import Controller, abstract, get
+
+
+@abstract()
+class BaseController(Controller):
+    @get("/hello-world")
+```
+
+The following example illustrates a scenario in which a base class defines a
+`/hello-world` route, inherited in sub-classes that each apply a different
+base route. The `ControllerTwo` class defines one more route, which is also
+inherited by `ControllerTwoBis`; and this last class defines one more specific
+route.
+
+```python
+from blacksheep import Application
+from blacksheep.server.controllers import Controller, abstract, get
+
+
+app = Application()
+
+
+@abstract()
+class BaseController(Controller):
+    @get("/hello-world")
+    def index(self):
+        # Note: the route /hello-world itself will not be registered in the
+        # router, because this class is decorated with @abstract()
+        return self.text(f"Hello, World! {self.__class__.__name__}")
+
+
+class ControllerOne(BaseController):
+    @classmethod
+    def route(cls) -> str:
+        return "/one"
+
+    # /one/hello-world
+
+
+class ControllerTwo(BaseController):
+    @classmethod
+    def route(cls) -> str:
+        return "/two"
+
+    # /two/hello-world
+
+    @get("/specific-route")  # /two/specific-route
+    def specific_route(self):
+        return self.text(f"This is a specific route in {self.__class__.__name__}")
+
+
+class ControllerTwoBis(ControllerTwo):
+    @classmethod
+    def route(cls) -> str:
+        return "/two-bis"
+
+    # /two-bis/hello-world
+
+    # /two-bis/specific-route
+
+    @get("/specific-route-2")  # /two-bis/specific-route-2
+    def specific_route(self):
+        return self.text(f"This is another route in {self.__class__.__name__}")
+```
+
+All routes of this example, with their respective response texts, are:
+
+- `/one/hello-world` :material-arrow-right: "Hello, World! ControllerOne"
+- `/two/hello-world` :material-arrow-right: "Hello, World! ControllerTwo"
+- `/two-bis/hello-world` :material-arrow-right: "Hello, World! ControllerTwoBis"
+- `/two/specific-route` :material-arrow-right: "This is a specific route in ControllerTwo"
+- `/two-bis/specific-route` :material-arrow-right: "This is a specific route in ControllerTwoBis"
+- `/two-bis/specific-route-2` :material-arrow-right: "This is another route in ControllerTwoBis"
+
+Controller types and their dependencies are resolved appropriately for each
+request handler,
