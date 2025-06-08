@@ -3,7 +3,8 @@
 BlackSheep is an [ASGI](https://asgi.readthedocs.io/en/latest/) web framework,
 which requires an ASGI HTTP server to run, such as
 [Uvicorn](http://www.uvicorn.org/), or
-[Hypercorn](https://pgjones.gitlab.io/hypercorn/). All examples in this
+[Hypercorn](https://pgjones.gitlab.io/hypercorn/) or
+[granian](https://github.com/emmett-framework/granian). All examples in this
 documentation use `Uvicorn`, but the framework has also been tested with
 Hypercorn and should work with any server that implements the `ASGI`
 specification.

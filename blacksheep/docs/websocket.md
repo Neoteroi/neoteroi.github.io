@@ -6,8 +6,9 @@ real-time applications, such as chat apps and similar use cases.
 
 BlackSheep can handle incoming WebSocket connections when used with an ASGI
 server that supports the WebSocket protocol (e.g.,
-[Uvicorn](https://www.uvicorn.org/#quickstart) or
-[Hypercorn](https://pgjones.gitlab.io/hypercorn/)).
+[Uvicorn](https://www.uvicorn.org/#quickstart),
+[Hypercorn](https://pgjones.gitlab.io/hypercorn/) or
+[Granian](https://github.com/emmett-framework/granian)).
 
 ## Creating a WebSocket route
 
