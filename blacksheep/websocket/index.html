@@ -1564,8 +1564,9 @@ bi-directional connection between a client and a server. It is commonly used in
 real-time applications, such as chat apps and similar use cases.</p>
 <p>BlackSheep can handle incoming WebSocket connections when used with an ASGI
 server that supports the WebSocket protocol (e.g.,
-<a href="https://www.uvicorn.org/#quickstart">Uvicorn</a> or
-<a href="https://pgjones.gitlab.io/hypercorn/">Hypercorn</a>).</p>
+<a href="https://www.uvicorn.org/#quickstart">Uvicorn</a>,
+<a href="https://pgjones.gitlab.io/hypercorn/">Hypercorn</a> or
+<a href="https://github.com/emmett-framework/granian">Granian</a>).</p>
 <h2 id="creating-a-websocket-route">Creating a WebSocket route<a class="headerlink" href="#creating-a-websocket-route" title="Permanent link">&para;</a></h2>
 <p>To make your request handler function as a WebSocket handler, use the <code>ws</code>
 decorator or the corresponding <code>add_ws</code> method provided by the app router. Note
@@ -1701,7 +1702,7 @@ until either the client disconnects or the server shuts down.</p>
 <h2 id="example-chat-application">Example: chat application<a class="headerlink" href="#example-chat-application" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/Neoteroi/BlackSheep-Examples/tree/main/websocket-chat">Here</a>
 you can find a basic example app using BlackSheep and VueJS.</p>
-<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-04-22 08:29:25</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (4)"><span class="nt-initials">RP</span></div><div class="nt-contributor nt-group-1" title="Elliot Waite &lt;elliot@elliotwaite.com&gt; (1)"><span class="nt-initials">EW</span></div><div class="nt-contributor nt-group-2" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div></div></div>
+<div class="nt-contribs"><p class="nt-mod-time">Last modified on: 2025-06-08 18:44:58</p><div class="nt-contributors"><div class="nt-contributor nt-group-0" title="Roberto Prevato &lt;roberto.prevato@gmail.com&gt; (5)"><span class="nt-initials">RP</span></div><div class="nt-contributor nt-group-1" title="Elliot Waite &lt;elliot@elliotwaite.com&gt; (1)"><span class="nt-initials">EW</span></div><div class="nt-contributor nt-group-2" title="Roman Vlasenko &lt;56698047+Klavionik@users.noreply.github.com&gt; (1)"><span class="nt-initials">RV</span></div></div></div>
 
 
 
