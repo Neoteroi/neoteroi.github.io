@@ -42,7 +42,8 @@ python -m venv venv
 
 BlackSheep is an [ASGI](https://asgi.readthedocs.io/en/latest/) web framework,
 so it requires an ASGI HTTP server like [uvicorn](http://www.uvicorn.org/), or
-[hypercorn](https://pgjones.gitlab.io/hypercorn/). Install `uvicorn` and
+[hypercorn](https://pgjones.gitlab.io/hypercorn/) or
+[granian](https://github.com/emmett-framework/granian). Install `uvicorn` and
 `blacksheep` for this tutorial:
 
 ```bash
