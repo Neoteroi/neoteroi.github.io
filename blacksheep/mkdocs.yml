@@ -27,6 +27,7 @@ nav:
   - Authentication: authentication.md
   - Authorization: authorization.md
   - OpenID Connect: openid-connect.md
+  - OpenTelemetry: opentelemetry.md
   - Sessions: sessions.md
   - Security:
       - CORS: cors.md
@@ -101,6 +102,8 @@ watch:
   - overrides
 
 markdown_extensions:
+  - pymdownx.blocks.tab:
+      alternate_style: true
   - admonition
   - markdown.extensions.codehilite:
       guess_lang: false
