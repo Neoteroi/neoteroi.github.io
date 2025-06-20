@@ -2,8 +2,8 @@
 
 [OpenTelemetry (OTEL)](https://opentelemetry.io/) is an open-source
 observability framework for cloud-native software. It provides a standard for
-collecting, processing, and exporting telemetry data (such as traces, metrics,
-and logs) from applications. By using OpenTelemetry, you can gain deep insights
+collecting, processing, and exporting telemetry data such as traces, metrics,
+and logs, from applications. By using OpenTelemetry, you can gain deep insights
 into the performance and behavior of your distributed systems, making it easier
 to monitor, troubleshoot, and optimize your applications.
 
@@ -39,7 +39,7 @@ from blacksheep.server.otel.otlp import use_open_telemetry_otlp
 
 ```
 
-More information is provided below.
+Follow the instructions below.
 
 ---
 
@@ -100,13 +100,14 @@ pip install azure-monitor-opentelemetry-exporter
 
 There are several ways to integrate with Grafana. This documentation describes
 only manual setup using environment variables for the OTLP protocol. This
-approach is flexible because it only requires outgoing HTTP connections, and
+approach is flexible because it only requires outgoing HTTP connectivity, and
 works well in scenarios where installing agents like `Grafana Alloy` is not
 easy or not possible (e.g. cloud `PaaS` services).
 
 - Install the required dependencies like described above.
 - Obtain environment variables for the OTLP protocol, using the _OpenTelemetry
-  getting started guide_ and the option _Send OpenTelemetry data directly to the Grafana Cloud OTLP endpoint._
+  getting started guide_ and the option _Send OpenTelemetry data directly to
+  the Grafana Cloud OTLP endpoint._
 
 ![Grafana Direct](./img/grafana-otel-direct.png)
 
@@ -154,9 +155,9 @@ A trace is produced for each web request and for all handled and unhandled
 exceptions. For unhandled exceptions, OpenTelemetry includes the full
 stacktrace of the exception.
 
-![Grafana traces](./img/grafana-traces.png)
+[![Grafana traces](./img/grafana-traces.png)](./img/grafana-traces.png)
 
-![Grafana errors](./img/grafana-errors.png)
+[![Grafana errors](./img/grafana-errors.png)](./img/grafana-errors.png)
 
 ## Example: Azure Application Insights
 
@@ -168,6 +169,7 @@ service.
 - Configure tracing like in the following example:
 
 ```python
+# reusable code
 from azure.monitor.opentelemetry.exporter import (
     AzureMonitorLogExporter,
     AzureMonitorTraceExporter,
@@ -195,13 +197,15 @@ def use_application_insights(
         AzureMonitorTraceExporter(connection_string=connection_string),
     )
 
+
+# app specific code:
 app = Application()
 use_application_insights(app, "YOUR_CONN_STRING")
 ```
 
 Observe how web requests and errors are displayed:
 
-![Azure Application Insights Requests](./img/azure-app-insights-requests.png)
+[![Azure Application Insights Requests](./img/azure-app-insights-requests.png)](./img/azure-app-insights-requests.png)
 
 ## Logging dependencies
 
@@ -209,7 +213,7 @@ When using OpenTelemetry you can handle your own tracing explicitly.
 The BlackSheep code includes an asynchronous context manager and example code
 for granular control of tracing.
 
-```python
+```python {linenums="1" hl_lines="9 4 11"}
 from blacksheep.server.otel import logcall
 
 
@@ -265,3 +269,54 @@ have its own independent context, so the current span is correctly tracked even
 when code is running concurrently. This ensures that in async code, each task
 sees its own current span, avoiding conflicts or leaks between concurrent
 executions.
+
+Custom events can be included in the current span:
+
+```python
+    span = trace.get_current_span()
+    span.add_event(
+        "Custom event: home handler called",
+        {"data": "Example"},
+    )
+```
+
+Beware that not all OpenTelemetry services support custom events.
+
+## Logs instrumentation
+
+The common code includes instrumentation for built-in `logging`. It configures
+instrumentation to send logs to the OpenTelemetry service only with priority
+higher or equal to `WARNING`.
+
+```python
+@app.router.get("/")
+async def home(request) -> Response:
+    logger.warning("Example warning")
+```
+
+[![Logs sent to backend](./img/grafana-logs.png)](./img/grafana-logs.png)
+
+To filter by a different priority, set a different level on the root logger:
+
+```python
+import logging
+
+
+logging.getLogger().setLevel(logging.INFO)
+```
+
+[![Logs sent to backend](./img/grafana-logs-info.png)](./img/grafana-logs-info.png)
+
+## Service information
+
+The common code includes a function, named `set_attributes`, which can be used
+to set the `OTEL_RESOURCE_ATTRIBUTES` environment variable with service metadata
+for OpenTelemetry.
+
+This method prepares and sets the OpenTelemetry resource attributes:
+service name, namespace, and environment, by updating the corresponding
+environment variable. This enables OpenTelemetry instrumentation to correctly
+identify and categorize telemetry data for the service.
+
+For more information on standard attributes, refer to: [_Environment Variable
+Specification_](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/).
