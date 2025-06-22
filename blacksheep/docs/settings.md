@@ -9,14 +9,21 @@ This page describes:
 
 ## Environmental variables
 
-| Name                     | Category | Description                                                                                                                                                                                                     |
-| ------------------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| APP_ENV                  | Settings | This environment variable is read to determine the environment of the application. For more information, refer to [_Defining application environment_](/blacksheep/settings/#defining-application-environment). |
-| APP_SHOW_ERROR_DETAILS   | Settings | If "1" or "true", configures the application to display web pages with error details in case of HTTP 500 Internal Server Error.                                                                                 |
-| APP_MOUNT_AUTO_EVENTS    | Settings | If "1" or "true", automatically binds lifecycle events of mounted apps between children and parents BlackSheep applications.                                                                                    |
-| APP_ROUTE_PREFIX         | Settings | Allows configuring a global prefix for all routes handled by the application. For more information, refer to: [Behind proxies](/blacksheep/behind-proxies/).                                                    |
-| APP_SECRET_<i>i</i>      | Secrets  | Allows configuring the secrets used by the application to protect data.                                                                                                                                         |
-| BLACKSHEEP_SECRET_PREFIX | Secrets  | Allows specifying the prefix of environment variables used to configure application secrets, defaults to "APP_SECRET" if not specified.                                                                         |
+| Name                     | Category | Description                                                                                                                                                                                                                                                                                                 |
+| ------------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| APP_ENV                  | Settings | This environment variable is read to determine the environment of the application. For more information, refer to [_Defining application environment_](/blacksheep/settings/#defining-application-environment).                                                                                             |
+| APP_DEFAULT_ROUTER       | Settings | Allows disabling the use of the default router exposed by BlackSheep. To disable the default router: `APP_DEFAULT_ROUTER=0`.                                                                                                                                                                                |
+| APP_SIGNAL_HANDLER       | Settings | Allows enabling a callback to the `{signal.SIGINT, signal.SIGTERM}` signals to detect when the application process is stopping. Information is used in `blacksheep.server.process.is_stopping()` and is useful when handling long-lasting connections. See _[Server-Sent Events](./server-sent-events.md)_. |
+| APP_JINJA_EXTENSION      | Settings | Allows configuring the file extension used to work with Jinja templates. By default it is `.jinja`.                                                                                                                                                                                                         |
+| APP_JINJA_PACKAGE_NAME   | Settings | Allows configuring the package name used by the default Jinja templates loader. By default it is `app` (as by default views are loaded from `app/views`.                                                                                                                                                    |
+| APP_JINJA_PACKAGE_PATH   | Settings | Allows configuring the path used by the default Jinja templates loader. By default it is `views` (as by default views are loaded from `app/views`.                                                                                                                                                          |
+| APP_JINJA_DEBUG          | Settings | Allows enabling Jinja debug mode, setting this env variable to a truthy value.                                                                                                                                                                                                                              |
+| APP_JINJA_ENABLE_ASYNC   | Settings | Allows enabling Jinja async mode, setting this env variable to a truthy value.                                                                                                                                                                                                                              |
+| APP_SHOW_ERROR_DETAILS   | Settings | If "1" or "true", configures the application to display web pages with error details in case of HTTP 500 Internal Server Error.                                                                                                                                                                             |
+| APP_MOUNT_AUTO_EVENTS    | Settings | If "1" or "true", automatically binds lifecycle events of mounted apps between children and parents BlackSheep applications.                                                                                                                                                                                |
+| APP_ROUTE_PREFIX         | Settings | Allows configuring a global prefix for all routes handled by the application. For more information, refer to: [Behind proxies](/blacksheep/behind-proxies/).                                                                                                                                                |
+| APP_SECRET_<i>i</i>      | Secrets  | Allows configuring the secrets used by the application to protect data.                                                                                                                                                                                                                                     |
+| BLACKSHEEP_SECRET_PREFIX | Secrets  | Allows specifying the prefix of environment variables used to configure application secrets, defaults to "APP_SECRET" if not specified.                                                                                                                                                                     |
 
 ## Defining application environment
 
@@ -148,6 +155,7 @@ def my_json(data: Any, status: int = 200) -> Response:
 ```
 
 ### Example: applying transformations during JSON operations
+
 The example below illustrates how to apply transformations to objects while
 they are serialized and deserialized. Beware that the example only illustrates
 this possibility, it doesn't handle objects inside lists, `@dataclass`, or
@@ -193,4 +201,33 @@ json_settings.use(
     loads=custom_loads,
     dumps=custom_dumps,
 )
+```
+
+## Encodings settings
+
+Starting from version `2.4.0`, the framework provides settings to control how
+`UnicodeDecodeError` exceptions are handled when parsing request bodies.
+
+By default the framework raises an exception when the client sends a payload
+specifying the wrong encoding in the `Content-Type` request header, or when
+the client sends a payload that is not `UTF-8` encoded and without specifying
+the charset encoding.
+
+To customize the handling of `UnicodeDecodeError` and implement possible
+fallbacks, import the `Decoder` class from the `blacksheep.settings.encodings`
+namespace and create your own implementation. Subclasses of this class define a
+strategy for decoding bytes into strings when a `UnicodeDecodeError` occurs
+during standard decoding. You must implement the `decode` method, which
+receives the bytes to decode and the original `UnicodeDecodeError`.
+
+```python
+from blacksheep.settings.encodings import Decoder, encodings_settings
+
+
+class MyDecoder(Decoder):
+    """Implements the Decoder interface."""
+    def decode(self, value: bytes, decode_error: UnicodeDecodeError) -> str: ...
+
+
+encodings_settings.use(MyDecoder())
 ```

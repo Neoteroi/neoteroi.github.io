@@ -97,6 +97,11 @@ span.task-list-indicator {
     --nt-color-7: #108d10;
 }
 
+:root>*
+{
+    --md-mermaid-sequence-number-bg-color: #00363e;
+}
+
 .version-warning {
     margin-top: 5px !important;
 }
