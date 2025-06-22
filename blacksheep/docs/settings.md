@@ -155,6 +155,7 @@ def my_json(data: Any, status: int = 200) -> Response:
 ```
 
 ### Example: applying transformations during JSON operations
+
 The example below illustrates how to apply transformations to objects while
 they are serialized and deserialized. Beware that the example only illustrates
 this possibility, it doesn't handle objects inside lists, `@dataclass`, or
@@ -200,4 +201,33 @@ json_settings.use(
     loads=custom_loads,
     dumps=custom_dumps,
 )
+```
+
+## Encodings settings
+
+Starting from version `2.4.0`, the framework provides settings to control how
+`UnicodeDecodeError` exceptions are handled when parsing request bodies.
+
+By default the framework raises an exception when the client sends a payload
+specifying the wrong encoding in the `Content-Type` request header, or when
+the client sends a payload that is not `UTF-8` encoded and without specifying
+the charset encoding.
+
+To customize the handling of `UnicodeDecodeError` and implement possible
+fallbacks, import the `Decoder` class from the `blacksheep.settings.encodings`
+namespace and create your own implementation. Subclasses of this class define a
+strategy for decoding bytes into strings when a `UnicodeDecodeError` occurs
+during standard decoding. You must implement the `decode` method, which
+receives the bytes to decode and the original `UnicodeDecodeError`.
+
+```python
+from blacksheep.settings.encodings import Decoder, encodings_settings
+
+
+class MyDecoder(Decoder):
+    """Implements the Decoder interface."""
+    def decode(self, value: bytes, decode_error: UnicodeDecodeError) -> str: ...
+
+
+encodings_settings.use(MyDecoder())
 ```
