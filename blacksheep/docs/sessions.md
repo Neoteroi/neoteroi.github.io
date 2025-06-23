@@ -67,7 +67,7 @@ sequenceDiagram
     Client->>Server: HTTP Request (Cookie: session ID)
     Server->>Store: Retrieve session data using session ID
     Store-->>Server: Session data
-    Server-->>Client: HTTP Response (may update Set-Cookie)
+    Server-->>Client: HTTP Response
 ```
 
 In this scenario, Session ID is exchanged between client and server via
@@ -136,6 +136,36 @@ and encrypted.
 Before version `2.4.0`, BlackSheep offered built-in support only for sessions
 stored entirely on the client side, in cookies. Using sessions with a different
 store required custom code.
+
+/// admonition | Cookies and cross-site request forgery.
+    type: danger
+
+When you store sessions in cookies on the client side, web applications must
+implement [Anti-Forgery validation](anti-request-forgery.md) to prevent
+Cross-Site Request Forgery (XSRF/CSRF).
+
+**Why?**
+
+Cookies are sent automatically by browsers with every request to your
+domain, making your app vulnerable to Cross-Site Request Forgery (CSRF)
+attacks, if information in cookies is used to authenticate requests and your
+application does not implement [Anti-Forgery
+validation](anti-request-forgery.md).
+
+**How?**
+
+Common anti-forgery mechanisms include:
+
+- CSRF tokens: Generate a unique token per session/request and require it in
+  forms or headers.
+- SameSite cookies: Set your session cookie with `SameSite=Strict` or
+  `SameSite=Lax` to limit cross-site requests.
+- Custom headers: For APIs, use and require a custom header (e.g.,
+  `X-Session-ID`) that browsers do not send cross-origin. In a user-defined
+  `SessionStore` type, you can rely on a custom request and response header to
+  exchange information with clients —updating your client code accordingly.
+
+///
 
 ## Enabling sessions, with custom store
 
