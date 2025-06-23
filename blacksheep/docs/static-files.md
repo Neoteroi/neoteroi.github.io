@@ -1,4 +1,4 @@
-# Serving static files
+F# Serving static files
 
 This page covers:
 
@@ -28,21 +28,22 @@ When serving files this way, a match-all route ("*") is configured in the
 application router for `GET` and `HEAD`, and files are read from the configured
 folder upon web requests.
 
+
 It is also possible to serve static files from sub-folders:
 
 ```python
 app.serve_files("app/static")
 ```
 
-Enable file discovery (in such case, requests for directories will generate an
-HTML response with a list of files):
+To enable file discovery, add the `discovery=True` parameter. In such case,
+requests for directories will generate an HTML response with a list of files:
 
 ```python
 app.serve_files("app/static", discovery=True)
 ```
 
-BlackSheep also supports serving static files from multiple folders, and
-specifying a prefix for the route path:
+Serving static files from multiple folders is supported, using a different path
+for each folder:
 
 ```python
 app = Application()
@@ -50,6 +51,52 @@ app = Application()
 # serve files contained in a "static" folder relative to the server cwd
 app.serve_files("app/images", root_path="images")
 app.serve_files("app/videos", root_path="videos")
+```
+
+### Route paths and folder names
+
+By default, when you serve files from a folder, the folder name is **not**
+included in the route at which files are served. For example, if you have a
+file `test.txt` in your `static` directory and you use:
+
+```python
+app.serve_files("static")
+```
+
+the file will be accessible at `http://localhost/test.txt` (not
+`http://localhost/static/test.txt`).
+
+If you want the files to be accessible under a specific route path (such as
+`/static/`), use the `root_path` parameter:
+
+```python
+app.serve_files("static", root_path="static")
+```
+
+With this configuration, `test.txt` will be accessible at `http://localhost/static/test.txt`.
+
+### Serving single files
+
+If you need to serve single files, it is possible to use the `file` function
+like in the following example.
+
+```python
+from blacksheep import Application, get
+from blacksheep.server.responses import file, ContentDispositionType
+
+
+app = Application()
+
+
+@get("/favicon.ico")
+def favicon_icon():
+    # Note: the file is read asynchronously and served in chunks,
+    # even though this function itself is synchronous
+    return file(
+        "path-to-your/favicon.ico",  # ← local path
+        "image/vnd.microsoft.icon",
+        content_disposition=ContentDispositionType.INLINE,
+    )
 ```
 
 ## File extensions
