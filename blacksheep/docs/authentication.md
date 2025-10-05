@@ -722,7 +722,8 @@ async def secure_login(request):
 When implementing Cookie authentication:
 
 - **Do not** hard-code secrets in source code. The examples above are just **examples**.
-- **Use strong secret keys**: Generate cryptographically secure random keys.
+- **Use strong secret keys**: Generate cryptographically secure random keys,
+  for example using `secrets.choice`.
 - **Enable secure flag**: Always set `secure=True` when using HTTPS in production.
 - **Key rotation**: Use multiple secret keys to support key rotation without breaking
   existing sessions.
@@ -1204,8 +1205,8 @@ def home(request: Request):
     type: tip
 
 As documented in [_Container Protocol_](./dependency-injection.md#the-container-protocol),
-BlackSheep supports the use of other DI containers as replacements for the built-in
-library used for dependency injection.
+BlackSheep supports the use of other DI containers as replacements for the
+built-in library used for dependency injection.
 
 ///
 
@@ -1264,7 +1265,6 @@ The authentication and authorization logic for BlackSheep is packaged and
 published in a dedicated library:
 [`guardpost`](https://github.com/neoteroi/guardpost) ([in
 pypi](https://pypi.org/project/guardpost/)).
-
 
 ## Next
 

@@ -19,6 +19,17 @@ automatically trace incoming requests, outgoing HTTP calls, and other
 operations, providing end-to-end visibility into your application's execution
 flow.
 
+/// note | Tutorial on self-hosted monitoring stack.
+
+For a tutorial on how to self-host a full monitoring stack in a single node of
+a Kubernetes cluster (which is fine for non-production environments), and to
+know more about OpenTelemetry and the OTLP protocol, you can read:
+[_K8s Studies on Monitoring_](https://robertoprevato.github.io/K8sStudies/k3s/monitoring/).
+It includes a working example of BlackSheep application that sends telemetries
+to an OpenTelemetry Collector.
+
+///
+
 ## Enabling OpenTelemetry in BlackSheep
 
 BlackSheep offers built-in support for OpenTelemetry since version `2.3.2`, but
@@ -155,9 +166,9 @@ A trace is produced for each web request and for all handled and unhandled
 exceptions. For unhandled exceptions, OpenTelemetry includes the full
 stacktrace of the exception.
 
-[![Grafana traces](./img/grafana-traces.png)](./img/grafana-traces.png)
+![Grafana traces](./img/grafana-traces.png)
 
-[![Grafana errors](./img/grafana-errors.png)](./img/grafana-errors.png)
+![Grafana errors](./img/grafana-errors.png)
 
 ## Example: Azure Application Insights
 
@@ -205,7 +216,7 @@ use_application_insights(app, "YOUR_CONN_STRING")
 
 Observe how web requests and errors are displayed:
 
-[![Azure Application Insights Requests](./img/azure-app-insights-requests.png)](./img/azure-app-insights-requests.png)
+![Azure Application Insights Requests](./img/azure-app-insights-requests.png)
 
 ## Logging dependencies
 
@@ -233,9 +244,9 @@ async def home(request) -> Response:
 The following screenshots illustrate how dependencies are displayed in Grafana
 and Azure Application Insights:
 
-[![Dependency in Grafana](./img/grafana-dependency.png)](./img/grafana-dependency.png)
+![Dependency in Grafana](./img/grafana-dependency.png)
 
-[![Dependency in Azure Application Insights](./img/azure-app-insights-dependency.png)](./img/azure-app-insights-dependency.png)
+![Dependency in Azure Application Insights](./img/azure-app-insights-dependency.png)
 
 /// admonition | Dependencies with Azure Application Insights.
     type: example
@@ -294,7 +305,7 @@ async def home(request) -> Response:
     logger.warning("Example warning")
 ```
 
-[![Logs sent to backend](./img/grafana-logs.png)](./img/grafana-logs.png)
+![Logs sent to backend](./img/grafana-logs.png)
 
 To filter by a different priority, set a different level on the root logger:
 
@@ -305,7 +316,7 @@ import logging
 logging.getLogger().setLevel(logging.INFO)
 ```
 
-[![Logs sent to backend](./img/grafana-logs-info.png)](./img/grafana-logs-info.png)
+![Logs sent to backend](./img/grafana-logs-info.png)
 
 ## Service information
 
