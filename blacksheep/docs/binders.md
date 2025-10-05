@@ -1,4 +1,5 @@
 # Binders
+
 BlackSheep implements automatic binding of parameters for request handlers, a
 feature inspired by "Model Binding" in the [ASP.NET web
 framework](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-2.2).
@@ -71,6 +72,7 @@ from `BoundValue` class, defined in `blacksheep.server.bindings`.
     the `Request` of the web request.
 
 ### Explicit binding
+
 Binders can be defined explicitly, using type annotations and classes from
 `blacksheep.server.bindings` (or just `blacksheep`).
 
@@ -115,6 +117,7 @@ extra unused properties, use `*args` in your class constructor: `__init__(one,
 two, three, *args)`.
 
 ## Optional parameters
+
 Optional parameters can be defined in one of these ways:
 
 1. using `typing.Optional` annotation
@@ -273,3 +276,12 @@ def home(something: FromCustomValue):
     return f"OK {something.value}"
 
 ```
+
+<!--TODO: document support for Add support for defining convert functions in
+custom BoundValue classes that are used to convert Python objects from parsed
+JSON into more specific classes, added in 2.4.1-->
+
+## Type Converters
+
+<!--TODO: document TypeConverter, include StrEnum, IntEnum, and Literal
+support, added in 2.4.1-->
