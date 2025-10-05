@@ -7,23 +7,10 @@ covers:
 
 - [X] How to use the built-in authentication strategy.
 - [X] How to configure a custom authentication handler.
-- [X] How to use the built-in support for JWT Bearer authentication.
+- [X] How to use the built-in support for **API Key** authentication.
+- [X] How to use the built-in support for **Basic authentication**.
+- [X] How to use the built-in support for **JWT Bearer** authentication.
 - [X] How to read the user's context in request handlers.
-
-/// admonition | Additional dependencies.
-    type: warning
-
-Using JWT Bearer and OpenID integrations requires additional dependencies.
-Install them by running: `pip install blacksheep[full]`.
-
-///
-
-## Underlying library
-
-The authentication and authorization logic for BlackSheep is packaged and
-published in a dedicated library:
-[`guardpost`](https://github.com/neoteroi/guardpost) ([in
-pypi](https://pypi.org/project/guardpost/)).
 
 ## How to use built-in authentication
 
@@ -38,9 +25,19 @@ Bearer tokens and then describe how to write a custom authentication handler.
 
 /// admonition | Terms: user, service, principal.
 
-The term 'user' typically refers to human users, while 'service' describes non-human clients. In Java and .NET, the term 'principal' is commonly used to describe a generic identity.
+The term 'user' typically refers to human users, while 'service' describes
+non-human clients. In Java and .NET, the term 'principal' is commonly used to
+describe a generic identity.
 
 ///
+
+## API Key authentication
+
+
+
+## Basic authentication
+
+
 
 ## OIDC
 
@@ -373,3 +370,22 @@ While authentication focuses on *identifying* users, authorization determines
 whether a user *is permitted* to perform the requested action. The next page
 describes the built-in [authorization strategy](authorization.md) in
 BlackSheep.
+
+<!--
+
+/// admonition | Additional dependencies.
+    type: warning
+
+Using JWT Bearer and OpenID integrations requires additional dependencies.
+Install them by running: `pip install blacksheep[full]`.
+
+///
+
+## Underlying library
+
+The authentication and authorization logic for BlackSheep is packaged and
+published in a dedicated library:
+[`guardpost`](https://github.com/neoteroi/guardpost) ([in
+pypi](https://pypi.org/project/guardpost/)).
+
+-->
