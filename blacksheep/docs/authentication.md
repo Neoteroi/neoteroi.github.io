@@ -121,54 +121,47 @@ async def get_user_info(request):
 
 API Keys can be retrieved from different locations in the request:
 
-/// tab | Header (default)
-    select: True
+=== "Header (default)"
 
-```python
-app.use_authentication().add(
-    APIKeyAuthentication(
-        APIKey(secret=Secret("your-secret-key")),
-        param_name="X-API-Key",
-        location="header"  # Default location
+    ```python
+    app.use_authentication().add(
+        APIKeyAuthentication(
+            APIKey(secret=Secret("your-secret-key")),
+            param_name="X-API-Key",
+            location="header"  # Default location
+        )
     )
-)
-```
+    ```
 
-Test with: `curl -H "X-API-Key: your-secret-key" http://localhost:8000/`
+    Test with: `curl -H "X-API-Key: your-secret-key" http://localhost:8000/`
 
-///
+=== "Query"
 
-/// tab | Query
-
-```python
-app.use_authentication().add(
-    APIKeyAuthentication(
-        APIKey(secret=Secret("your-secret-key")),
-        param_name="api_key",
-        location="query"
+    ```python
+    app.use_authentication().add(
+        APIKeyAuthentication(
+            APIKey(secret=Secret("your-secret-key")),
+            param_name="api_key",
+            location="query"
+        )
     )
-)
-```
+    ```
 
-Test with: `curl http://localhost:8000/?api_key=your-secret-key`
+    Test with: `curl http://localhost:8000/?api_key=your-secret-key`
 
-///
+=== "Cookie"
 
-/// tab | Cookie
-
-```python
-app.use_authentication().add(
-    APIKeyAuthentication(
-        APIKey(secret=Secret("your-secret-key")),
-        param_name="api_key",
-        location="cookie"
+    ```python
+    app.use_authentication().add(
+        APIKeyAuthentication(
+            APIKey(secret=Secret("your-secret-key")),
+            param_name="api_key",
+            location="cookie"
+        )
     )
-)
-```
+    ```
 
-Test with: `curl -b "api_key=your-secret-key" http://localhost:8000/`
-
-///
+    Test with: `curl -b "api_key=your-secret-key" http://localhost:8000/`
 
 ### Dynamic API Key provider
 
@@ -271,6 +264,16 @@ app.use_authentication().add(
 
 ## Basic authentication
 
+Since version `2.4.2`, BlackSheep provides built-in support for HTTP Basic
+Authentication, which allows clients to authenticate using a username and password
+combination. Basic authentication credentials can be configured statically or retrieved
+dynamically from external sources.
+
+### Enabling Basic authentication
+
+The following example shows how to configure Basic authentication with static
+credentials:
+
 ```python
 from blacksheep import Application, get
 from blacksheep.server.authentication.basic import BasicAuthentication, BasicCredentials
@@ -303,6 +306,209 @@ app.use_authorization()
 async def get_claims(request):
     return request.user.roles
 ```
+
+You can configure multiple users with different roles and claims:
+
+```python
+from blacksheep import Application, get
+from blacksheep.server.authentication.basic import BasicAuthentication, BasicCredentials
+from blacksheep.server.authorization import auth
+from essentials.secrets import Secret
+
+
+app = Application()
+
+app.use_authentication().add(
+    BasicAuthentication(
+        # Admin user with full access
+        BasicCredentials(
+            username="admin",
+            password=Secret("$ADMIN_PASSWORD"),
+            roles=["admin", "user"],
+            claims={"department": "IT", "level": "admin"}
+        ),
+        # Regular user
+        BasicCredentials(
+            username="john_doe",
+            password=Secret("$JOHN_PASSWORD"),
+            roles=["user"],
+            claims={"department": "sales", "level": "user"}
+        ),
+        # Read-only user
+        BasicCredentials(
+            username="guest",
+            password=Secret("$GUEST_PASSWORD"),
+            roles=["readonly"],
+            claims={"department": "public", "level": "guest"}
+        )
+    )
+)
+
+app.use_authorization()
+
+
+@auth()
+@get("/")
+async def get_user_info(request):
+    return {
+        "username": request.user.claims.get("sub"),
+        "roles": request.user.roles,
+        "claims": request.user.claims
+    }
+```
+
+Test with curl:
+```bash
+# Admin user
+curl -u "admin:admin_password_here" http://localhost:8000/
+
+# Regular user
+curl -u "john_doe:john_password_here" http://localhost:8000/
+
+# Guest user
+curl -u "guest:guest_password_here" http://localhost:8000/
+```
+
+### Dynamic credentials provider
+
+For scenarios where credentials need to be retrieved dynamically (e.g., from a database
+or LDAP), implement the `BasicCredentialsProvider` abstract class:
+
+```python
+from typing import List
+from blacksheep import Application, get
+from blacksheep.server.authentication.basic import (
+    BasicAuthentication,
+    BasicCredentials,
+    BasicCredentialsProvider
+)
+from blacksheep.server.authorization import auth
+from essentials.secrets import Secret
+
+
+class DatabaseCredentialsProvider(BasicCredentialsProvider):
+    """
+    Example provider that retrieves credentials from a database.
+    """
+
+    def __init__(self, db_connection):
+        self.db = db_connection
+
+    async def get_credentials(self) -> List[BasicCredentials]:
+        """
+        Fetch credentials from database with associated roles and claims.
+        """
+        # Example database query (adapt to your database)
+        users_data = await self.db.fetch_all("""
+            SELECT username, password_hash, roles, department, access_level
+            FROM users
+            WHERE is_active = true
+        """)
+
+        credentials = []
+        for row in users_data:
+            # TODO: return a custom subclass of BasicCredentials that overrides the
+            # `match` method to handle the password_hash (as the client will send a
+            # password in clear text!)
+            credentials.append(BasicCredentials(
+                username=row["username"],
+                password=Secret(row["password_hash"], direct_value=True),
+                roles=row["roles"].split(",") if row["roles"] else [],
+                claims={
+                    "department": row["department"],
+                    "access_level": row["access_level"]
+                }
+            ))
+
+        return credentials
+
+
+# Usage with dynamic provider
+app = Application()
+
+# Assume you have a database connection
+# db_connection = get_database_connection()
+
+app.use_authentication().add(
+    BasicAuthentication(
+        credentials_provider=DatabaseCredentialsProvider(db_connection)
+    )
+)
+
+app.use_authorization()
+
+
+@auth()
+@get("/")
+async def protected_endpoint(request):
+    return {
+        "message": "Access granted",
+        "username": request.user.claims.get("sub"),
+        "department": request.user.claims.get("department"),
+        "access_level": request.user.claims.get("access_level")
+    }
+```
+
+**Note:** dependency injection is also supported, configuring the authentication handler as a _type_ to be instantiated rather than an instance.
+
+### Generating authorization headers
+
+The `BasicCredentials` class provides a utility method to generate the Authorization header value:
+
+```python
+from blacksheep.server.authentication.basic import BasicCredentials
+from essentials.secrets import Secret
+
+# Create credentials
+admin_credentials = BasicCredentials(
+    username="admin",
+    password=Secret("secret_password", direct_value=True)
+)
+
+# Generate the Authorization header value
+header_value = admin_credentials.to_header_value()
+print(header_value)  # Output: Basic YWRtaW46c2VjcmV0X3Bhc3N3b3Jk
+
+# Use in HTTP client
+import httpx
+
+response = httpx.get(
+    "http://localhost:8000/protected",
+    headers={"Authorization": header_value}
+)
+```
+
+### Advanced configuration
+
+You can customize the authentication scheme:
+
+```python
+app.use_authentication().add(
+    BasicAuthentication(
+        BasicCredentials(
+            username="service",
+            password=Secret("$SERVICE_PASSWORD"),
+            roles=["service"],
+            claims={"client_type": "internal_service"}
+        ),
+        scheme="InternalBasic",  # Custom scheme name
+        description="Internal service authentication using Basic auth"
+    )
+)
+```
+
+/// admonition | Security recommendations
+    type: warning
+
+When implementing Basic authentication:
+
+- **Always use HTTPS** in production to protect credentials in transit.
+- Use strong, unique passwords and consider password policies.
+- If you store password in a database, store hashes with salt, not plain text passwords.
+  If you work with hashes and salts, define a subclass of `BasicCredentials` that
+  overrides the `match` method to handle hashes according to your preference.
+
+///
 
 ## OIDC
 
