@@ -12,6 +12,7 @@ covers:
 - [X] How to use the built-in support for **JWT Bearer** authentication.
 - [X] How to use the built-in support for **Cookie** authentication.
 - [X] How to read the user's context in request handlers.
+- [X] How authentication can be documented in **OpenAPI Documentation**.
 
 /// admonition | Additional dependencies.
     type: warning
@@ -25,26 +26,21 @@ Install them by running: `pip install blacksheep[full]`.
 
 Common strategies for identifying users in web applications include:
 
-- Reading an `Authorization: Bearer xxx` request header containing a [JWT](https://jwt.io/introduction/).
-  with claims that identify the user.
 - Reading a signed token from a cookie.
+- Handling API Keys sent in custom headers.
+- Handling basic credentials sent in `Authorization: Basic ***` headers.
+- Handling JSON Web Tokens (JWTs) signed and including payloads with information
+  about the user, transmitted using `Authorization: Bearer ***` request headers.
 
-The following sections first explain how to use the built-in support for JWT
-Bearer tokens and then describe how to write a custom authentication handler.
-
-/// admonition | Terms: user, service, principal.
-
-The term 'user' typically refers to human users, while 'service' describes
-non-human clients. In Java and .NET, the term 'principal' is commonly used to
-describe a generic identity.
-
-///
+The following sections describe how to enable authentication using built-in
+classes, and how to define custom authentication handlers.
 
 ## API Key authentication
 
-Since version `2.4.2`, BlackSheep provides built-in support for API Key authentication
-with flexible configuration options. API Keys can be read from request headers, query
-parameters, or cookies, and each key can be associated with specific roles and claims.
+Since version `2.4.2`, BlackSheep provides built-in support for API Key
+authentication with flexible configuration options. API Keys can be read from
+request headers, query parameters, or cookies, and each key can be associated
+with specific roles and claims.
 
 ### Enabling API Key authentication
 
@@ -985,6 +981,30 @@ app.use_authentication().add(
 )
 ```
 
+/// admonition | Symmetric vs Asymmetric
+    type: info
+
+**Symmetric encryption** (shared secret):
+
+- ✅ Faster validation (no key fetching required)
+- ✅ Simpler setup for internal services
+- ❌ Same key used for signing and validation
+- ❌ Key distribution challenges in distributed systems
+
+**Asymmetric encryption** (public/private keys):
+
+- ✅ Better security model (separate keys for signing/validation)
+- ✅ Better for third-party integrations
+- ❌ Slower validation (key fetching and cryptographic operations)
+- ❌ More complex setup
+
+Choose symmetric encryption for internal services where you control both token creation
+and validation. Use asymmetric encryption when integrating with external identity
+providers or when you need to distribute validation capabilities without sharing signing
+keys.
+
+///
+
 /// admonition | Security considerations
     type: warning
 
@@ -997,28 +1017,6 @@ When using symmetric JWT authentication:
 - **Key rotation**: Implement a strategy for rotating secret keys periodically.
 - **Secure transmission**: Always use HTTPS in production to protect tokens in transit.
 - **Token expiration**: Set appropriate expiration times (`exp` claim) for your tokens.
-
-///
-
-/// admonition | Symmetric vs Asymmetric
-    type: info
-
-**Symmetric encryption** (shared secret):
-- ✅ Faster validation (no key fetching required)
-- ✅ Simpler setup for internal services
-- ❌ Same key used for signing and validation
-- ❌ Key distribution challenges in distributed systems
-
-**Asymmetric encryption** (public/private keys):
-- ✅ Better security model (separate keys for signing/validation)
-- ✅ Better for third-party integrations
-- ❌ Slower validation (key fetching and cryptographic operations)
-- ❌ More complex setup
-
-Choose symmetric encryption for internal services where you control both token creation
-and validation. Use asymmetric encryption when integrating with external identity
-providers or when you need to distribute validation capabilities without sharing signing
-keys.
 
 ///
 
