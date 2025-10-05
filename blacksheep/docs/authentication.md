@@ -8,9 +8,18 @@ covers:
 - [X] How to use the built-in authentication strategy.
 - [X] How to configure a custom authentication handler.
 - [X] How to use the built-in support for **API Key** authentication.
-- [X] How to use the built-in support for **Basic authentication**.
+- [X] How to use the built-in support for **Basic** authentication.
 - [X] How to use the built-in support for **JWT Bearer** authentication.
+- [X] How to use the built-in support for **Cookie** authentication.
 - [X] How to read the user's context in request handlers.
+
+/// admonition | Additional dependencies.
+    type: warning
+
+Using JWT Bearer and OpenID integrations requires additional dependencies.
+Install them by running: `pip install blacksheep[full]`.
+
+///
 
 ## How to use built-in authentication
 
@@ -510,6 +519,19 @@ When implementing Basic authentication:
 
 ///
 
+## Cookie
+
+BlackSheep implements a built-in class for Cookie authentication. This class can be
+used to authenticate users based on a cookie, and it is used internally by default with
+the OIDC integration (after a user successfully signs-in with an external identity
+provider, the user context is stored in a cookie by default).
+
+It can set cookies and validates them automatically.
+
+```python
+
+```
+
 ## OIDC
 
 BlackSheep implements built-in support for OpenID Connect authentication,
@@ -576,6 +598,8 @@ For more information and examples, refer to the dedicated page about
 
 ## JWT Bearer
 
+### With Asymmetric Encryption
+
 BlackSheep implements built-in support for JWT Bearer authentication, and
 validation of JWTs:
 
@@ -633,9 +657,8 @@ async def open(user: User | None):
 
 ```
 
-The built-in handler for JWT Bearer authentication does not currently support
-JWTs signed with symmetric keys. Support for symmetric keys might be added in
-the future.
+The built-in handler for JWT Bearer authentication also supports symmetric encryption,
+but only since version `2.4.2`.
 
 /// admonition | 💡
 
@@ -643,6 +666,156 @@ It is possible to configure several `JWTBearerAuthentication` handlers,
 for applications that need to support more than one identity provider. For
 example, for applications that need to support sign-in through Auth0, Azure
 Active Directory, Azure Active Directory B2C.
+
+///
+
+### With Symmetric Encryption
+
+Since version `2.4.2`, BlackSheep supports JWT Bearer authentication with symmetric
+encryption using shared secret keys. This is useful for scenarios where you control both
+the token issuer and validator, such as internal services or microservices
+architectures.
+
+The following example shows how to configure JWT Bearer authentication with a symmetric
+secret key:
+
+```python
+from blacksheep import Application, get, json
+from blacksheep.server.authentication.jwt import JWTBearerAuthentication
+from blacksheep.server.authorization import auth
+from essentials.secrets import Secret
+
+app = Application()
+
+app.use_authentication().add(
+    JWTBearerAuthentication(
+        secret_key=Secret("$JWT_SECRET"),  # ⟵ obtained from JWT_SECRET env var
+        valid_audiences=["my-service"],
+        valid_issuers=["my-issuer"],
+        algorithms=["HS256"],  # ⟵ symmetric algorithms: HS256, HS384, HS512
+        auth_mode="JWT Symmetric"
+    )
+)
+
+app.use_authorization()
+
+
+@auth()
+@get("/protected")
+async def protected_endpoint(request):
+    return {
+        "message": "Access granted",
+        "user": request.user.claims.get("sub"),
+        "roles": request.user.claims.get("roles", [])
+    }
+```
+
+#### Supported symmetric algorithms
+
+When using symmetric encryption, the following algorithms are supported:
+
+- `HS256` (HMAC using SHA-256) - **recommended**
+- `HS384` (HMAC using SHA-384)
+- `HS512` (HMAC using SHA-512)
+
+#### Creating symmetric JWTs
+
+You can create JWTs for testing using Python's `PyJWT` library:
+
+```python
+import jwt
+from datetime import datetime, timedelta
+
+# Your shared secret (same as in the authentication config)
+secret = "your-secret-key-here"
+
+# Create a JWT payload
+payload = {
+    "sub": "user123",
+    "aud": "my-service",
+    "iss": "my-issuer",
+    "exp": datetime.utcnow() + timedelta(hours=1),
+    "iat": datetime.utcnow(),
+    "roles": ["user", "admin"]
+}
+
+# Generate the token
+token = jwt.encode(payload, secret, algorithm="HS256")
+print(f"Token: {token}")
+
+# Test with curl
+# curl -H "Authorization: Bearer {token}" http://localhost:8000/protected
+```
+
+#### Multiple JWT configurations
+
+You can configure both symmetric and asymmetric JWT authentication handlers in the same
+application to support different token types:
+
+```python
+from blacksheep import Application
+from blacksheep.server.authentication.jwt import JWTBearerAuthentication
+from essentials.secrets import Secret
+
+app = Application()
+
+# Symmetric JWT for internal services
+app.use_authentication().add(
+    JWTBearerAuthentication(
+        secret_key=Secret("$INTERNAL_JWT_SECRET"),
+        valid_audiences=["internal-api"],
+        valid_issuers=["internal-issuer"],
+        algorithms=["HS256"],
+        auth_mode="JWT Internal"
+    )
+)
+
+# Asymmetric JWT for external identity providers
+app.use_authentication().add(
+    JWTBearerAuthentication(
+        authority="https://login.microsoftonline.com/tenant.onmicrosoft.com",
+        valid_audiences=["external-client-id"],
+        valid_issuers=["https://login.microsoftonline.com/tenant-id/v2.0"],
+        algorithms=["RS256"],
+        auth_mode="JWT External"
+    )
+)
+```
+
+/// admonition | Security considerations
+    type: warning
+
+When using symmetric JWT authentication:
+
+- **Use strong secret keys**: Generate cryptographically secure random keys of at least
+  256 bits for HS256.
+- **Protect your secrets**: Store secret keys securely and never commit them to version
+  control.
+- **Key rotation**: Implement a strategy for rotating secret keys periodically.
+- **Secure transmission**: Always use HTTPS in production to protect tokens in transit.
+- **Token expiration**: Set appropriate expiration times (`exp` claim) for your tokens.
+
+///
+
+/// admonition | Symmetric vs Asymmetric
+    type: info
+
+**Symmetric encryption** (shared secret):
+- ✅ Faster validation (no key fetching required)
+- ✅ Simpler setup for internal services
+- ❌ Same key used for signing and validation
+- ❌ Key distribution challenges in distributed systems
+
+**Asymmetric encryption** (public/private keys):
+- ✅ Better security model (separate keys for signing/validation)
+- ✅ Better for third-party integrations
+- ❌ Slower validation (key fetching and cryptographic operations)
+- ❌ More complex setup
+
+Choose symmetric encryption for internal services where you control both token creation
+and validation. Use asymmetric encryption when integrating with external identity
+providers or when you need to distribute validation capabilities without sharing signing
+keys.
 
 ///
 
@@ -884,23 +1057,6 @@ async def optional_auth_endpoint(request):
         return {"message": "Anonymous user"}
 ```
 
-## Next
-
-While authentication focuses on *identifying* users, authorization determines
-whether a user *is permitted* to perform the requested action. The next page
-describes the built-in [authorization strategy](authorization.md) in
-BlackSheep.
-
-<!--
-
-/// admonition | Additional dependencies.
-    type: warning
-
-Using JWT Bearer and OpenID integrations requires additional dependencies.
-Install them by running: `pip install blacksheep[full]`.
-
-///
-
 ## Underlying library
 
 The authentication and authorization logic for BlackSheep is packaged and
@@ -908,4 +1064,10 @@ published in a dedicated library:
 [`guardpost`](https://github.com/neoteroi/guardpost) ([in
 pypi](https://pypi.org/project/guardpost/)).
 
--->
+
+## Next
+
+While authentication focuses on *identifying* users, authorization determines
+whether a user *is permitted* to perform the requested action. The next page
+describes the built-in [authorization strategy](authorization.md) in
+BlackSheep.
