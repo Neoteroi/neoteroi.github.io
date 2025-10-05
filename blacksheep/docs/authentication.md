@@ -33,8 +33,13 @@ describe a generic identity.
 
 ## API Key authentication
 
-The following example illustrates how API Key authentication can be enabled
-in BlackSheep:
+Since version `2.4.2`, BlackSheep provides built-in support for API Key authentication
+with flexible configuration options. API Keys can be read from request headers, query
+parameters, or cookies, and each key can be associated with specific roles and claims.
+
+### Enabling API Key authentication
+
+The following example illustrates how API Key authentication can be enabled:
 
 ```python
 from blacksheep import Application, get
@@ -65,6 +70,205 @@ async def get_claims(request):
     return request.user.roles
 ```
 
+You can configure multiple API Keys with different roles and claims:
+
+```python
+from blacksheep import Application, get
+from blacksheep.server.authentication.apikey import APIKey, APIKeyAuthentication
+from blacksheep.server.authorization import auth
+from essentials.secrets import Secret
+
+
+app = Application()
+
+app.use_authentication().add(
+    APIKeyAuthentication(
+        # Admin API key with full access
+        APIKey(
+            secret=Secret("$ADMIN_API_KEY"),
+            roles=["admin", "user"],
+            claims={"department": "IT"}
+        ),
+        # Regular user API key
+        APIKey(
+            secret=Secret("$USER_API_KEY"),
+            roles=["user"],
+            claims={"department": "sales"}
+        ),
+        # Read-only API key
+        APIKey(
+            secret=Secret("$READONLY_API_KEY"),
+            roles=["readonly"],
+            claims={}
+        ),
+        param_name="X-API-Key",
+    )
+)
+
+app.use_authorization()
+
+
+@auth()
+@get("/")
+async def get_user_info(request):
+    return {
+        "roles": request.user.roles,
+        "claims": request.user.claims
+    }
+```
+
+### API Key locations
+
+API Keys can be retrieved from different locations in the request:
+
+/// tab | Header (default)
+    select: True
+
+```python
+app.use_authentication().add(
+    APIKeyAuthentication(
+        APIKey(secret=Secret("your-secret-key")),
+        param_name="X-API-Key",
+        location="header"  # Default location
+    )
+)
+```
+
+Test with: `curl -H "X-API-Key: your-secret-key" http://localhost:8000/`
+
+///
+
+/// tab | Query
+
+```python
+app.use_authentication().add(
+    APIKeyAuthentication(
+        APIKey(secret=Secret("your-secret-key")),
+        param_name="api_key",
+        location="query"
+    )
+)
+```
+
+Test with: `curl http://localhost:8000/?api_key=your-secret-key`
+
+///
+
+/// tab | Cookie
+
+```python
+app.use_authentication().add(
+    APIKeyAuthentication(
+        APIKey(secret=Secret("your-secret-key")),
+        param_name="api_key",
+        location="cookie"
+    )
+)
+```
+
+Test with: `curl -b "api_key=your-secret-key" http://localhost:8000/`
+
+///
+
+### Dynamic API Key provider
+
+For scenarios where API Keys need to be retrieved dynamically (e.g., from a database),
+implement the `APIKeysProvider` abstract class:
+
+```python
+from typing import List
+from blacksheep import Application, get
+from blacksheep.server.authentication.apikey import (
+    APIKey,
+    APIKeyAuthentication,
+    APIKeysProvider
+)
+from blacksheep.server.authorization import auth
+from essentials.secrets import Secret
+
+
+class DatabaseAPIKeysProvider(APIKeysProvider):
+    """
+    Example provider that retrieves API keys from a database.
+    """
+
+    def __init__(self, db_connection):
+        self.db = db_connection
+
+    async def get_keys(self) -> List[APIKey]:
+        """
+        Fetch API keys from database with associated roles and claims.
+        """
+        # Example database query (adapt to your database)
+        keys_data = await self.db.fetch_all("""
+            SELECT secret, roles, department, access_level
+            FROM api_keys
+            WHERE is_active = true
+        """)
+
+        api_keys = []
+        for row in keys_data:
+            api_keys.append(APIKey(
+                secret=Secret(row["secret"], direct_value=True),
+                roles=row["roles"].split(",") if row["roles"] else [],
+                claims={
+                    "department": row["department"],
+                    "access_level": row["access_level"]
+                }
+            ))
+
+        return api_keys
+
+
+# Usage with dynamic provider
+app = Application()
+
+# Assume you have a database connection
+# db_connection = get_database_connection()
+
+app.use_authentication().add(
+    APIKeyAuthentication(
+        param_name="X-API-Key",
+        keys_provider=DatabaseAPIKeysProvider(db_connection)
+    )
+)
+
+app.use_authorization()
+
+
+@auth()
+@get("/")
+async def protected_endpoint(request):
+    return {
+        "message": "Access granted",
+        "user_department": request.user.claims.get("department"),
+        "access_level": request.user.claims.get("access_level")
+    }
+```
+
+**Note:** dependency injection is also supported, configuring the
+authentication handler as a _type_ to be instantiated rather than an instance.
+
+### Advanced API Key configuration
+
+You can customize the authentication scheme and add descriptions:
+
+```python
+app.use_authentication().add(
+    APIKeyAuthentication(
+        APIKey(
+            secret=Secret("$API_SECRET"),
+            roles=["service"],
+            claims={"client_type": "external_service"}
+        ),
+        param_name="X-Service-Key",
+        scheme="ServiceKey",  # Custom scheme name
+        location="header",
+        description="External service authentication using API keys"
+    )
+)
+```
+
 ## Basic authentication
 
 ```python
@@ -75,11 +279,6 @@ from essentials.secrets import Secret
 
 
 app = Application()
-
-
-admin_credentials =
-
-print(admin_credentials.to_header_value())
 
 app.use_authentication().add(
     BasicAuthentication(
@@ -104,7 +303,6 @@ app.use_authorization()
 async def get_claims(request):
     return request.user.roles
 ```
-
 
 ## OIDC
 
@@ -425,11 +623,60 @@ def home(request: Request):
 /// admonition | ContainerProtocol.
     type: tip
 
-As documented in [_Container Protocol_](./dependency-injection.md#the-container-protocol), BlackSheep
-supports the use of other DI containers as replacements for the built-in
+As documented in [_Container Protocol_](./dependency-injection.md#the-container-protocol),
+BlackSheep supports the use of other DI containers as replacements for the built-in
 library used for dependency injection.
 
 ///
+
+
+### Error handling and security considerations
+
+When using authentication and authorization, consider these security practices:
+
+```python
+from blacksheep import Application, get, json
+from blacksheep.server.authentication...
+from blacksheep.exceptions import Unauthorized
+from essentials.secrets import Secret
+
+
+app = Application()
+
+app.use_authentication().add(
+    ...
+)
+
+app.use_authorization()
+
+
+@get("/public")
+async def public_endpoint():
+    """Public endpoint that doesn't require authentication."""
+    return {"message": "This is public"}
+
+
+@auth()
+@get("/protected")
+async def protected_endpoint(request):
+    """Protected endpoint that requires an authenticated user."""
+    return {
+        "message": "Access granted",
+        "roles": request.user.roles
+    }
+
+
+@get("/optional-auth")
+async def optional_auth_endpoint(request):
+    """Endpoint with optional authentication."""
+    if request.user and request.user.is_authenticated():
+        return {
+            "message": "Authenticated user",
+            "roles": request.user.roles
+        }
+    else:
+        return {"message": "Anonymous user"}
+```
 
 ## Next
 
