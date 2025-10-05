@@ -33,10 +33,77 @@ describe a generic identity.
 
 ## API Key authentication
 
+The following example illustrates how API Key authentication can be enabled
+in BlackSheep:
 
+```python
+from blacksheep import Application, get
+from blacksheep.server.authentication.apikey import APIKey, APIKeyAuthentication
+from blacksheep.server.authorization import auth
+from essentials.secrets import Secret
+
+
+app = Application()
+
+
+app.use_authentication().add(
+    APIKeyAuthentication(
+        APIKey(
+            secret=Secret("$API_SECRET"),  # ⟵ obtained from API_SECRET env var
+            roles=["user"],  # ⟵ optional roles
+        ),
+        param_name="X-API-Key",
+    )
+)
+
+app.use_authorization()
+
+
+@auth()  # requires authorization
+@get("/")
+async def get_claims(request):
+    return request.user.roles
+```
 
 ## Basic authentication
 
+```python
+from blacksheep import Application, get
+from blacksheep.server.authentication.basic import BasicAuthentication, BasicCredentials
+from blacksheep.server.authorization import auth
+from essentials.secrets import Secret
+
+
+app = Application()
+
+
+admin_credentials =
+
+print(admin_credentials.to_header_value())
+
+app.use_authentication().add(
+    BasicAuthentication(
+        BasicCredentials(
+            username="admin",
+            password=Secret("$ADMIN_PASSWORD"),  # ⟵ obtained from ADMIN_PASSWORD env var
+            roles=["admin"],  # ⟵ optional roles
+        ),
+        BasicCredentials(
+            username="user",
+            password=Secret("$USER_PASSWORD"),  # ⟵ obtained from USER_PASSWORD env var
+            roles=["user"],  # ⟵ optional roles
+        )
+    )
+)
+
+app.use_authorization()
+
+
+@auth()  # requires authorization
+@get("/")
+async def get_claims(request):
+    return request.user.roles
+```
 
 
 ## OIDC
