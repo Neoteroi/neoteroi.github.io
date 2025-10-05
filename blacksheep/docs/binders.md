@@ -277,11 +277,373 @@ def home(something: FromCustomValue):
 
 ```
 
-<!--TODO: document support for Add support for defining convert functions in
-custom BoundValue classes that are used to convert Python objects from parsed
-JSON into more specific classes, added in 2.4.1-->
+## Custom Convert Functions in BoundValue Classes
+
+Since version `2.4.1`, custom `BoundValue` classes can define a `convert` class method to transform Python objects from parsed JSON into more specific types. This is particularly useful when you need to apply custom validation or transformation logic during the binding process.
+
+### Defining a Convert Function
+
+To add custom conversion logic to a `BoundValue` class, define a `convert` class method:
+
+```python
+from typing import Any, Dict
+from blacksheep import Application, FromJSON, post
+from blacksheep.server.bindings import BoundValue
+
+class CustomData(BoundValue[Dict[str, Any]]):
+    """
+    Custom bound value with conversion logic.
+    """
+
+    @classmethod
+    def convert(cls, value: Any) -> Dict[str, Any]:
+        """
+        Convert the parsed JSON value into the desired format.
+        This method is called after JSON parsing but before creating the BoundValue instance.
+        """
+        if isinstance(value, dict):
+            # Apply custom validation and transformation
+            if 'required_field' not in value:
+                raise ValueError("Missing required_field in request data")
+
+            # Transform the data
+            return {
+                'processed': True,
+                'original': value,
+                'timestamp': value.get('timestamp', 'default_value')
+            }
+
+        raise ValueError("Expected a dictionary object")
+
+app = Application()
+
+@post("/api/data")
+async def process_data(data: FromJSON[CustomData]):
+    # data.value contains the converted dictionary
+    return {
+        "received": data.value,
+        "processed": data.value['processed']
+    }
+```
+
+### Advanced Custom Conversion
+
+You can implement more complex conversion logic for specific use cases:
+
+```python
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Optional
+from blacksheep import FromJSON, post
+from blacksheep.server.bindings import BoundValue
+
+@dataclass
+class UserProfile:
+    name: str
+    email: str
+    created_at: datetime
+    age: Optional[int] = None
+
+class UserProfileBinder(BoundValue[UserProfile]):
+    """
+    Custom binder that converts JSON to UserProfile with date parsing.
+    """
+
+    @classmethod
+    def convert(cls, value: Any) -> UserProfile:
+        if not isinstance(value, dict):
+            raise ValueError("Expected a dictionary for UserProfile")
+
+        # Parse the datetime string
+        created_at_str = value.get('created_at')
+        if isinstance(created_at_str, str):
+            try:
+                created_at = datetime.fromisoformat(created_at_str)
+            except ValueError:
+                raise ValueError("Invalid datetime format for created_at")
+        else:
+            created_at = datetime.utcnow()
+
+        # Validate required fields
+        if not value.get('name') or not value.get('email'):
+            raise ValueError("Name and email are required fields")
+
+        return UserProfile(
+            name=value['name'],
+            email=value['email'],
+            created_at=created_at,
+            age=value.get('age')
+        )
+
+@post("/api/users")
+async def create_user(profile: FromJSON[UserProfileBinder]):
+    user = profile.value  # This is a UserProfile instance
+    return {
+        "message": f"User {user.name} created successfully",
+        "user_id": hash(user.email),
+        "created_at": user.created_at.isoformat()
+    }
+```
+
+### Error Handling in Convert Functions
+
+Convert functions should raise appropriate exceptions for invalid data:
+
+```python
+from blacksheep.server.bindings import BoundValue
+from blacksheep.exceptions import BadRequest
+
+class ValidatedInput(BoundValue[dict]):
+    @classmethod
+    def convert(cls, value: Any) -> dict:
+        if not isinstance(value, dict):
+            raise BadRequest("Expected JSON object")
+
+        # Custom validation logic
+        if 'id' not in value:
+            raise BadRequest("Missing 'id' field")
+
+        if not isinstance(value['id'], int) or value['id'] <= 0:
+            raise BadRequest("Field 'id' must be a positive integer")
+
+        return value
+```
+
+When the `convert` method raises an exception, BlackSheep automatically returns a `400 Bad Request` response with the error message.
+
+/// admonition | Convert Method Behavior
+    type: info
+
+- The `convert` method is called **after** JSON parsing but **before** the `BoundValue` instance is created.
+- It receives the parsed Python object (dict, list, etc.) as input.
+- The return value becomes the `value` property of the `BoundValue` instance.
+- Exceptions raised in `convert` methods are automatically converted to `400 Bad Request` responses.
+
+///
 
 ## Type Converters
 
-<!--TODO: document TypeConverter, include StrEnum, IntEnum, and Literal
-support, added in 2.4.1-->
+Since version `2.4.1`, BlackSheep provides a flexible type conversion system through the `TypeConverter` abstract class. This system allows automatic conversion of string representations from request parameters (query, headers, route, etc.) into specific Python types.
+
+### Built-in Type Converters
+
+BlackSheep includes several built-in type converters that handle common data types:
+
+| Converter           | Supported Types | Description                                       |
+| ------------------- | --------------- | ------------------------------------------------- |
+| `StrConverter`      | `str`           | Handles string values with URL decoding           |
+| `BoolConverter`     | `bool`          | Converts "true"/"false", "1"/"0" to boolean       |
+| `IntConverter`      | `int`           | Converts strings to integers                      |
+| `FloatConverter`    | `float`         | Converts strings to floating-point numbers        |
+| `UUIDConverter`     | `UUID`          | Converts strings to UUID objects                  |
+| `BytesConverter`    | `bytes`         | Converts strings to bytes using UTF-8 encoding    |
+| `DateTimeConverter` | `datetime`      | Parses ISO datetime strings                       |
+| `DateConverter`     | `date`          | Parses ISO date strings                           |
+| `StrEnumConverter`  | `StrEnum`       | Converts strings to StrEnum values (Python 3.11+) |
+| `IntEnumConverter`  | `IntEnum`       | Converts strings to IntEnum values (Python 3.11+) |
+| `LiteralConverter`  | `Literal`       | Validates against literal type values             |
+
+### String Enum Support (Python 3.11+)
+
+BlackSheep provides automatic support for `StrEnum` types:
+
+```python
+from enum import StrEnum
+from blacksheep import Application, get
+
+app = Application()
+
+class Color(StrEnum):
+    RED = "red"
+    GREEN = "green"
+    BLUE = "blue"
+
+@get("/items")
+async def get_items(color: Color):
+    # color parameter automatically converted to Color enum
+    return {"color": color.value, "name": color.name}
+
+# Usage examples:
+# GET /items?color=red        -> Color.RED
+# GET /items?color=GREEN      -> Color.GREEN (by name)
+# GET /items?color=invalid    -> 400 Bad Request
+```
+
+### Integer Enum Support (Python 3.11+)
+
+Similarly, `IntEnum` types are automatically supported:
+
+```python
+from enum import IntEnum
+from blacksheep import Application, get
+
+class Priority(IntEnum):
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+
+@get("/tasks")
+async def get_tasks(priority: Priority):
+    return {"priority": priority.value, "name": priority.name}
+
+# Usage examples:
+# GET /tasks?priority=1       -> Priority.LOW
+# GET /tasks?priority=HIGH    -> Priority.HIGH (by name)
+# GET /tasks?priority=5       -> 400 Bad Request
+```
+
+### Literal Type Support
+
+BlackSheep supports `typing.Literal` for restricting values to specific literals:
+
+```python
+from typing import Literal
+from blacksheep import Application, get
+
+@get("/api/data")
+async def get_data(format: Literal["json", "xml", "csv"]):
+    return {"format": format, "message": f"Returning data in {format} format"}
+
+# Usage examples:
+# GET /api/data?format=json   -> format="json"
+# GET /api/data?format=pdf    -> 400 Bad Request
+
+# Case-insensitive literal matching
+from blacksheep.server.bindings.converters import LiteralConverter
+
+# Configure case-insensitive matching (if needed globally)
+# This would require custom binder configuration
+```
+
+### Custom Type Converter
+
+You can define custom type converters by implementing the `TypeConverter` abstract class:
+
+```python
+from abc import abstractmethod
+from blacksheep.server.bindings.converters import TypeConverter
+from blacksheep.server.bindings.converters import converters
+from blacksheep import Application, get
+
+# Custom type example
+class ProductCode:
+    def __init__(self, code: str):
+        if not code.startswith("PROD-"):
+            raise ValueError("Product code must start with 'PROD-'")
+        if len(code) != 10:
+            raise ValueError("Product code must be exactly 10 characters")
+        self.code = code
+
+    def __str__(self):
+        return self.code
+
+# Custom converter
+class ProductCodeConverter(TypeConverter):
+    def can_convert(self, expected_type) -> bool:
+        return expected_type is ProductCode
+
+    def convert(self, value, expected_type):
+        if value is None:
+            return None
+        try:
+            return ProductCode(value)
+        except ValueError as e:
+            raise ValueError(f"Invalid product code: {e}")
+
+# Register the custom converter
+converters.append(ProductCodeConverter())
+
+app = Application()
+
+@get("/products/{product_code}")
+async def get_product(product_code: ProductCode):
+    return {"product_code": str(product_code)}
+
+# Usage examples:
+# GET /products/PROD-12345  -> ProductCode("PROD-12345")
+# GET /products/INVALID     -> 400 Bad Request
+```
+
+### Advanced Converter Configuration
+
+For more complex scenarios, you can configure converters with custom options:
+
+```python
+from blacksheep.server.bindings.converters import LiteralConverter
+from blacksheep import FromQuery, get
+
+# Case-insensitive literal converter
+case_insensitive_converter = LiteralConverter(case_insensitive=True)
+
+class CustomFromQuery(FromQuery[T]):
+    def __init__(self, default_value=None):
+        super().__init__(default_value)
+        # Custom converter logic could be added here
+
+@get("/search")
+async def search(
+    sort_order: Literal["asc", "desc"] = "asc",
+    category: Literal["books", "movies", "games"] = "books"
+):
+    # Both parameters support case-insensitive matching if configured
+    return {"sort_order": sort_order, "category": category}
+```
+
+### Error Handling in Type Conversion
+
+When type conversion fails, BlackSheep automatically returns a `400 Bad Request` response:
+
+```python
+from enum import StrEnum
+from blacksheep import Application, get
+
+class Status(StrEnum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+
+@get("/users")
+async def get_users(status: Status):
+    return {"status": status}
+
+# GET /users?status=invalid -> 400 Bad Request with message:
+# "invalid is not a valid Status"
+```
+
+### Type Converter Priority
+
+Converters are evaluated in the order they appear in the `converters` list. Built-in converters are registered by default, and custom converters are typically appended to the list.
+
+```python
+from blacksheep.server.bindings.converters import converters
+
+# View all registered converters
+for converter in converters:
+    print(f"{converter.__class__.__name__}: {converter}")
+
+# Add custom converter with priority (insert at beginning)
+converters.insert(0, YourCustomConverter())
+```
+
+/// admonition | Version Requirements
+    type: info
+
+- **StrEnum and IntEnum support**: Requires Python 3.11 or later
+- **Literal support**: Available in all supported Python versions (3.8+)
+- **Custom TypeConverter**: Available since BlackSheep 2.4.1
+
+For older Python versions, you can achieve similar functionality using regular `Enum` classes or custom validation in your request handlers.
+
+///
+
+/// admonition | Best Practices
+    type: tip
+
+1. **Use appropriate types**: Choose the most specific type that represents your data (e.g., `Literal` for fixed values, `StrEnum` for string constants).
+
+2. **Error messages**: Custom converters should provide clear error messages for invalid input.
+
+3. **Performance**: Simple built-in converters are faster than complex custom ones. Use built-in types when possible.
+
+4. **Validation**: Type converters handle format conversion, but additional business logic validation should be done in your request handlers.
+
+///
