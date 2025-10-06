@@ -279,7 +279,10 @@ def home(something: FromCustomValue):
 
 ## Custom Convert Functions in BoundValue Classes
 
-Since version `2.4.1`, custom `BoundValue` classes can define a `convert` class method to transform Python objects from parsed JSON into more specific types. This is particularly useful when you need to apply custom validation or transformation logic during the binding process.
+Since version `2.4.1`, custom `BoundValue` classes can define a `convert` class method
+to transform Python objects from parsed JSON into more specific types. This is
+particularly useful when you need to apply custom validation or transformation logic
+during the binding process.
 
 ### Defining a Convert Function
 
@@ -299,7 +302,8 @@ class CustomData(BoundValue[Dict[str, Any]]):
     def convert(cls, value: Any) -> Dict[str, Any]:
         """
         Convert the parsed JSON value into the desired format.
-        This method is called after JSON parsing but before creating the BoundValue instance.
+        This method is called after JSON parsing but before creating the BoundValue
+        instance.
         """
         if isinstance(value, dict):
             # Apply custom validation and transformation
@@ -409,21 +413,25 @@ class ValidatedInput(BoundValue[dict]):
         return value
 ```
 
-When the `convert` method raises an exception, BlackSheep automatically returns a `400 Bad Request` response with the error message.
+When the `convert` method raises an exception, BlackSheep automatically returns a `400
+Bad Request` response with the error message.
 
 /// admonition | Convert Method Behavior
     type: info
 
-- The `convert` method is called **after** JSON parsing but **before** the `BoundValue` instance is created.
 - It receives the parsed Python object (dict, list, etc.) as input.
 - The return value becomes the `value` property of the `BoundValue` instance.
-- Exceptions raised in `convert` methods are automatically converted to `400 Bad Request` responses.
+- Exceptions raised in `convert` methods are automatically converted to `400 Bad
+  Request` responses.
 
 ///
 
 ## Type Converters
 
-Since version `2.4.1`, BlackSheep provides a flexible type conversion system through the `TypeConverter` abstract class. This system allows automatic conversion of string representations from request parameters (query, headers, route, etc.) into specific Python types.
+Since version `2.4.1`, BlackSheep provides a flexible type conversion system through the
+`TypeConverter` abstract class. This system allows automatic conversion of string
+representations from request parameters (query, headers, route, etc.) into specific
+Python types.
 
 ### Built-in Type Converters
 
@@ -611,7 +619,9 @@ async def get_users(status: Status):
 
 ### Type Converter Priority
 
-Converters are evaluated in the order they appear in the `converters` list. Built-in converters are registered by default, and custom converters are typically appended to the list.
+Converters are evaluated in the order they appear in the `converters` list. Built-in
+converters are registered by default, and custom converters are typically appended to
+the list.
 
 ```python
 from blacksheep.server.bindings.converters import converters
@@ -623,27 +633,3 @@ for converter in converters:
 # Add custom converter with priority (insert at beginning)
 converters.insert(0, YourCustomConverter())
 ```
-
-/// admonition | Version Requirements
-    type: info
-
-- **StrEnum and IntEnum support**: Requires Python 3.11 or later
-- **Literal support**: Available in all supported Python versions (3.8+)
-- **Custom TypeConverter**: Available since BlackSheep 2.4.1
-
-For older Python versions, you can achieve similar functionality using regular `Enum` classes or custom validation in your request handlers.
-
-///
-
-/// admonition | Best Practices
-    type: tip
-
-1. **Use appropriate types**: Choose the most specific type that represents your data (e.g., `Literal` for fixed values, `StrEnum` for string constants).
-
-2. **Error messages**: Custom converters should provide clear error messages for invalid input.
-
-3. **Performance**: Simple built-in converters are faster than complex custom ones. Use built-in types when possible.
-
-4. **Validation**: Type converters handle format conversion, but additional business logic validation should be done in your request handlers.
-
-///
