@@ -7,6 +7,7 @@ This page covers:
 
 - [X] How to use the built-in authorization strategy.
 - [X] How to apply authorization rules to request handlers.
+- [X] How to require roles in request handlers.
 
 It is recommended to review the [authentication documentation](authentication.md)
 before proceeding with this page.
@@ -258,6 +259,83 @@ async def only_for_user_authenticated_with_github():
     # authentication scheme, defined overriding the scheme @property
     return ok("example")
 ```
+
+## Authorizing by roles
+
+/// tab | Since version 2.4.2
+
+Since version `2.4.2`, the framework includes built-in features to require
+_sufficient_ roles (any one is enough) to authorize web requests. The authenticated
+user object must have a `roles` property of type `List[str]`.
+
+```python
+from blacksheep.server.authorization import Policy, auth
+
+
+app.use_authentication(...)  # configure as desired
+
+
+# requires a user with a roles property containing the string "admin" ↓
+@auth(roles=["admin"])
+async def only_for_admins():
+    ...
+```
+
+Examples:
+
+- When using JWT Bearer authentication, the JWT payload must have a `roles` claim with
+  the desired roles, for authorization to succeed.
+- When using Basic authentication or API Key authentication with the built-in classes,
+  refer to the documentation at [_Authentication_](./authentication.md) for examples
+  on how to configure roles or claims on the identity object obtained after successful
+  authentication.
+- When using custom authentication handlers, implement the desired logic and configure
+  `Identity` objects with the desired roles.
+
+```python
+class MyAuthenticationHandler(AuthenticationHandler):
+    def authenticate(self, context: Request) -> Identity | None:
+        # TODO: implement your own authentication logic, handle roles as desired
+        return Identity({"sub": "***", "roles": []}, self.scheme)
+```
+
+///
+
+/// tab | Before version 2.4.2
+
+Before `2.4.2`, the framework did not include any specific code to define
+roles for authorization, and required defining a _Policy_ that would
+check for the desired property on the request context.
+
+```python
+from guardpost import (
+    AuthenticationHandler,
+    Identity,
+    User,
+    AuthorizationContext,
+    Requirement,
+)
+from guardpost.common import AuthenticatedRequirement
+
+
+class AdminRequirement(Requirement):
+    def handle(self, context: AuthorizationContext):
+        identity = context.identity
+
+        # Your own logic to check identity claims…
+        if identity is not None and identity.claims.get("role") == "admin":
+            context.succeed(self)
+
+app.use_authentication(...)  # configure as desired
+
+app.use_authorization().add(Policy("admin", AdminRequirement()))
+
+@auth("admin")
+async def only_for_admins():
+    ...
+```
+
+///
 
 ## Failure response codes
 
