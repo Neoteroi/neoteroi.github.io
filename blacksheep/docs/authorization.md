@@ -7,6 +7,7 @@ This page covers:
 
 - [X] How to use the built-in authorization strategy.
 - [X] How to apply authorization rules to request handlers.
+- [X] How to require roles in request handlers.
 
 It is recommended to review the [authentication documentation](authentication.md)
 before proceeding with this page.
@@ -258,6 +259,21 @@ async def only_for_user_authenticated_with_github():
     # authentication scheme, defined overriding the scheme @property
     return ok("example")
 ```
+
+## How to request roles for handlers.
+
+<!--TODO: continue from here!-->
+
+=== "Since version 2.4.2"
+
+    Since version 2.4.2, the framework includes built-in features to request
+    _sufficient_ roles (any one is enough) to authorize web requests.
+
+=== "Before version 2.4.2"
+
+    Before `2.4.2`, the framework did not include any specific code to define
+    roles for authorization, and required defining a _Policy_ that would
+    check for the desired property on the request context.
 
 ## Failure response codes
 
