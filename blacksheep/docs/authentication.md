@@ -529,11 +529,6 @@ with signed and encrypted user data using `itsdangerous.Serializer`.
 
 The following example shows how to use the built-in `CookieAuthentication` class:
 
-**Summary:**
-- `set_cookie` is used to securely set an authentication cookie containing user claims and expiration, typically after a successful login.
-- `unset_cookie` removes the authentication cookie, logging the user out.
-- `request.user.claims` allows you to access the authenticated user's claims in request handlers, such as user ID, name, or roles.
-
 ```python
 import secrets
 from datetime import datetime, timedelta, UTC
@@ -589,6 +584,11 @@ async def logout(request):
     cookie_auth.unset_cookie(response)
     return response
 ```
+
+**Summary:**
+- `set_cookie` is used to securely set an authentication cookie containing user claims and expiration, typically after a successful login.
+- `unset_cookie` removes the authentication cookie, logging the user out.
+- `request.user.claims` allows you to access the authenticated user's claims in request handlers, such as user ID, name, or roles.
 
 /// admonition | Security recommendations
     type: warning
