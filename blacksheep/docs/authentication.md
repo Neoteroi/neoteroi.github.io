@@ -527,174 +527,34 @@ with signed and encrypted user data using `itsdangerous.Serializer`.
 
 ### Basic Cookie authentication setup
 
-The following example shows how to configure Cookie authentication:
+The following example shows how to use the built-in `CookieAuthentication` class:
 
 ```python
-from blacksheep import Application, get, json
+import secrets
+from datetime import datetime, timedelta, UTC
+
+from blacksheep import Application, get, json, post
 from blacksheep.server.authentication.cookie import CookieAuthentication
-from blacksheep.server.authorization import auth
-
-app = Application()
-
-# Configure cookie authentication
-app.use_authentication().add(
-    CookieAuthentication(
-        cookie_name="user_session",  # Default: "identity"
-        secret_keys=["your-secret-key"],  # Keys for signing/encryption
-        auth_scheme="CookieAuth"  # Custom scheme name
-    )
-)
-
-app.use_authorization()
-
-
-@auth()
-@get("/profile")
-async def get_profile(request):
-    return {
-        "message": "User profile",
-        "user": request.user.claims
-    }
-
-
-@get("/login")
-async def login(request):
-    """Example login endpoint that sets authentication cookie"""
-    response = json({"message": "Login successful"})
-
-    # Get the cookie authentication handler
-    cookie_auth = app.services.resolve(CookieAuthentication)
-
-    # Set user data in cookie (typically done after validating credentials)
-    user_data = {
-        "sub": "user123",
-        "name": "John Doe",
-        "roles": ["user"],
-        "exp": 1234567890  # Optional expiration timestamp
-    }
-
-    cookie_auth.set_cookie(user_data, response, secure=True)
-    return response
-
-
-@get("/logout")
-async def logout(request):
-    """Example logout endpoint that removes authentication cookie"""
-    response = json({"message": "Logged out"})
-
-    # Get the cookie authentication handler
-    cookie_auth = app.services.resolve(CookieAuthentication)
-
-    # Remove the authentication cookie
-    cookie_auth.unset_cookie(response)
-    return response
-```
-
-### Advanced Cookie configuration
-
-You can customize the cookie authentication with additional options:
-
-```python
-from blacksheep import Application
-from blacksheep.server.authentication.cookie import CookieAuthentication
-from itsdangerous import JSONWebSignatureSerializer
-
-app = Application()
-
-# Advanced configuration with custom serializer
-custom_serializer = JSONWebSignatureSerializer("your-secret-key")
-
-app.use_authentication().add(
-    CookieAuthentication(
-        cookie_name="app_session",
-        secret_keys=["primary-key", "backup-key"],  # Key rotation support
-        serializer=custom_serializer,  # Custom serializer
-        auth_scheme="CustomCookieAuth"
-    )
-)
-```
-
-### Working with cookie data
-
-The cookie authentication handler provides methods to manage authentication cookies:
-
-```python
-from blacksheep import Application, get, post, json
-from blacksheep.server.authentication.cookie import CookieAuthentication
-
-app = Application()
-
-cookie_auth = CookieAuthentication(
-    cookie_name="session",
-    secret_keys=["your-secret-key"]
-)
-
-app.use_authentication().add(cookie_auth)
-
-
-@post("/api/signin")
-async def signin(request):
-    """Sign in endpoint that validates credentials and sets cookie"""
-    # TODO: Validate user credentials from request body
-
-    response = json({"success": True})
-
-    # Set authentication cookie with user claims
-    user_claims = {
-        "sub": "user123",
-        "email": "user@example.com",
-        "roles": ["user", "admin"],
-        "department": "IT"
-    }
-
-    cookie_auth.set_cookie(user_claims, response, secure=True)
-    return response
-
-
-@post("/api/signout")
-async def signout(request):
-    """Sign out endpoint that removes the authentication cookie"""
-    response = json({"message": "Signed out successfully"})
-    cookie_auth.unset_cookie(response)
-    return response
-
-
-@get("/api/user")
-async def get_current_user(request):
-    """Get current user info from cookie authentication"""
-    if request.user and request.user.is_authenticated():
-        return json({
-            "authenticated": True,
-            "claims": request.user.claims
-        })
-    else:
-        return json({"authenticated": False})
-```
-
-### Cookie security considerations
-
-When using cookie authentication, consider these security practices:
-
-```python
-from blacksheep import Application
-from blacksheep.server.authentication.cookie import CookieAuthentication
-from datetime import datetime, timedelta
 
 app = Application()
 
 # Secure cookie configuration
-app.use_authentication().add(
-    CookieAuthentication(
-        cookie_name="secure_session",
-        secret_keys=[
-            "primary-secret-key-256-bits-long",
-            "backup-secret-key-for-rotation"
-        ]
-    )
+cookie_auth = CookieAuthentication(
+    cookie_name="secure_session",
+    secret_keys=[
+        secrets.token_urlsafe(32),
+        secrets.token_urlsafe(32),
+    ],
 )
+app.use_authentication().add(cookie_auth)
 
 
-@app.route("/login", methods=["POST"])
+@get("/")
+async def home(request) -> dict:
+    return request.user.claims
+
+
+@post("/login")
 async def secure_login(request):
     # TODO: Validate credentials
 
@@ -704,17 +564,31 @@ async def secure_login(request):
     user_data = {
         "sub": "user123",
         "name": "John Doe",
-        "exp": int((datetime.utcnow() + timedelta(hours=24)).timestamp())
+        "exp": int((datetime.now(UTC) + timedelta(hours=24)).timestamp()),
     }
 
-    cookie_auth = app.services.resolve(CookieAuthentication)
     cookie_auth.set_cookie(
         user_data,
         response,
-        secure=True  # Always use secure=True in production with HTTPS
+        secure=True,  # Always use secure=True in production with HTTPS
     )
     return response
+
+
+@get("/logout")
+async def logout(request):
+    """Example logout endpoint that removes authentication cookie"""
+    response = json({"message": "Logged out"})
+
+    # Remove the authentication cookie
+    cookie_auth.unset_cookie(response)
+    return response
 ```
+
+**Summary:**
+- `set_cookie` is used to securely set an authentication cookie containing user claims and expiration, typically after a successful login.
+- `unset_cookie` removes the authentication cookie, logging the user out.
+- `request.user.claims` allows you to access the authenticated user's claims in request handlers, such as user ID, name, or roles.
 
 /// admonition | Security recommendations
     type: warning
