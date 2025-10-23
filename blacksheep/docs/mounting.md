@@ -20,7 +20,7 @@ parent_app.mount("/example-path", child_app)
 Example:
 
 ```python
-from blacksheep import Application
+from blacksheep import Application, Router
 
 parent = Application()
 
@@ -30,7 +30,7 @@ def parent_home():
     return "Hello, from the parent app"
 
 
-child = Application()
+child = Application(router=Router())
 
 
 @child.router.get("/")
