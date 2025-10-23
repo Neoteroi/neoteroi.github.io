@@ -113,8 +113,8 @@ When mapping the request's payload to an instance of the desired type, the type
 is instantiated using `cls(**data)`. If it necessary to parse dates or other
 complex types that are not handled by JSON deserialization, this must be done
 in the constructor of the class. To handle gracefully a JSON payload having
-extra unused properties, use `*args` in your class constructor: `__init__(one,
-two, three, *args)`.
+extra unused properties, use `**kwargs` in your class constructor: `__init__(one,
+two, three, **kwargs)`.
 
 ## Optional parameters
 
