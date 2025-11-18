@@ -100,7 +100,7 @@ class FromAcceptHeader(FromHeader[str]):
     name = "Accept"
 
 
-class FromFooCookie(FromCookie[Optional[str]]):
+class FromFooCookie(FromCookie[str | None]):
     name = "foo"
 
 

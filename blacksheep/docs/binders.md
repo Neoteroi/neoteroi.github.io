@@ -142,8 +142,8 @@ from typing import Optional
 
 @get("/foo")
 async def example(
-    page: Optional[int],
-    search: Optional[str],
+    page: int | None,
+    search: str | None,
 ):
     # page is read from the query string, if specified, otherwise defaults to None
     # search is read from the query string, if specified, otherwise defaults to None
@@ -172,8 +172,8 @@ from blacksheep import FromQuery, get
 
 @get("/foo")
 async def example(
-    page: FromQuery[Optional[int]],
-    search: FromQuery[Optional[str]],
+    page: FromQuery[int | None],
+    search: FromQuery[str | None],
 ):
     # page.value defaults to None
     # search.value defaults to None
@@ -226,7 +226,7 @@ class FromAcceptHeader(FromHeader[str]):
     name = "Accept"
 
 
-class FromFooCookie(FromCookie[Optional[str]]):
+class FromFooCookie(FromCookie[str | None]):
     name = "foo"
 
 
@@ -264,7 +264,7 @@ class CustomBinder(Binder):
 
     handle = FromCustomValue
 
-    async def get_value(self, request: Request) -> Optional[str]:
+    async def get_value(self, request: Request) -> str | None:
         # TODO: implement here the desired logic to read a value from
         # the request object
         return "example"
@@ -346,7 +346,7 @@ class UserProfile:
     name: str
     email: str
     created_at: datetime
-    age: Optional[int] = None
+    age: int | None = None
 
 class UserProfileBinder(BoundValue[UserProfile]):
     """

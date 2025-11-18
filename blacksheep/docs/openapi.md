@@ -270,6 +270,71 @@ async def hidden_endpoint():
     return "This endpoint won't appear in documentation"
 ```
 
+### Response annotation
+
+Since version `2.4.4`, `Annotated` is supported to have proper automatic documentation
+of response objects. Example:
+
+```python {linenums="1" hl_lines="21"}
+from typing import Annotated
+
+from openapidocs.v3 import Info
+from pydantic import BaseModel
+
+from blacksheep import Application, get, json
+from blacksheep.messages import Response
+from blacksheep.server.openapi.v3 import OpenAPIHandler
+
+app = Application()
+
+docs = OpenAPIHandler(info=Info(title="Example API", version="0.0.1"))
+docs.bind_app(app)
+
+
+class Example(BaseModel):
+    foo: str
+
+
+@get("/foo")
+async def get_foo() -> Annotated[Response, Example]:
+    response = json(Example(foo="Hello!"))
+    response.add_header(b"X-Foo", b"Foo")
+    return response
+```
+
+Produces the following documentation:
+
+```yaml {linenums="1" hl_lines="11-14 17-19"}
+openapi: 3.1.0
+info:
+    title: Example API
+    version: 0.0.1
+paths:
+    /foo:
+        get:
+            responses:
+                '200':
+                    description: Success response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Example'
+            operationId: get_foo
+servers: []
+components:
+    schemas:
+        Example:
+            properties:
+                foo:
+                    title: Foo
+                    type: string
+            required:
+            - foo
+            title: Example
+            type: object
+tags: []
+```
+
 ### Documenting only certain routes
 
 To document only certain routes, use an include function like in the example
@@ -986,7 +1051,7 @@ the desired result:
 
 ```python
 class CustomOpenAPIHandler(OpenAPIHandler):
-    def get_operation_id(self, docs: Optional[EndpointDocs], handler) -> str:
+    def get_operation_id(self, docs: EndpointDocs | None, handler) -> str:
         return handler.__name__.capitalize().replace("_", " ")
 ```
 

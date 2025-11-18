@@ -311,7 +311,7 @@ class Cat:
 class CatsRepository(ABC):
 
     @abstractmethod
-    async def get_cat_by_id(self, id: str) -> Optional[Cat]:
+    async def get_cat_by_id(self, id: str) -> Cat | None:
         pass
 
 # ------------------
@@ -319,7 +319,7 @@ class CatsRepository(ABC):
 # the concrete implementation will be defined in a dedicated package
 class PostgreSQLCatsRepository(CatsRepository):
 
-    async def get_cat_by_id(self, id: str) -> Optional[Cat]:
+    async def get_cat_by_id(self, id: str) -> Cat | None:
         # TODO: implement
         raise Exception("Not implemented")
 

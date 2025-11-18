@@ -767,7 +767,7 @@ app.use_authentication().add(
         valid_audiences=["my-service"],
         valid_issuers=["my-issuer"],
         algorithms=["HS256"],  # ⟵ symmetric algorithms: HS256, HS384, HS512
-        auth_mode="JWT Symmetric"
+        scheme="JWT Symmetric"
     )
 )
 
@@ -840,7 +840,7 @@ app.use_authentication().add(
         valid_audiences=["internal-api"],
         valid_issuers=["internal-issuer"],
         algorithms=["HS256"],
-        auth_mode="JWT Internal"
+        scheme="JWT Internal"
     )
 )
 
@@ -851,7 +851,7 @@ app.use_authentication().add(
         valid_audiences=["external-client-id"],
         valid_issuers=["https://login.microsoftonline.com/tenant-id/v2.0"],
         algorithms=["RS256"],
-        auth_mode="JWT External"
+        scheme="JWT External"
     )
 )
 ```

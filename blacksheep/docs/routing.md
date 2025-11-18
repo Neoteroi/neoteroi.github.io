@@ -553,10 +553,10 @@ One option to keep track of the route that matches a request is to wrap the
 
 ```python
     def wrap_get_route_match(
-        fn: Callable[[Request], Optional[RouteMatch]]
-    ) -> Callable[[Request], Optional[RouteMatch]]:
+        fn: Callable[[Request], RouteMatch | None]
+    ) -> Callable[[Request], RouteMatch | None]:
         @wraps(fn)
-        def get_route_match(request: Request) -> Optional[RouteMatch]:
+        def get_route_match(request: Request) -> RouteMatch | None:
             match = fn(request)
             request.route = match.pattern.decode()  if match else "Not Found"  # type: ignore
             return match
