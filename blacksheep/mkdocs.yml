@@ -4,7 +4,6 @@ site_description: The official documentation website of BlackSheep, a fast ASGI 
 site_url: https://www.neoteroi.dev/blacksheep/
 repo_name: Neoteroi/BlackSheep
 repo_url: https://github.com/Neoteroi/BlackSheep
-edit_uri: ""
 
 nav:
   - Overview: index.md
@@ -78,8 +77,9 @@ theme:
     repo: fontawesome/brands/github
 
 extra:
-  version: 2
-  is_current_version: true
+  site:
+    version: 2
+    is_current_version: true
 
 extra_css:
   - css/neoteroi.css

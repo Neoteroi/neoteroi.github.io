@@ -109,12 +109,7 @@ span.task-list-indicator {
 .md-typeset .tabbed-labels>label, .md-typeset .admonition, .md-typeset details {
     font-size: .75rem !important;
 }
-/*
-.md-typeset code {
-    font-size: .9em !important;
-}
 
-table td code {
-    white-space: nowrap;
+.md-header__title, .md-header__button, .md-header a {
+    color: white !important;
 }
-*/
