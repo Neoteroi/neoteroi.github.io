@@ -58,6 +58,141 @@ settings and configuration roots. Refer to [_Getting started with the MVC projec
 for more information.
 ///
 
+## EnvironmentSettings
+
+/// admonition | New in BlackSheep 2.4.4
+    type: info
+
+Starting from BlackSheep 2.4.4, the `Application` object includes an `env_settings` property that provides runtime access to environment-based configuration settings.
+
+///
+
+The `Application` object automatically attaches an `EnvironmentSettings` instance that contains configuration values read from environment variables. This feature provides transparency and enables runtime inspection of the application's configuration, which is useful for debugging, testing, and administrative purposes.
+
+### Accessing Environment Settings
+
+You can access the environment settings through the `env_settings` property:
+
+```python
+from blacksheep import Application
+
+app = Application()
+
+# Access environment settings at runtime
+print(f"Show error details: {app.env_settings.show_error_details}")
+print(f"Force HTTPS: {app.env_settings.force_https}")
+print(f"HTTP scheme: {app.env_settings.http_scheme}")
+```
+
+### Available Environment Settings
+
+The `EnvironmentSettings` object includes the following properties (all read-only):
+
+| Property | Environment Variable | Type | Description |
+|----------|---------------------|------|-------------|
+| `show_error_details` | `APP_SHOW_ERROR_DETAILS` | `bool` | Whether to display detailed error information |
+| `force_https` | `APP_FORCE_HTTPS` | `bool` | Whether to force HTTPS scheme and enable HSTS |
+| `http_scheme` | `APP_HTTP_SCHEME` | `str | None` | Explicitly set request scheme (`http` or `https`) |
+
+### Practical Use Cases
+
+#### Testing and Assertions
+
+Environment settings are particularly useful for testing configuration:
+
+```python
+import os
+from blacksheep import Application
+
+# Set environment variable
+os.environ["APP_FORCE_HTTPS"] = "true"
+
+app = Application()
+
+# Assert configuration in tests
+assert app.env_settings.force_https is True
+assert app.env_settings.http_scheme is None  # Not set
+
+# Clean up
+del os.environ["APP_FORCE_HTTPS"]
+```
+
+#### Health Check Endpoints
+
+Create health check endpoints that expose configuration information:
+
+```python
+from blacksheep import Application, get
+
+app = Application()
+
+@get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "config": {
+            "force_https": app.env_settings.force_https,
+            "http_scheme": app.env_settings.http_scheme,
+            "show_error_details": app.env_settings.show_error_details
+        }
+    }
+```
+
+#### Admin Tools and Configuration Inspection
+
+Build administrative interfaces that display current configuration:
+
+```python
+from blacksheep import Application, get
+from blacksheep.server.authorization import auth
+
+app = Application()
+
+@auth(roles=["admin"])
+@get("/admin/config")
+async def admin_config():
+    """Administrative endpoint to inspect application configuration"""
+    return {
+        "environment_settings": {
+            "show_error_details": app.env_settings.show_error_details,
+            "force_https": app.env_settings.force_https,
+            "http_scheme": app.env_settings.http_scheme,
+        },
+        "runtime_info": {
+            "debug_mode": app.debug,
+            "middleware_count": len(app.middlewares),
+        }
+    }
+```
+
+#### Debugging and Development
+
+Use environment settings for conditional debugging logic:
+
+```python
+from blacksheep import Application
+
+app = Application()
+
+@app.on_start
+async def configure_logging():
+    if app.env_settings.show_error_details:
+        # Enable verbose logging in development
+        import logging
+        logging.getLogger().setLevel(logging.DEBUG)
+        print("Debug logging enabled due to APP_SHOW_ERROR_DETAILS=true")
+```
+
+### Benefits of Runtime Configuration Access
+
+1. **Transparency**: Easy inspection of how the application is configured
+2. **Testing**: Reliable assertions about configuration state in tests
+3. **Debugging**: Quick access to configuration values during development
+4. **Monitoring**: Health checks and admin endpoints can expose configuration
+5. **Conditional Logic**: Runtime decisions based on configuration values
+
+The `EnvironmentSettings` object is read-only, ensuring that configuration remains stable throughout the application lifecycle while still providing full visibility into the current settings.
+
 ### Configuring exceptions handlers
 
 The BlackSheep `Application` object has an `exceptions_handlers` dictionary
