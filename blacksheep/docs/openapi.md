@@ -399,6 +399,7 @@ class UserManagementController(Controller):
 ### Tag display in OpenAPI UI
 
 When you specify tags on Controllers, they appear in the OpenAPI documentation UI (Swagger, ReDoc, Scalar) as collapsible sections. Users can:
+
 - Expand/collapse tag sections to focus on specific functionality
 - Filter endpoints by tags (depending on the UI provider)
 - See a hierarchical organization of your API surface
@@ -920,7 +921,7 @@ A generic type with more arguments, like `Foo[T, U, X]` gets represented with
 /// admonition | Alternative naming style in BlackSheep 2.4.4
     type: info
 
-Starting from BlackSheep 2.4.4, you can enable alternative programming-style naming for generic types using underscore notation. Set the environment variable `APP_OPENAPI_USE_UNDERSCORE_GENERIC_NAMES` to `'1'` or `'true'` to use names like `GenericType_T` instead of `GenericTypeOfT`.
+Starting from BlackSheep 2.4.4, you can enable alternative programming-style naming for generic types using underscore notation. Set the environment variable `APP_OPENAPI_PROGRAMMING_NAMES` to `'1'` or `'true'` to use names like `GenericType_T` instead of `GenericTypeOfT`.
 
 ///
 
