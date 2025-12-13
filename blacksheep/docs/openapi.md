@@ -12,6 +12,7 @@ OpenAPI Specification file. This page describes the following:
 - [X] Options to display OpenAPI Documentation.
 - [X] How to implement a custom `UIProvider`.
 - [X] How to document authentication schemes.
+- [X] How to specify OpenAPI tags for Controller classes.
 
 ## Introduction to OpenAPI Documentation
 
@@ -269,6 +270,140 @@ To exclude certain endpoints from the API documentation, use `@docs.ignore()`:
 async def hidden_endpoint():
     return "This endpoint won't appear in documentation"
 ```
+
+### Specifying OpenAPI tags for Controllers
+
+/// admonition | New in BlackSheep 2.4.4
+    type: info
+
+Starting from BlackSheep 2.4.4, you can specify OpenAPI tags directly on Controller classes to organize and categorize your API endpoints in the documentation.
+
+///
+
+You can specify OpenAPI tags for Controller classes using the `@docs.tags()` decorator. This allows you to organize your API endpoints into logical groups in the generated OpenAPI documentation:
+
+```python
+from blacksheep import Application
+from blacksheep.server.controllers import Controller, get, post, put, delete
+from blacksheep.server.openapi.v3 import OpenAPIHandler
+from openapidocs.v3 import Info
+from dataclasses import dataclass
+from uuid import UUID
+
+app = Application()
+
+docs = OpenAPIHandler(info=Info(title="Pet Store API", version="1.0.0"))
+docs.bind_app(app)
+
+
+@dataclass
+class Pet:
+    id: UUID
+    name: str
+    category: str
+
+
+@dataclass
+class CreatePetInput:
+    name: str
+    category: str
+
+
+@docs.tags("Pets")
+class PetsController(Controller):
+    """
+    Controller for managing pets in the store.
+    """
+
+    @classmethod
+    def route(cls) -> str:
+        return "/api/pets"
+
+    @get()
+    async def get_pets(self) -> list[Pet]:
+        """Get all pets"""
+        return []
+
+    @get("/{pet_id}")
+    async def get_pet(self, pet_id: UUID) -> Pet:
+        """Get a pet by ID"""
+        pass
+
+    @post()
+    async def create_pet(self, input: CreatePetInput) -> Pet:
+        """Create a new pet"""
+        pass
+
+    @put("/{pet_id}")
+    async def update_pet(self, pet_id: UUID, input: CreatePetInput) -> Pet:
+        """Update an existing pet"""
+        pass
+
+    @delete("/{pet_id}")
+    async def delete_pet(self, pet_id: UUID) -> None:
+        """Delete a pet"""
+        pass
+
+
+@docs.tags("Orders", "Store")
+class OrdersController(Controller):
+    """
+    Controller for managing store orders.
+    """
+
+    @classmethod
+    def route(cls) -> str:
+        return "/api/orders"
+
+    @get()
+    async def get_orders(self) -> list[dict]:
+        """Get all orders"""
+        return []
+
+    @post()
+    async def create_order(self, order_data: dict) -> dict:
+        """Create a new order"""
+        return {}
+```
+
+In this example:
+- All endpoints in `PetsController` will be tagged with **"Pets"**
+- All endpoints in `OrdersController` will be tagged with both **"Orders"** and **"Store"**
+- The tags help organize the API documentation into logical sections
+
+### Multiple tags per Controller
+
+You can specify multiple tags for a single Controller by passing multiple string arguments:
+
+```python
+@docs.tags("Users", "Authentication", "Admin")
+class UserManagementController(Controller):
+    @classmethod
+    def route(cls) -> str:
+        return "/api/admin/users"
+
+    @get()
+    async def list_users(self):
+        """List all users (Admin only)"""
+        return []
+```
+
+### Benefits of Controller tags
+
+1. **Better organization**: Group related endpoints together in the OpenAPI UI
+2. **Improved navigation**: Users can easily find endpoints by category
+3. **Cleaner documentation**: Logical grouping makes the API easier to understand
+4. **Consistent tagging**: All endpoints in a Controller automatically inherit the same tags
+5. **Multiple categorization**: Controllers can belong to multiple logical groups
+
+### Tag display in OpenAPI UI
+
+When you specify tags on Controllers, they appear in the OpenAPI documentation UI (Swagger, ReDoc, Scalar) as collapsible sections. Users can:
+- Expand/collapse tag sections to focus on specific functionality
+- Filter endpoints by tags (depending on the UI provider)
+- See a hierarchical organization of your API surface
+
+The tags are displayed in alphabetical order by default, making it easy for API consumers to navigate your documentation.
 
 ### Response annotation
 
@@ -781,6 +916,13 @@ represented with `GenericTypeOfT` to respect OpenAPI specification, saying
 that `$ref values must be RFC3986-compliant percent-encoded URIs`.
 A generic type with more arguments, like `Foo[T, U, X]` gets represented with
 `FooOfTAndUAndX`.
+
+/// admonition | Alternative naming style in BlackSheep 2.4.4
+    type: info
+
+Starting from BlackSheep 2.4.4, you can enable alternative programming-style naming for generic types using underscore notation. Set the environment variable `APP_OPENAPI_USE_UNDERSCORE_GENERIC_NAMES` to `'1'` or `'true'` to use names like `GenericType_T` instead of `GenericTypeOfT`.
+
+///
 
 ///
 
