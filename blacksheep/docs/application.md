@@ -88,11 +88,11 @@ print(f"HTTP scheme: {app.env_settings.http_scheme}")
 
 The `EnvironmentSettings` object includes the following properties (all read-only):
 
-| Property | Environment Variable | Type | Description |
-|----------|---------------------|------|-------------|
+| Property             | Environment Variable     | Type   | Description                                   |
+| -------------------- | ------------------------ | ------ | --------------------------------------------- |
 | `show_error_details` | `APP_SHOW_ERROR_DETAILS` | `bool` | Whether to display detailed error information |
-| `force_https` | `APP_FORCE_HTTPS` | `bool` | Whether to force HTTPS scheme and enable HSTS |
-| `http_scheme` | `APP_HTTP_SCHEME` | `str | None` | Explicitly set request scheme (`http` or `https`) |
+| `force_https`        | `APP_FORCE_HTTPS`        | `bool` | Whether to force HTTPS scheme and enable HSTS |
+| `http_scheme`        | `APP_HTTP_SCHEME`        | `str   | None`                                         | Explicitly set request scheme (`http` or `https`) |
 
 ### Practical Use Cases
 
