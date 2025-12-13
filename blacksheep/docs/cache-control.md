@@ -18,7 +18,8 @@ refer to the [`mozilla.org` documentation](https://developer.mozilla.org/en-US/d
 /// admonition | New in BlackSheep 2.4.4
     type: info
 
-Starting from BlackSheep 2.4.4, the `no_cache` and `private` directives support `list[str]` values to specify field-specific caching rules.
+Starting from BlackSheep 2.4.4, the `no_cache` and `private` directives support `list[str]` values to specify field-specific caching rules. Earlier versions would require to handle multiple headers
+using comma separated values like: `field1, field2`.
 
 ///
 
