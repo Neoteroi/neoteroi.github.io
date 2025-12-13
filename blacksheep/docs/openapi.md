@@ -273,12 +273,9 @@ async def hidden_endpoint():
 
 ### Specifying OpenAPI tags for Controllers
 
-/// admonition | New in BlackSheep 2.4.4
-    type: info
-
 Starting from BlackSheep 2.4.4, you can specify OpenAPI tags directly on Controller classes to organize and categorize your API endpoints in the documentation.
 
-///
+Before BlackSheep 2.4.4, OpenAPI tags were automatically generated based on the controller class name. For example, a `PetsController` class would automatically generate a "Pets" tag for all its endpoints. The new `@docs.tags()` decorator provides explicit control over tag assignment and supports multiple tags per controller.
 
 You can specify OpenAPI tags for Controller classes using the `@docs.tags()` decorator. This allows you to organize your API endpoints into logical groups in the generated OpenAPI documentation:
 
@@ -367,6 +364,7 @@ class OrdersController(Controller):
 ```
 
 In this example:
+
 - All endpoints in `PetsController` will be tagged with **"Pets"**
 - All endpoints in `OrdersController` will be tagged with both **"Orders"** and **"Store"**
 - The tags help organize the API documentation into logical sections
