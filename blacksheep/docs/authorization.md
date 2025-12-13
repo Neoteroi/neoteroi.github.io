@@ -42,7 +42,7 @@ class ExampleAuthHandler(AuthenticationHandler):
     def __init__(self):
         pass
 
-    async def authenticate(self, context: Request) -> Optional[Identity]:
+    async def authenticate(self, context: Request) -> Identity | None:
         header_value = context.get_first_header(b"Authorization")
         if header_value:
             # TODO: parse and validate the value of the authorization
@@ -62,7 +62,7 @@ app.use_authorization().add(Policy(Authenticated, AuthenticatedRequirement()))
 
 
 @get("/")
-async def for_anybody(user: Optional[User]):
+async def for_anybody(user: User | None):
     if user is None:
         return json({"anonymous": True})
 
@@ -138,7 +138,7 @@ class ExampleAuthHandler(AuthenticationHandler):
     def __init__(self):
         pass
 
-    async def authenticate(self, context: Request) -> Optional[Identity]:
+    async def authenticate(self, context: Request) -> Identity | None:
         header_value = context.get_first_header(b"Authorization")
         if header_value:
             # TODO: parse and validate the value of the authorization
@@ -173,7 +173,7 @@ app.use_authorization().add(Policy(Authenticated, AuthenticatedRequirement())).a
 
 
 @get("/")
-async def for_anybody(user: Optional[User]):
+async def for_anybody(user: User | None):
     # This method can be used by anybody
     if user is None:
         return json({"anonymous": True})
@@ -220,7 +220,7 @@ from blacksheep.server.authorization import allow_anonymous
 
 @allow_anonymous()
 @get("/")
-async def for_anybody(user: Optional[User]):
+async def for_anybody(user: User | None):
     if user is None:
         return json({"anonymous": True})
 
@@ -248,7 +248,7 @@ class GitHubAuthHandler(AuthenticationHandler):
     def scheme(self) -> str:
       return "github"
 
-    async def authenticate(self, context: Request) -> Optional[Identity]:
+    async def authenticate(self, context: Request) -> Identity | None:
         ...
 
 

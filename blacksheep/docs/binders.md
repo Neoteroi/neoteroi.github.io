@@ -109,12 +109,122 @@ creating an instance of CreateCatInput from it. If an exception occurs while
 trying to parse the request payload or when instantiating the `CreateCatInput`,
 the framework produces automatically a `400 Bad Request` response for the client.
 
-When mapping the request's payload to an instance of the desired type, the type
-is instantiated using `cls(**data)`. If it necessary to parse dates or other
-complex types that are not handled by JSON deserialization, this must be done
-in the constructor of the class. To handle gracefully a JSON payload having
-extra unused properties, use `**kwargs` in your class constructor: `__init__(one,
-two, three, **kwargs)`.
+/// admonition | Improved in BlackSheep 2.4.4
+    type: info
+
+Starting from BlackSheep 2.4.4, extra properties in request bodies are **automatically ignored by default** when mapping to user-defined dataclasses, Pydantic v2 models, or plain classes. This applies to nested properties, lists, and dictionaries as well.
+
+///
+
+When mapping the request's payload to an instance of the desired type, BlackSheep automatically handles extra properties that don't match the target class structure. **You no longer need to explicitly handle extra properties** in most cases.
+
+### Automatic Extra Property Handling
+
+BlackSheep now ignores extra fields by default:
+
+```python
+from dataclasses import dataclass
+from blacksheep import FromJSON, post
+
+@dataclass
+class CreateUserInput:
+    name: str
+    email: str
+    # age field is not defined here
+
+@post("/api/users")
+async def create_user(input: FromJSON[CreateUserInput]):
+    # This works even if the request includes extra fields like "age", "country", etc.
+    return {"created": input.value.name}
+
+# Request body with extra fields (automatically ignored):
+# {
+#   "name": "John Doe",
+#   "email": "john@example.com",
+#   "age": 30,           # <- ignored
+#   "country": "USA",    # <- ignored
+#   "preferences": {...} # <- ignored
+# }
+```
+
+### Nested Properties and Collections
+
+The improvement also applies to nested objects, lists, and dictionaries:
+
+```python
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class Address:
+    street: str
+    city: str
+    # postal_code not defined
+
+@dataclass
+class User:
+    name: str
+    addresses: List[Address]
+
+@post("/api/users")
+async def create_user_with_addresses(input: FromJSON[User]):
+    # Extra fields in nested Address objects are also ignored
+    return {"user_created": input.value.name}
+
+# Request body (extra fields at all levels are ignored):
+# {
+#   "name": "John Doe",
+#   "extra_field": "ignored",  # <- ignored at root level
+#   "addresses": [
+#     {
+#       "street": "123 Main St",
+#       "city": "Springfield",
+#       "postal_code": "12345",  # <- ignored in nested Address
+#       "country": "USA"         # <- ignored in nested Address
+#     }
+#   ]
+# }
+```
+
+### Legacy Behavior and Custom Control
+
+If you need the previous behavior or want explicit control over extra properties:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class LegacyInput:
+    name: str
+    email: str
+
+    def __init__(self, name: str, email: str, **kwargs):
+        # Explicitly handle extra properties if needed
+        self.name = name
+        self.email = email
+        self.extra_data = kwargs  # Store extra fields
+
+# Or use Pydantic for more control:
+from pydantic import BaseModel
+
+class StrictInput(BaseModel):
+    name: str
+    email: str
+
+    class Config:
+        extra = "forbid"  # Reject extra fields
+        # or extra = "allow"  # Allow and preserve extra fields
+```
+
+### Benefits of Automatic Extra Property Handling
+
+1. **Better Developer Experience**: No need to add `**kwargs` to handle extra client data
+2. **Robust API Evolution**: APIs remain backward-compatible when clients send additional fields
+3. **Cleaner Code**: Focus on the data you need, ignore what you don't
+4. **Consistent Behavior**: Works the same way across dataclasses, Pydantic models, and plain classes
+5. **Deep Handling**: Automatically applies to nested objects and collections
+
+This improvement makes BlackSheep APIs more resilient to client-side changes and reduces the need for defensive programming when handling request payloads.
 
 ## Optional parameters
 
@@ -142,8 +252,8 @@ from typing import Optional
 
 @get("/foo")
 async def example(
-    page: Optional[int],
-    search: Optional[str],
+    page: int | None,
+    search: str | None,
 ):
     # page is read from the query string, if specified, otherwise defaults to None
     # search is read from the query string, if specified, otherwise defaults to None
@@ -172,8 +282,8 @@ from blacksheep import FromQuery, get
 
 @get("/foo")
 async def example(
-    page: FromQuery[Optional[int]],
-    search: FromQuery[Optional[str]],
+    page: FromQuery[int | None],
+    search: FromQuery[str | None],
 ):
     # page.value defaults to None
     # search.value defaults to None
@@ -226,7 +336,7 @@ class FromAcceptHeader(FromHeader[str]):
     name = "Accept"
 
 
-class FromFooCookie(FromCookie[Optional[str]]):
+class FromFooCookie(FromCookie[str | None]):
     name = "foo"
 
 
@@ -264,7 +374,7 @@ class CustomBinder(Binder):
 
     handle = FromCustomValue
 
-    async def get_value(self, request: Request) -> Optional[str]:
+    async def get_value(self, request: Request) -> str | None:
         # TODO: implement here the desired logic to read a value from
         # the request object
         return "example"
@@ -346,7 +456,7 @@ class UserProfile:
     name: str
     email: str
     created_at: datetime
-    age: Optional[int] = None
+    age: int | None = None
 
 class UserProfileBinder(BoundValue[UserProfile]):
     """

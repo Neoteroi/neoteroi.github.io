@@ -49,8 +49,8 @@ The following table describes options for the `GzipMiddleware` constructor.
 | ------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | min_size      | `int` (default 500)                   | The minimum size before applying compression to response bodies.                                                                                         |
 | comp_level    | `int` (default 5)                     | The compression level, as passed to `gzip.compress` function.                                                                                            |
-| handled_types | `Optional[Iterable[bytes]]`           | Control which content types can be compressed by the specific instance of `GzipMiddleware`.                                                              |
-| executor      | `Optional[Executor]` (default `None`) | Control which instance of `concurrent.future.Executor` is used to compress - if not specified the default executor handled by `run_in_executor` is used. |
+| handled_types | `Iterable[bytes] | None`           | Control which content types can be compressed by the specific instance of `GzipMiddleware`.                                                              |
+| executor      | `Executor | None` (default `None`) | Control which instance of `concurrent.future.Executor` is used to compress - if not specified the default executor handled by `run_in_executor` is used. |
 
 When `handled_types` is not specified for an instance of `GzipMiddleware`,
 compression is applied by default to content types containing any of the

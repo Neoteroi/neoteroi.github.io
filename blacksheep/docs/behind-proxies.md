@@ -143,11 +143,12 @@ For example, the `get_absolute_url_to_path` defined in `blacksheep.messages`
 will handle the information and return an absolute URL to the server
 according to both scenarios.
 
-| Feature                                        | Description                                                                                                                                            |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request.base_path`                            | Returns the `base_path` of a web request, when the ASGI scope includes a `root_path`, or a route prefix is used.                                       |
-| `blacksheep.messages.get_absolute_url_to_path` | Returns an absolute URL path to a given destination, including the current `root_path` or route prefix. Useful when working with redirects.            |
-| OpenAPI Documentation                          | Since version `2.1.0`, it uses relative links to serve the OpenAPI Specification files (YAML and JSON), and relative paths to support any path prefix. |
+| Feature                                        | Description                                                                                                                                                      |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `request.base_path`                            | Returns the `base_path` of a web request, when the ASGI scope includes a `root_path`, or a route prefix is used.                                                 |
+| `blacksheep.messages.get_absolute_url_to_path` | Returns an absolute URL path to a given destination, including the current `root_path` or route prefix. Useful when working with redirects.                      |
+| `HTTPSchemeMiddleware`                         | Since version `2.4.4`, automatically configures request scheme for TLS termination scenarios using `APP_FORCE_HTTPS` or `APP_HTTP_SCHEME` environment variables. |
+| OpenAPI Documentation                          | Since version `2.1.0`, it uses relative links to serve the OpenAPI Specification files (YAML and JSON), and relative paths to support any path prefix.           |
 
 /// details | Jinja2 template helper
     type: tip
@@ -157,3 +158,233 @@ The BlackSheep MVC template includes an example of helper function to
 in Jinja templates.
 
 ///
+
+## HTTPS Scheme Configuration
+
+/// admonition | New in BlackSheep 2.4.4
+    type: info
+
+Starting from BlackSheep 2.4.4, BlackSheep provides automatic scheme configuration for applications running behind reverse proxies or load balancers with TLS termination.
+
+///
+
+When applications run behind reverse proxies or load balancers that handle TLS termination, the backend application receives HTTP requests even though clients connect via HTTPS. This can cause issues with:
+
+- **URL generation**: Links and redirects may use `http://` instead of `https://`
+- **OpenID Connect flows**: Authentication redirects require correct scheme URLs
+- **Security headers**: HSTS headers may not be applied appropriately
+- **Cookie security**: Secure cookies may not work properly
+
+### Automatic Scheme Configuration
+
+BlackSheep automatically configures request scheme handling based on environment variables. This feature is applied during application startup when specific environment variables are detected.
+
+#### Force HTTPS with HSTS
+
+To force all requests to use HTTPS scheme and automatically enable HSTS (HTTP Strict Transport Security) headers:
+
+```bash
+# Environment variable
+APP_FORCE_HTTPS=true
+```
+
+```python
+from blacksheep import Application, get
+
+app = Application()
+
+# When APP_FORCE_HTTPS=true, BlackSheep automatically:
+# 1. Sets request.scheme = "https" for all requests
+# 2. Adds HSTS middleware for security headers
+# 3. Ensures proper URL generation in proxied environments
+
+@get("/redirect-example")
+async def redirect_example(request):
+    # This will generate https:// URLs even if the backend receives http://
+    redirect_url = request.url.replace(path="/dashboard")
+    return redirect(redirect_url)
+```
+
+#### Explicit Scheme Configuration
+
+To explicitly set the request scheme without enabling HSTS:
+
+```bash
+# Force HTTPS scheme
+APP_HTTP_SCHEME=https
+
+# Or force HTTP scheme (for development)
+APP_HTTP_SCHEME=http
+```
+
+```python
+from blacksheep import Application, get
+
+app = Application()
+
+# When APP_HTTP_SCHEME is set, BlackSheep automatically:
+# - Sets request.scheme to the specified value
+# - Does NOT add HSTS headers (unlike APP_FORCE_HTTPS)
+
+@get("/api/info")
+async def api_info(request):
+    return {
+        "scheme": request.scheme,  # Will be "https" if APP_HTTP_SCHEME=https
+        "host": request.host,
+        "url": str(request.url)
+    }
+```
+
+### Manual HTTPSchemeMiddleware
+
+For more control, you can manually configure the `HTTPSchemeMiddleware`:
+
+```python
+from blacksheep import Application
+from blacksheep.server.remotes.scheme import HTTPSchemeMiddleware
+from blacksheep.middlewares import MiddlewareCategory
+
+app = Application()
+
+# Manual configuration
+app.middlewares.append(
+    HTTPSchemeMiddleware("https"),
+    category=MiddlewareCategory.INIT,
+    priority=-100  # Execute early in the middleware chain
+)
+
+@get("/manual-config")
+async def manual_config_example(request):
+    # request.scheme will always be "https"
+    return {"configured_scheme": request.scheme}
+```
+
+### Environment Variable Priority
+
+When both environment variables are set, `APP_FORCE_HTTPS` takes precedence over `APP_HTTP_SCHEME`:
+
+```bash
+# This configuration will use APP_FORCE_HTTPS
+APP_FORCE_HTTPS=true
+APP_HTTP_SCHEME=http  # This is ignored
+```
+
+| Environment Variable    | Behavior                   | HSTS Headers  | Use Case                        |
+| ----------------------- | -------------------------- | ------------- | ------------------------------- |
+| `APP_FORCE_HTTPS=true`  | Forces HTTPS scheme        | ✅ Enabled     | Production with TLS termination |
+| `APP_HTTP_SCHEME=https` | Forces HTTPS scheme        | ❌ Not enabled | Custom HTTPS setup              |
+| `APP_HTTP_SCHEME=http`  | Forces HTTP scheme         | ❌ Not enabled | Development/testing             |
+| Neither set             | Uses actual request scheme | ❌ Not enabled | Default behavior                |
+
+### Use Cases and Benefits
+
+#### 1. Load Balancers with TLS Termination
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant LoadBalancer as Load Balancer<br/>(TLS Termination)
+    participant App as BlackSheep App<br/>(APP_FORCE_HTTPS=true)
+
+    Client->>LoadBalancer: HTTPS Request
+    LoadBalancer->>App: HTTP Request (decrypted)
+    App-->>LoadBalancer: HTTP Response with https:// URLs
+    LoadBalancer-->>Client: HTTPS Response + HSTS headers
+```
+
+#### 2. OpenID Connect Integration
+
+```python
+from blacksheep import Application
+from blacksheep.server.openid.oidc import OpenIDSettings
+
+# With APP_FORCE_HTTPS=true, OpenID Connect redirects work correctly
+app = Application()
+
+# OpenID Connect will generate correct https:// redirect URLs
+oidc_settings = OpenIDSettings(
+    authority="https://your-authority.com",
+    client_id="your-client-id",
+    # redirect_uri will automatically use https:// scheme
+)
+```
+
+#### 3. API Gateway Deployments
+
+```python
+# Deployment behind AWS API Gateway, Azure API Management, etc.
+# Set APP_FORCE_HTTPS=true to ensure proper URL generation
+
+from blacksheep import Application, get
+
+app = Application()
+
+@get("/api/resource/{id}")
+async def get_resource(request, id: str):
+    # Generate links to other resources with correct scheme
+    base_url = request.url.replace(path="")
+    return {
+        "id": id,
+        "self": f"{base_url}/api/resource/{id}",
+        "related": f"{base_url}/api/resource/{id}/related"
+    }
+```
+
+### Configuration in Application Settings
+
+Access the current scheme configuration through the application's environment settings:
+
+```python
+from blacksheep import Application
+
+app = Application()
+
+@app.on_start
+async def log_configuration():
+    print(f"Force HTTPS: {app.env_settings.force_https}")
+    print(f"HTTP Scheme: {app.env_settings.http_scheme}")
+
+    if app.env_settings.force_https:
+        print("🔒 HTTPS enforcement and HSTS headers enabled")
+    elif app.env_settings.http_scheme:
+        print(f"🔧 Scheme forced to: {app.env_settings.http_scheme}")
+    else:
+        print("ℹ️  Using actual request scheme")
+```
+
+### Troubleshooting
+
+**Problem**: URLs still generate with `http://` scheme
+
+**Solution**: Ensure the environment variable is set correctly:
+
+```bash
+# Check if the variable is set
+echo $APP_FORCE_HTTPS
+
+# Set it correctly (case-sensitive)
+export APP_FORCE_HTTPS=true
+# or
+export APP_FORCE_HTTPS=1
+```
+
+**Problem**: HSTS headers not appearing
+
+**Solution**: Use `APP_FORCE_HTTPS` instead of `APP_HTTP_SCHEME` for automatic HSTS:
+
+```bash
+# This enables HSTS
+APP_FORCE_HTTPS=true
+
+# This does NOT enable HSTS
+APP_HTTP_SCHEME=https
+```
+
+**Problem**: Scheme middleware not applying
+
+**Solution**: The middleware is only applied automatically when environment variables are detected at startup. Check the application startup logs or environment settings:
+
+```python
+# Verify configuration is detected
+print(f"App env settings: {app.env_settings.__dict__}")
+```

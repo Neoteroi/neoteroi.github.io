@@ -1,14 +1,13 @@
 The `blacksheep.server.remotes` namespace provides classes and functions to
-handle information related to remote proxies and clients.
-
-Web applications in production environments are often hosted behind servers
-such as Apache, IIS, or NGINX. Proxy servers typically obscure some information
-from the original web request before it reaches the web application.
+handle information related to remote proxies and clients. Web applications in production
+environments are often hosted behind servers such as Apache, IIS, NGINX, or Kubernetes
+ingress controllers. Proxy servers typically obscure some information from the original
+web request before it reaches the web application.
 
 For example:
 
-- When HTTPS requests are proxied over HTTP, the original scheme (HTTPS) is
-  lost and must be forwarded in a header.
+- When TLS termination is used, meaning that HTTPS requests are proxied over HTTP, the
+  original scheme (HTTPS) is lost.
 - When an application receives a request from a proxy instead of its true
   source, the original client IP address must also be forwarded in a header.
 - The path of web requests can be altered during proxying (e.g., NGINX
@@ -20,6 +19,7 @@ redirects, authentication, link generation (when absolute URLs are required),
 and client geolocation. This page documents how to configure BlackSheep to work
 with proxy servers and load balancers, using the provided classes to handle:
 
+- [X] Forcing HTTP scheme.
 - [X] X-Forwarded headers.
 - [X] Forwarded header.
 - [X] Trusted hosts.
@@ -28,6 +28,35 @@ with proxy servers and load balancers, using the provided classes to handle:
 For information on how to handle the prefix of routes when exposing a web
 application behind a proxy, refer to the dedicated page
 [_Behind Proxies_](./behind-proxies.md).
+
+## Forcing HTTP scheme
+
+In many cases, when web applications are exposed behind proxies that do TLS termination
+(the proxy or ingress accepts HTTPS requests and proxies to the back-end listening on
+HTTP), we simply need to instruct the web application to generate URLs to itself using
+`https` scheme instead of `http`.
+
+/// tab | Since version 2.4.4
+
+Since version `2.4.4`, the framework includes built-in features to force the HTTP scheme
+of generated URLs.
+
+TODO: document env variables.
+
+///
+
+/// tab | Before version 2.4.4
+
+Before `2.4.4`, the framework did not include any specific code to force the HTTP scheme
+and it required applying a middleware.
+
+TODO: like in FinOps API.
+
+```python
+
+```
+
+///
 
 ## Handling X-Forwarded headers
 
@@ -71,9 +100,9 @@ Options of the `XForwardedHeadersMiddleware` class:
 
 | Parameter      | Type, default                        | Description                                                                                                                                                                      |
 | -------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| allowed_hosts  | Optional[Sequence[str]] = None       | Sequence of allowed hosts. If configured, requests that send a different host in the `Host` header or `X-Forwarded-Host` header are replied with Bad Request.                    |
-| known_proxies  | Optional[Sequence[IPAddress]] = None | Sequence of allowed proxies IP addresses. If configured, requests that send different proxies IPs in the request scope or `X-Forwarded-For` header are replied with Bad Request. |
-| known_networks | Optional[Sequence[IPNetwork]] = None | Sequence of allowed proxies networks. If configured, requests that send a foreign proxy IP in the request scope or `X-Forwarded-For` header are replied with Bad Request.        |
+| allowed_hosts  | `Sequence[str] | None` = None       | Sequence of allowed hosts. If configured, requests that send a different host in the `Host` header or `X-Forwarded-Host` header are replied with Bad Request.                    |
+| known_proxies  | Sequence[IPAddress] &#124; None = None | Sequence of allowed proxies IP addresses. If configured, requests that send different proxies IPs in the request scope or `X-Forwarded-For` header are replied with Bad Request. |
+| known_networks | Sequence[IPNetwork] &#124; None = None | Sequence of allowed proxies networks. If configured, requests that send a foreign proxy IP in the request scope or `X-Forwarded-For` header are replied with Bad Request.        |
 | forward_limit  | int = 1                              | Maximum number of allowed forwards, by default 1.                                                                                                                                |
 
 When `known_proxies` is not provided, it is set by default to handle `localhost`:
@@ -107,9 +136,9 @@ Options of the `ForwardedHeadersMiddleware` class:
 
 | Parameter      | Type, default                        | Description                                                                                                                                                                |
 | -------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| allowed_hosts  | Optional[Sequence[str]] = None       | Sequence of allowed hosts. If configured, requests that send a different host in the `Host` header or `Forwarded` header are replied with Bad Request.                     |
-| known_proxies  | Optional[Sequence[IPAddress]] = None | Sequence of allowed proxies IP addresses. If configured, requests that send different proxies IPs in the request scope or `Forwarded` header are replied with Bad Request. |
-| known_networks | Optional[Sequence[IPNetwork]] = None | Sequence of allowed proxies networks. If configured, requests that send a foreign proxy IP in the request scope or `Forwarded` header are replied with Bad Request.        |
+| allowed_hosts  | Sequence[str] &#124; None = None       | Sequence of allowed hosts. If configured, requests that send a different host in the `Host` header or `Forwarded` header are replied with Bad Request.                     |
+| known_proxies  | Sequence[IPAddress] &#124; None = None | Sequence of allowed proxies IP addresses. If configured, requests that send different proxies IPs in the request scope or `Forwarded` header are replied with Bad Request. |
+| known_networks | Sequence[IPNetwork] &#124; None = None | Sequence of allowed proxies networks. If configured, requests that send a foreign proxy IP in the request scope or `Forwarded` header are replied with Bad Request.        |
 | forward_limit  | int = 1                              | Maximum number of allowed forwards, by default 1.                                                                                                                          |
 
 When `known_proxies` is not provided, it is set by default to handle `localhost`:

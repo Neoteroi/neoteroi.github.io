@@ -7,6 +7,8 @@ This page covers:
 
 - [X] Introduction to middlewares.
 - [X] How to use function decorators to avoid code repetition.
+- [X] Middleware management with MiddlewareList and MiddlewareCategory.
+- [X] Organizing middlewares by categories and priorities.
 
 ## Introduction to middlewares
 
@@ -103,6 +105,159 @@ class ExampleMiddleware:
 When middlewares are defined for an application, resolution chains are built at
 its start. Every handler configured in the application router is replaced by a
 chain, executing middlewares in order, down to the registered handler.
+
+## Middleware management with MiddlewareList and MiddlewareCategory
+
+/// admonition | New in BlackSheep 2.4.4
+    type: info
+
+Starting from BlackSheep 2.4.4, middleware management has been enhanced with `MiddlewareList` and `MiddlewareCategory` to simplify middleware ordering and organization.
+
+///
+
+The `MiddlewareList` is a specialized container that provides better control over middleware ordering through categories and priorities. This addresses common issues where middleware order matters significantly, such as ensuring authentication happens before authorization, or that CORS headers are set early in the pipeline.
+
+### Middleware categories
+
+The `MiddlewareCategory` enum defines predefined categories that represent the typical order middlewares should be executed:
+
+```python
+from blacksheep.middlewares import MiddlewareCategory
+
+# Available categories (in execution order):
+MiddlewareCategory.INIT      # 10 - CORS, security headers, early configuration
+MiddlewareCategory.SESSION   # 20 - Session handling
+MiddlewareCategory.AUTH      # 30 - Authentication
+MiddlewareCategory.AUTHZ     # 40 - Authorization
+MiddlewareCategory.BUSINESS  # 50 - User business logic middlewares (default)
+MiddlewareCategory.MESSAGE   # 60 - Request/Response modification
+```
+
+### Adding categorized middlewares
+
+You can now specify a category and priority when adding middlewares:
+
+```python
+from blacksheep import Application
+from blacksheep.middlewares import MiddlewareCategory
+
+app = Application()
+
+# Add middleware with category and priority
+app.middlewares.append(
+    cors_middleware,
+    category=MiddlewareCategory.INIT,
+    priority=0  # Lower priority = executed first within category
+)
+
+app.middlewares.append(
+    auth_middleware,
+    category=MiddlewareCategory.AUTH,
+    priority=0
+)
+
+app.middlewares.append(
+    custom_business_logic,
+    category=MiddlewareCategory.BUSINESS,
+    priority=10
+)
+
+# If no category is specified, defaults to BUSINESS
+app.middlewares.append(logging_middleware)
+```
+
+### Priority within categories
+
+Within each category, middlewares are ordered by their priority value (lower values execute first):
+
+```python
+# These will execute in order: middleware_a, middleware_b, middleware_c
+app.middlewares.append(middleware_a, MiddlewareCategory.AUTH, priority=0)
+app.middlewares.append(middleware_b, MiddlewareCategory.AUTH, priority=5)
+app.middlewares.append(middleware_c, MiddlewareCategory.AUTH, priority=10)
+```
+
+### Backward compatibility
+
+The traditional `append()` and `insert()` methods continue to work:
+
+```python
+# Traditional approach (still supported)
+app.middlewares.append(my_middleware)
+
+# Insert at specific position (defaults to INIT category for backward compatibility)
+app.middlewares.insert(0, early_middleware)
+```
+
+### Example: Complete middleware setup
+
+Here's a comprehensive example showing how to organize middlewares by category:
+
+```python
+from blacksheep import Application
+from blacksheep.middlewares import MiddlewareCategory
+from blacksheep.server.cors import CORSMiddleware
+from blacksheep.server.authentication import AuthenticationMiddleware
+from blacksheep.server.authorization import AuthorizationMiddleware
+
+app = Application()
+
+# CORS and security headers (execute first)
+app.middlewares.append(
+    CORSMiddleware(),
+    category=MiddlewareCategory.INIT,
+    priority=0
+)
+
+# Session handling
+app.middlewares.append(
+    session_middleware,
+    category=MiddlewareCategory.SESSION,
+    priority=0
+)
+
+# Authentication (after sessions)
+app.middlewares.append(
+    AuthenticationMiddleware(),
+    category=MiddlewareCategory.AUTH,
+    priority=0
+)
+
+# Authorization (after authentication)
+app.middlewares.append(
+    AuthorizationMiddleware(),
+    category=MiddlewareCategory.AUTHZ,
+    priority=0
+)
+
+# Custom business logic
+app.middlewares.append(
+    rate_limiting_middleware,
+    category=MiddlewareCategory.BUSINESS,
+    priority=0
+)
+
+app.middlewares.append(
+    custom_logging_middleware,
+    category=MiddlewareCategory.BUSINESS,
+    priority=10
+)
+
+# Response modification (execute last)
+app.middlewares.append(
+    response_time_middleware,
+    category=MiddlewareCategory.MESSAGE,
+    priority=0
+)
+```
+
+### Benefits of categorized middlewares
+
+1. **Predictable ordering**: Middlewares execute in a logical, predictable order based on their category.
+2. **Easier maintenance**: You can add middlewares without worrying about their position in a flat list.
+3. **Better organization**: Categories make it clear what each middleware's purpose is.
+4. **Flexible priorities**: Fine-tune execution order within categories using priority values.
+5. **Backward compatibility**: Existing code continues to work without changes.
 
 ## Wrapping request handlers
 

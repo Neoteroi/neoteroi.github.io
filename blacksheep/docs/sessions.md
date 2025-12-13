@@ -120,9 +120,9 @@ For this scenario, the `use_sessions` method accepts the following parameters:
         store: str,
         *,
         session_cookie: str = "session",
-        serializer: Optional[SessionSerializer] = None,
-        signer: Optional[Signer] = None,
-        session_max_age: Optional[int] = None,
+        serializer: SessionSerializer | None = None,
+        signer: Signer | None = None,
+        session_max_age: int | None = None,
     ) -> None:
         ...
 ```

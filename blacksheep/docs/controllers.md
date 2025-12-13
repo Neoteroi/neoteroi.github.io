@@ -288,7 +288,7 @@ class BaseController(Controller):
     path: ClassVar[str] = "base"
 
     @classmethod
-    def route(cls) -> Optional[str]:
+    def route(cls) -> str | None:
         return f"/api/{cls.path}"
 
     @get("/foo")  # /api/base/foo
