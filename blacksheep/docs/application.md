@@ -49,6 +49,7 @@ the environment variable `APP_SHOW_ERROR_DETAILS` to control whether the
 application displays detailed error information. Setting
 `APP_SHOW_ERROR_DETAILS=1` or `APP_SHOW_ERROR_DETAILS=True` enables this
 feature.
+
 ///
 
 /// admonition | Settings strategy
@@ -56,18 +57,17 @@ feature.
 BlackSheep project templates include a strategy to handle application
 settings and configuration roots. Refer to [_Getting started with the MVC project template_](./mvc-project-template.md)
 for more information.
+
 ///
 
 ## EnvironmentSettings
 
-/// admonition | New in BlackSheep 2.4.4
-    type: info
-
-Starting from BlackSheep 2.4.4, the `Application` object includes an `env_settings` property that provides runtime access to environment-based configuration settings.
-
-///
-
-The `Application` object automatically attaches an `EnvironmentSettings` instance that contains configuration values read from environment variables. This feature provides transparency and enables runtime inspection of the application's configuration, which is useful for debugging, testing, and administrative purposes.
+Starting from BlackSheep 2.4.4, the `Application` object includes an `env_settings`
+property that provides runtime access to environment-based configuration settings.
+The `Application` object automatically attaches an `EnvironmentSettings` instance that
+contains configuration values read from environment variables. This feature provides
+transparency and enables runtime inspection of the application's configuration, which
+is useful for debugging, testing, and administrative purposes.
 
 ### Accessing Environment Settings
 
@@ -88,11 +88,17 @@ print(f"HTTP scheme: {app.env_settings.http_scheme}")
 
 The `EnvironmentSettings` object includes the following properties (all read-only):
 
-| Property             | Environment Variable     | Type         | Description                                   |
-| -------------------- | ------------------------ | ------------ | --------------------------------------------- |
-| `show_error_details` | `APP_SHOW_ERROR_DETAILS` | `bool`       | Whether to display detailed error information |
-| `force_https`        | `APP_FORCE_HTTPS`        | `bool`       | Whether to force HTTPS scheme and enable HSTS |
-| `http_scheme`        | `APP_HTTP_SCHEME`        | `str | None` | Explicitly set request scheme (`http` or `https`) |
+| Property             | Environment Variable     | Type         | Default | Description                                   |
+| -------------------- | ------------------------ | ------------ | ------- | --------------------------------------------- |
+| `env`                | `APP_ENV`                | `str`        | `"production"` | Application environment (e.g., "local", "dev", "production") |
+| `show_error_details` | `APP_SHOW_ERROR_DETAILS` | `bool`       | `False` | Whether to display detailed error information |
+| `mount_auto_events`  | `APP_MOUNT_AUTO_EVENTS`  | `bool`       | `True`  | Whether to automatically mount application events |
+| `use_default_router` | `APP_DEFAULT_ROUTER`     | `bool`       | `True`  | Whether to use the default router |
+| `add_signal_handler` | `APP_SIGNAL_HANDLER`     | `bool`       | `False` | Whether to add signal handlers for graceful shutdown |
+| `http_scheme`        | `APP_HTTP_SCHEME`        | `str | None` | `None`  | Explicitly set request scheme (`http` or `https`) |
+| `force_https`        | `APP_FORCE_HTTPS`        | `bool`       | `False` | Whether to force HTTPS scheme and enable HSTS |
+
+Refer to [_Settings_](./settings.md) for more information.
 
 ### Practical Use Cases
 
