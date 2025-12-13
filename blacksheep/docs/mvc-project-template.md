@@ -15,8 +15,7 @@ reading this one.
 
 ### Requirements
 
-* [Python](https://www.python.org) version >= **3.10** (3.8 and 3.9 are
-  supported but not recommended for this tutorial)
+* [Python](https://www.python.org) version >= **3.10**
 * Ensure the Python executable is included in the `$PATH` environment variable.
   (tip: if you install Python on Windows using the official installer, enable
   the checkbox to update your `$PATH` variable during the installation)

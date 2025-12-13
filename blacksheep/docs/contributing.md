@@ -13,8 +13,7 @@ among these projects, only BlackSheep is using `Cython`.
 Building `blacksheep` locally requires the following:
 
 * one of the supported [Python](https://www.python.org/downloads/) versions; it
-  is recommended to use one of the latest two stable versions (e.g. Python 3.8
-  or 3.9 as of the 1st of May 2021)
+  is recommended to use one of the latest two stable versions
 * a `C` compiler, required to use
   [Cython](https://cython.readthedocs.io/en/latest/src/quickstart/install.html)
   (refer to Cython's documentation for more information on this subject)
