@@ -231,7 +231,7 @@ BlackSheep 2.6.0 adds full OpenAPI documentation support for `FromText` and `Fro
 
 ///
 
-BlackSheep automatically generates OpenAPI documentation for various request body binders:
+BlackSheep automatically generates OpenAPI documentation for various request body binders. The following examples assume the `docs` handler has been set up as described in the [Built-in support](#built-in-support-for-openapi-documentation) section.
 
 #### FromJSON
 

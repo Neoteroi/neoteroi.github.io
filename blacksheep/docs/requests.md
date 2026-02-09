@@ -415,7 +415,7 @@ The `FileBuffer` class wraps `SpooledTemporaryFile` and provides these methods:
 - `read(size: int = -1) -> bytes`: Read file content
 - `seek(offset: int, whence: int = 0) -> int`: Change file position
 - `close() -> None`: Close the file
-- `save_to(file_path: str) -> None`: Save file to disk (async)
+- `async save_to(file_path: str) -> None`: Asynchronously save file to disk (must be awaited)
 
 ```python
 from blacksheep import FromFiles, post
