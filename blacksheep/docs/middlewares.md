@@ -5,10 +5,11 @@ request.
 
 This page covers:
 
-- [X] Introduction to middlewares.
+- [X] Introduction to BlackSheep middlewares.
 - [X] How to use function decorators to avoid code repetition.
 - [X] Middleware management with MiddlewareList and MiddlewareCategory.
 - [X] Organizing middlewares by categories and priorities.
+- [X] How to integrate ASGI middlewares.
 
 ## Introduction to middlewares
 
@@ -106,7 +107,7 @@ When middlewares are defined for an application, resolution chains are built at
 its start. Every handler configured in the application router is replaced by a
 chain, executing middlewares in order, down to the registered handler.
 
-## Middleware management with MiddlewareList and MiddlewareCategory
+## Middleware management
 
 /// admonition | New in BlackSheep 2.4.4
     type: info
@@ -350,7 +351,217 @@ def headers(additional_headers: Tuple[Tuple[str, str], ...]):
     return decorator
 ```
 
-!!! warning
-    The `ensure_response` function is necessary to support scenarios
-    when the request handlers defined by the user doesn't return an instance of
-    Response class (see _[request handlers normalization](request-handlers.md)_).
+/// admonition | Additional dependencies.
+    type: warning
+
+The `ensure_response` function is necessary to support scenarios
+when the request handlers defined by the user doesn't return an instance of
+Response class (see _[request handlers normalization](request-handlers.md)_).
+
+///
+
+## How to integrate ASGI middlewares
+
+BlackSheep middlewares cannot be mixed with ASGI middlewares because they use different
+code APIs. However, the `Application` class itself in BlackSheep supports the signature
+of ASGI middlewares, and can be mixed with them at the application level instead of the
+middleware chain level.
+
+Consider the following example, where the `Starlette` `TrustedHostMiddleware` is used
+with a BlackSheep application, following the pattern described in the Starlette
+documentation at [_Using Middleware In Other Frameworks_](https://starlette.dev/middleware/#using-middleware-in-other-frameworks).
+
+```python {hl_lines='12'}
+from blacksheep import Application, get
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+
+
+app = Application()
+
+
+@get("/")
+async def home():
+    return "Hello!"
+
+app = TrustedHostMiddleware(app, allowed_hosts=["localhost"])
+```
+
+Below is an example where `FastAPI-Events` is used with a BlackSheep application:
+
+```python {hl_lines='27-30'}
+from blacksheep import Application, get
+from fastapi_events.dispatcher import dispatch
+from fastapi_events.middleware import EventHandlerASGIMiddleware
+from fastapi_events.handlers.local import LocalHandler
+from fastapi_events.typing import Event
+
+
+app = Application()
+
+
+async def handle_all_events(event: Event):
+    """Handler for all events"""
+    print(f"Event received: {event}")
+
+
+# Create a local handler for events
+local_handler = LocalHandler()
+local_handler.register(handle_all_events)
+
+
+@get("/")
+async def home():
+    dispatch("my-fancy-event", payload={"id": 1})  # Emit events anywhere in your code
+    return "Hello!"
+
+
+app = EventHandlerASGIMiddleware(
+    app,
+    handlers=[local_handler]
+)
+```
+
+### Creating a custom application class for ASGI middleware management
+
+While the direct wrapping approach shown above works well for simple cases, you may
+want to create a custom application class if you need to manage multiple ASGI middlewares
+or prefer a more explicit API that's consistent with BlackSheep's middleware system.
+
+The following example shows how to define such a custom class that supports adding ASGI
+middlewares through a dedicated method:
+
+```python
+# yourapp.py
+from typing import Callable
+
+from blacksheep import Application, Router
+from blacksheep.server.routing import MountRegistry
+from rodi import ContainerProtocol
+
+
+class CustomApplication(Application):
+    """
+    Application subclass that supports ASGI middleware at the application level.
+
+    ASGI middleware are applied before BlackSheep processes the request, providing
+    a clean separation between ASGI-level and BlackSheep-level middleware.
+
+    Usage:
+        app = CustomApplication()
+
+        # Add ASGI middleware (order matters - first added wraps outermost)
+        app.add_asgi_middleware(some_asgi_middleware)
+        app.add_asgi_middleware(another_asgi_middleware)
+    """
+
+    def __init__(
+        self,
+        *,
+        router: Router | None = None,
+        services: ContainerProtocol | None = None,
+        show_error_details: bool = False,
+        mount: MountRegistry | None = None,
+    ):
+        super().__init__(
+            router=router,
+            services=services,
+            show_error_details=show_error_details,
+            mount=mount,
+        )
+        self._asgi_chain = super().__call__
+        self._asgi_middlewares: list[Callable] = []
+
+    def add_asgi_middleware(self, middleware: Callable) -> None:
+        """
+        Adds an ASGI middleware to the application.
+
+        The middleware should be a callable with signature:
+            async def middleware(app, scope, receive, send) -> None
+
+        Or a factory that returns such a callable:
+            def middleware_factory(app) -> Callable
+
+        Middleware are applied in the order they are added, with the first
+        added being the outermost layer.
+
+        Args:
+            middleware: An ASGI middleware callable or factory
+        """
+        self._asgi_middlewares.append(middleware)
+
+    async def start(self):
+        self._asgi_chain = self._build_asgi_chain()
+        return await super().start()
+
+    async def __call__(self, scope, receive, send):
+        return await self._asgi_chain(scope, receive, send)
+
+    def _build_asgi_chain(self) -> Callable:
+        """
+        Builds the ASGI middleware chain, with the base Application.__call__
+        as the innermost application.
+        """
+        # Start with the base application handler
+        app = super().__call__
+
+        # Wrap with each middleware in reverse order (last added wraps innermost)
+        for middleware in reversed(self._asgi_middlewares):
+            # Check if it's a factory (single parameter) or direct middleware
+            import inspect
+            sig = inspect.signature(middleware)
+            params = list(sig.parameters.keys())
+
+            # Factory pattern: middleware(app) -> callable (single parameter)
+            if len(params) == 1:
+                app = middleware(app)
+            # Direct ASGI callable: needs to be wrapped
+            elif len(params) == 3 and params == ['scope', 'receive', 'send']:
+                # Wrap to provide app parameter
+                wrapped_app = app
+                async def asgi_wrapper(scope, receive, send, mw=middleware, inner=wrapped_app):
+                    await mw(inner, scope, receive, send)
+                app = asgi_wrapper  # type: ignore
+            else:
+                raise TypeError(
+                    f"ASGI middleware must have signature (app, scope, receive, send) "
+                    f"or be a factory with signature (app). Got: {sig}"
+                )
+
+        return app
+```
+
+The following example demonstrates how to use the custom `CustomApplication` class.
+Notice the use of a lambda function to wrap the middleware initialization—this factory
+pattern ensures the middleware receives the application instance correctly:
+
+```python
+from blacksheep import get
+from fastapi_events.dispatcher import dispatch
+from fastapi_events.middleware import EventHandlerASGIMiddleware
+from fastapi_events.handlers.local import LocalHandler
+from fastapi_events.typing import Event
+from yourapp import CustomApplication
+
+
+app = CustomApplication()
+
+
+async def handle_all_events(event: Event):
+    """Handler for all events"""
+    print(f"Event received: {event}")
+
+
+# Create a local handler for events
+local_handler = LocalHandler()
+local_handler.register(handle_all_events)
+
+
+@get("/")
+async def home():
+    dispatch("my-fancy-event", payload={"id": 1})  # Emit events anywhere in your code
+    return "Hello!"
+
+
+# Note how the factory pattern is used below:
+app.add_asgi_middleware(lambda app: EventHandlerASGIMiddleware(app, handlers=[local_handler]))
+```
