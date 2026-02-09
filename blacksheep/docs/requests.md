@@ -177,6 +177,13 @@ kinds.
 
 #### Reading a form request body
 
+/// admonition | Improved in BlackSheep 2.6.0
+    type: info
+
+Starting from BlackSheep 2.6.0, `request.form()` and `request.multipart()` use `SpooledTemporaryFile` for memory-efficient file handling. Small files (<1MB) are kept in memory, while larger files automatically spill to temporary disk files. The framework automatically cleans up resources at the end of each request.
+
+///
+
 ===  "Using binders (recommended)"
 
     ```python
@@ -259,34 +266,178 @@ kinds.
         # data is bytes
     ```
 
-#### Reading files
+#### Reading files and multipart/form-data
 
-Files read from `multipart/form-data` payload.
+/// admonition | Significantly improved in BlackSheep 2.6.0
+    type: info
+
+BlackSheep 2.6.0 introduces significant improvements for handling `multipart/form-data` with memory-efficient streaming and file handling:
+
+- **Memory-efficient file handling**: Files use `SpooledTemporaryFile` - small files (<1MB) stay in memory, larger files automatically spill to temporary disk files
+- **True streaming parsing**: New `Request.multipart_stream()` method for streaming multipart data without buffering the entire request body
+- **Automatic resource cleanup**: The framework automatically calls `Request.dispose()` at the end of each request to clean up file resources
+- **Better API**: `FileBuffer` class provides clean methods (`read()`, `seek()`, `close()`, `save_to()`) for uploaded files
+- **Streaming parts**: `FormPart.stream()` method to stream part data in chunks
+- **OpenAPI support**: `FromText` and `FromFiles` are now properly documented in OpenAPI
+
+///
+
+Files are read from `multipart/form-data` payload.
 
 ===  "Using binders (recommended)"
 
     ```python
-    from blacksheep import FromFiles
+    from blacksheep import FromFiles, post
 
 
-    @post("/something")
+    @post("/upload")
     async def post_files(files: FromFiles):
-        data = files.value
+        # files.value is a list of FormPart objects
+        for file_part in files.value:
+            # Access file metadata
+            file_name = file_part.file_name.decode() if file_part.file_name else "unknown"
+            content_type = file_part.content_type.decode() if file_part.content_type else None
+            
+            # file_part.file is a FileBuffer instance with efficient memory handling
+            # Small files (<1MB) are kept in memory, larger files use temporary disk files
+            file_buffer = file_part.file
+            
+            # Read file content
+            content = file_buffer.read()
+            
+            # Or save directly to disk
+            await file_buffer.save_to(f"./uploads/{file_name}")
     ```
 
 === "Directly from the request"
 
     ```python
+    from blacksheep import post, Request
+
+
     @post("/upload-files")
     async def upload_files(request: Request):
         files = await request.files()
 
         for part in files:
+            # Access file metadata
+            file_name = part.file_name.decode() if part.file_name else "unknown"
+            
+            # file_bytes contains the entire file content
             file_bytes = part.data
-            file_name = file.file_name.decode()
-
-        ...
+            
+            # Or use the FileBuffer for more control
+            file_buffer = part.file
+            content = file_buffer.read()
     ```
+
+=== "Memory-efficient streaming (2.6.0+)"
+
+    For handling large file uploads efficiently without loading the entire request body into memory:
+
+    ```python
+    from blacksheep import post, Request, created
+
+
+    @post("/upload-large")
+    async def upload_large_files(request: Request):
+        # Stream multipart data without buffering entire request body
+        async for part in request.multipart_stream():
+            if part.file_name:
+                # This is a file upload
+                file_name = part.file_name.decode()
+                
+                # Stream the file content in chunks
+                with open(f"./uploads/{file_name}", "wb") as f:
+                    async for chunk in part.stream():
+                        f.write(chunk)
+            else:
+                # This is a regular form field
+                field_name = part.name.decode() if part.name else ""
+                field_value = part.data.decode()
+                print(f"Field {field_name}: {field_value}")
+        
+        return created()
+    ```
+
+=== "Mixed form with files and text (2.6.0+)"
+
+    Using `FromFiles` and `FromText` together in the same handler:
+
+    ```python
+    from blacksheep import FromFiles, FromText, post
+
+
+    @post("/upload-with-description")
+    async def upload_with_metadata(
+        description: FromText,
+        files: FromFiles,
+    ):
+        # description.value contains the text field value
+        text_content = description.value
+        
+        # files.value contains the uploaded files
+        for file_part in files.value:
+            file_name = file_part.file_name.decode() if file_part.file_name else "unknown"
+            
+            # Process the file
+            await file_part.file.save_to(f"./uploads/{file_name}")
+        
+        return {"description": text_content, "files_count": len(files.value)}
+    ```
+
+##### Resource management and cleanup
+
+BlackSheep automatically manages file resources. The framework calls `Request.dispose()` at the end of each request-response cycle to clean up temporary files. However, if you need manual control:
+
+```python
+from blacksheep import post, Request
+
+
+@post("/manual-cleanup")
+async def manual_file_handling(request: Request):
+    try:
+        files = await request.files()
+        
+        for part in files:
+            # Process files
+            pass
+    finally:
+        # Manually clean up resources if needed
+        # (normally not required as framework does this automatically)
+        request.dispose()
+```
+
+##### FileBuffer API
+
+The `FileBuffer` class wraps `SpooledTemporaryFile` and provides these methods:
+
+- `read(size: int = -1) -> bytes`: Read file content
+- `seek(offset: int, whence: int = 0) -> int`: Change file position
+- `close() -> None`: Close the file
+- `save_to(file_path: str) -> None`: Save file to disk (async)
+
+```python
+from blacksheep import FromFiles, post
+
+
+@post("/process-file")
+async def process_file(files: FromFiles):
+    for file_part in files.value:
+        file_buffer = file_part.file
+        
+        # Read first 100 bytes
+        header = file_buffer.read(100)
+        
+        # Go back to start
+        file_buffer.seek(0)
+        
+        # Read entire content
+        full_content = file_buffer.read()
+        
+        # Save to disk
+        await file_buffer.save_to("./output.bin")
+```
 
 #### Reading streams
 
