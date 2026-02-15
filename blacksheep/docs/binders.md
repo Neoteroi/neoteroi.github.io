@@ -14,6 +14,7 @@ This page describes:
 
 - [X] Implicit and explicit bindings.
 - [X] Built-in binders.
+- [X] Multipart/form-data support (improved in 2.6.0).
 - [X] How to define a custom binder.
 
 It is recommended to read the following pages before this one:
@@ -349,6 +350,137 @@ def home(accept: FromAcceptHeader, foo: FromFooCookie) -> Response:
         """
     )
 ```
+
+## Multipart/Form-data Support
+
+/// admonition | Significantly improved in BlackSheep 2.6.0
+    type: info
+
+BlackSheep 2.6.0 introduces major improvements for handling `multipart/form-data` requests with the `FromForm` and `FromFiles` binders:
+
+- **Memory-efficient file handling**: Files use `SpooledTemporaryFile` - small files (<1MB) stay in memory, larger files automatically spill to temporary disk files
+- **True streaming parsing**: New streaming API for processing multipart data without buffering the entire request body
+- **Automatic resource cleanup**: The framework automatically cleans up file resources at the end of each request
+- **Better file API**: `FileBuffer` class provides clean methods (`read()`, `seek()`, `close()`, `save_to()`) for working with uploaded files
+- **OpenAPI documentation**: `FromText` and `FromFiles` are now fully documented in OpenAPI schemas
+
+///
+
+### FromForm: Application/x-www-form-urlencoded and Multipart
+
+The `FromForm` binder handles both `application/x-www-form-urlencoded` and `multipart/form-data` content types:
+
+```python
+from dataclasses import dataclass
+from blacksheep import FromForm, post
+
+
+@dataclass
+class UserInput:
+    name: str
+    email: str
+    age: int
+
+
+@post("/users")
+async def create_user(input: FromForm[UserInput]):
+    user = input.value
+    # user.name, user.email, user.age are automatically parsed
+    return {"message": f"User {user.name} created"}
+```
+
+### FromFiles: File Upload Handling
+
+The `FromFiles` binder provides efficient handling of file uploads with memory-efficient buffering:
+
+```python
+from blacksheep import FromFiles, post
+
+
+@post("/upload")
+async def upload_files(files: FromFiles):
+    # files.value is a list of FormPart objects
+    for file_part in files.value:
+        # Access file metadata
+        file_name = file_part.file_name.decode() if file_part.file_name else "unknown"
+        content_type = file_part.content_type.decode() if file_part.content_type else None
+
+        # file_part.file is a FormPart instance with efficient memory handling
+        # Small files (<1MB) are kept in memory, larger files use temporary disk files
+        file_buffer = file_part.file
+
+        # Or save directly to disk (recommended for large files)
+        await file_buffer.save_to(f"./uploads/{file_name}")
+
+    return {"uploaded": len(files.value)}
+```
+
+### Mixed Multipart Forms: Files and Text Together
+
+Since version 2.6.0, you can use `FromText` and `FromFiles` together to handle forms with both text fields and file uploads:
+
+```python
+from blacksheep import FromFiles, FromText, post
+
+
+@post("/upload-with-description")
+async def upload_with_metadata(
+    description: FromText,
+    files: FromFiles,
+):
+    # description.value contains the text field value
+    text_content = description.value
+
+    # files.value contains the uploaded files
+    for file_part in files.value:
+        file_name = file_part.file_name.decode() if file_part.file_name else "unknown"
+
+        # Process the file
+        await file_part.file.save_to(f"./uploads/{file_name}")
+
+    return {
+        "description": text_content,
+        "files_count": len(files.value)
+    }
+```
+
+### Memory-Efficient Streaming for Large Files
+
+For handling very large file uploads efficiently, use the streaming API directly:
+
+```python
+from blacksheep import post, Request, created
+
+
+@post("/upload-large")
+async def upload_large_files(request: Request):
+    # Stream multipart data without buffering entire request body
+    async for part in request.multipart_stream():
+        if part.file_name:
+            # This is a file upload
+            file_name = part.file_name.decode()
+
+            # Stream the file content in chunks
+            with open(f"./uploads/{file_name}", "wb") as f:
+                async for chunk in part.stream():
+                    f.write(chunk)
+        else:
+            # This is a regular form field
+            field_name = part.name.decode() if part.name else ""
+            field_value = part.data.decode()
+
+    return created()
+```
+
+### Automatic Resource Cleanup
+
+BlackSheep automatically manages file resources. The framework calls `Request.dispose()` at the end of each request-response cycle to clean up temporary files created during multipart parsing. This ensures:
+
+- Temporary files are automatically deleted
+- Memory is properly released
+- No manual cleanup is required in most cases
+
+If you need manual control over resource cleanup (e.g., in long-running background tasks), you can call `request.dispose()` explicitly.
 
 ## Defining a custom binder
 

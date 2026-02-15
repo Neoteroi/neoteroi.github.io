@@ -297,14 +297,7 @@ Files are read from `multipart/form-data` payload.
             # Access file metadata
             file_name = file_part.file_name.decode() if file_part.file_name else "unknown"
             content_type = file_part.content_type.decode() if file_part.content_type else None
-            
-            # file_part.file is a FileBuffer instance with efficient memory handling
-            # Small files (<1MB) are kept in memory, larger files use temporary disk files
-            file_buffer = file_part.file
-            
-            # Read file content
-            content = file_buffer.read()
-            
+
             # Or save directly to disk
             await file_buffer.save_to(f"./uploads/{file_name}")
     ```
@@ -322,10 +315,10 @@ Files are read from `multipart/form-data` payload.
         for part in files:
             # Access file metadata
             file_name = part.file_name.decode() if part.file_name else "unknown"
-            
+
             # file_bytes contains the entire file content
             file_bytes = part.data
-            
+
             # Or use the FileBuffer for more control
             file_buffer = part.file
             content = file_buffer.read()
@@ -346,7 +339,7 @@ Files are read from `multipart/form-data` payload.
             if part.file_name:
                 # This is a file upload
                 file_name = part.file_name.decode()
-                
+
                 # Stream the file content in chunks
                 with open(f"./uploads/{file_name}", "wb") as f:
                     async for chunk in part.stream():
@@ -356,7 +349,7 @@ Files are read from `multipart/form-data` payload.
                 field_name = part.name.decode() if part.name else ""
                 field_value = part.data.decode()
                 print(f"Field {field_name}: {field_value}")
-        
+
         return created()
     ```
 
@@ -375,14 +368,14 @@ Files are read from `multipart/form-data` payload.
     ):
         # description.value contains the text field value
         text_content = description.value
-        
+
         # files.value contains the uploaded files
         for file_part in files.value:
             file_name = file_part.file_name.decode() if file_part.file_name else "unknown"
-            
+
             # Process the file
             await file_part.file.save_to(f"./uploads/{file_name}")
-        
+
         return {"description": text_content, "files_count": len(files.value)}
     ```
 
@@ -398,7 +391,7 @@ from blacksheep import post, Request
 async def manual_file_handling(request: Request):
     try:
         files = await request.files()
-        
+
         for part in files:
             # Process files
             pass
@@ -425,16 +418,16 @@ from blacksheep import FromFiles, post
 async def process_file(files: FromFiles):
     for file_part in files.value:
         file_buffer = file_part.file
-        
+
         # Read first 100 bytes
         header = file_buffer.read(100)
-        
+
         # Go back to start
         file_buffer.seek(0)
-        
+
         # Read entire content
         full_content = file_buffer.read()
-        
+
         # Save to disk
         await file_buffer.save_to("./output.bin")
 ```
