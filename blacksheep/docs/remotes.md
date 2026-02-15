@@ -39,21 +39,30 @@ HTTP), we simply need to instruct the web application to generate URLs to itself
 /// tab | Since version 2.4.4
 
 Since version `2.4.4`, the framework includes built-in features to force the HTTP scheme
-of generated URLs.
-
-TODO: document env variables.
+of generated URLs. You can configure an environment variable to enforce the request's
+scheme property globally: `APP_FORCE_HTTPS=true` to force HTTPS and HSTS, or
+`APP_HTTP_SCHEME=https` to force `https`, or `APP_HTTP_SCHEME=http` to force `http`.
 
 ///
 
 /// tab | Before version 2.4.4
 
 Before `2.4.4`, the framework did not include any specific code to force the HTTP scheme
-and it required applying a middleware.
+and it required applying a middleware, setting the `request.scheme` early in the handler
+chain. For example:
 
-TODO: like in FinOps API.
+```python {hl_lines="5-7"}
+def configure_http_scheme_middleware(app: Application):
+    http_scheme_env = os.environ.get("APP_HTTP_SCHEME")
 
-```python
+    if http_scheme_env:
+        async def http_scheme_middleware(request, next_handler):
+            request.scheme = http_scheme_env
+            return await next_handler(request)
 
+        @app.on_middlewares_configuration
+        def on_middlewares_configuration(_):
+            app.middlewares.insert(0, http_scheme_middleware)
 ```
 
 ///
@@ -98,12 +107,12 @@ def configure_forwarded_headers(app):
 
 Options of the `XForwardedHeadersMiddleware` class:
 
-| Parameter      | Type, default                        | Description                                                                                                                                                                      |
-| -------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| allowed_hosts  | `Sequence[str] | None` = None       | Sequence of allowed hosts. If configured, requests that send a different host in the `Host` header or `X-Forwarded-Host` header are replied with Bad Request.                    |
+| Parameter      | Type, default                          | Description                                                                                                                                                                      |
+| -------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| allowed_hosts  | `Sequence[str]                         | None` = None                                                                                                                                                                     | Sequence of allowed hosts. If configured, requests that send a different host in the `Host` header or `X-Forwarded-Host` header are replied with Bad Request. |
 | known_proxies  | Sequence[IPAddress] &#124; None = None | Sequence of allowed proxies IP addresses. If configured, requests that send different proxies IPs in the request scope or `X-Forwarded-For` header are replied with Bad Request. |
 | known_networks | Sequence[IPNetwork] &#124; None = None | Sequence of allowed proxies networks. If configured, requests that send a foreign proxy IP in the request scope or `X-Forwarded-For` header are replied with Bad Request.        |
-| forward_limit  | int = 1                              | Maximum number of allowed forwards, by default 1.                                                                                                                                |
+| forward_limit  | int = 1                                | Maximum number of allowed forwards, by default 1.                                                                                                                                |
 
 When `known_proxies` is not provided, it is set by default to handle `localhost`:
 `[ip_address("127.0.0.1")]`.
@@ -134,12 +143,12 @@ def configure_forwarded_headers(app):
 
 Options of the `ForwardedHeadersMiddleware` class:
 
-| Parameter      | Type, default                        | Description                                                                                                                                                                |
-| -------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter      | Type, default                          | Description                                                                                                                                                                |
+| -------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | allowed_hosts  | Sequence[str] &#124; None = None       | Sequence of allowed hosts. If configured, requests that send a different host in the `Host` header or `Forwarded` header are replied with Bad Request.                     |
 | known_proxies  | Sequence[IPAddress] &#124; None = None | Sequence of allowed proxies IP addresses. If configured, requests that send different proxies IPs in the request scope or `Forwarded` header are replied with Bad Request. |
 | known_networks | Sequence[IPNetwork] &#124; None = None | Sequence of allowed proxies networks. If configured, requests that send a foreign proxy IP in the request scope or `Forwarded` header are replied with Bad Request.        |
-| forward_limit  | int = 1                              | Maximum number of allowed forwards, by default 1.                                                                                                                          |
+| forward_limit  | int = 1                                | Maximum number of allowed forwards, by default 1.                                                                                                                          |
 
 When `known_proxies` is not provided, it is set by default to handle `localhost`:
 `[ip_address("127.0.0.1")]`.
