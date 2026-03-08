@@ -14,6 +14,7 @@ nav:
   - Working with async: async.md
   - Context managers: context-managers.md
   - Union types: union-types.md
+  - Decorator pattern: decorator-pattern.md
   - Errors: errors.md
   - About Rodi: about.md
   - Neoteroi docs home: "/"
