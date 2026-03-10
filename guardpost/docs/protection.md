@@ -46,7 +46,7 @@ class PasswordHandler(AuthenticationHandler):
         if username and password:
             if self._check_credentials(username, password):
                 context.identity = Identity(
-                    claims={"sub": username}, scheme=self.scheme
+                    claims={"sub": username}, authentication_mode=self.scheme
                 )
             else:
                 # Signal a failed attempt — the rate limiter will count this
@@ -121,7 +121,7 @@ class PasswordHandler(AuthenticationHandler):
         if context.username and context.password:
             if context.username == "alice" and context.password == "s3cr3t":
                 context.identity = Identity(
-                    claims={"sub": context.username}, scheme=self.scheme
+                    claims={"sub": context.username}, authentication_mode=self.scheme
                 )
             else:
                 raise InvalidCredentialsError("Bad credentials.")

@@ -193,7 +193,7 @@ class ApiKeyHandler(AuthenticationHandler):
             return  # no credentials — anonymous, don't count as failure
         user = await self.user_store.find_by_api_key(api_key)
         if user:
-            context.identity = Identity(claims=user, scheme=self.scheme)
+            context.identity = Identity(claims=user, authentication_mode=self.scheme)
         else:
             raise InvalidCredentialsError("Unknown API key.")
 

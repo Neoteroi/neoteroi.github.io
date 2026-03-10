@@ -25,7 +25,7 @@ pip install guardpost[jwt]
 ## The `Identity` class
 
 An `Identity` represents the authenticated entity — a user, a service, or any
-principal. It carries a dict of **claims** and a **scheme** string that
+principal. It carries a dict of **claims** and an **authentication_mode** string that
 indicates how the identity was authenticated.
 
 ```python {linenums="1"}
@@ -88,9 +88,10 @@ class BearerTokenHandler(AuthenticationHandler):
         if token == "secret-token":
             context.identity = Identity(
                 claims={"sub": "user-1", "name": "Alice"},
-                scheme=self.scheme,
+                authentication_mode=self.scheme,
             )
-        # If the token is missing or wrong we simply leave context.identity as None
+        # If the token is missing or wrong you can leave context.identity as None,
+        # or leave authentication_mode unset to create an anonymous identity
 ```
 
 /// admonition | Synchronous handlers
@@ -123,7 +124,7 @@ class BearerTokenHandler(AuthenticationHandler):
         if context.token == "secret-token":
             context.identity = Identity(
                 claims={"sub": "user-1", "name": "Alice"},
-                scheme=self.scheme,
+                authentication_mode=self.scheme,
             )
 
 

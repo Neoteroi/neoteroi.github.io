@@ -51,7 +51,7 @@ Both sync and async implementations are supported:
                 user_info = await fetch_user_info(token)
                 if user_info:
                     context.identity = Identity(
-                        claims=user_info, scheme=self.scheme
+                        claims=user_info, authentication_mode=self.scheme
                     )
     ```
 
@@ -71,7 +71,7 @@ Both sync and async implementations are supported:
             sub = self._valid_keys.get(api_key)
             if sub:
                 context.identity = Identity(
-                    claims={"sub": sub}, scheme=self.scheme
+                    claims={"sub": sub}, authentication_mode=self.scheme
                 )
     ```
 
@@ -93,7 +93,7 @@ class CookieHandler(AuthenticationHandler):
         session_id = getattr(context, "session_id", None)
         if session_id:
             context.identity = Identity(
-                claims={"sub": "user-from-cookie"}, scheme=self.scheme
+                claims={"sub": "user-from-cookie"}, authentication_mode=self.scheme
             )
 ```
 
@@ -168,7 +168,7 @@ class BearerHandler(AuthenticationHandler):
     async def authenticate(self, context) -> None:
         if context.token == "valid-jwt":
             context.identity = Identity(
-                claims={"sub": "u1", "name": "Alice"}, scheme=self.scheme
+                claims={"sub": "u1", "name": "Alice"}, authentication_mode=self.scheme
             )
 
 
@@ -178,7 +178,7 @@ class ApiKeyHandler(AuthenticationHandler):
     def authenticate(self, context) -> None:
         if context.api_key == "svc-key":
             context.identity = Identity(
-                claims={"sub": "service-a"}, scheme=self.scheme
+                claims={"sub": "service-a"}, authentication_mode=self.scheme
             )
 
 
@@ -188,7 +188,7 @@ async def main():
     ctx = MockContext(api_key="svc-key")
     await strategy.authenticate(ctx)
     print(ctx.identity.sub)     # "service-a"
-    print(ctx.identity.scheme)  # "ApiKey"
+    print(ctx.identity.authentication_mode)  # "ApiKey"
 
 
 asyncio.run(main())
@@ -212,7 +212,7 @@ This is useful for APIs that support multiple credential types simultaneously.
 
 ## Grouping handlers by scheme
 
-You can inspect `context.identity.scheme` after authentication to know which
+You can inspect `context.identity.authentication_mode` after authentication to know which
 handler authenticated the request, and apply different logic accordingly.
 
 ```python {linenums="1"}
@@ -233,7 +233,7 @@ class BearerHandler(AuthenticationHandler):
     async def authenticate(self, context) -> None:
         if context.token:
             context.identity = Identity(
-                claims={"sub": "user-1"}, scheme=self.scheme
+                claims={"sub": "user-1"}, authentication_mode=self.scheme
             )
 
 
@@ -243,7 +243,7 @@ class ApiKeyHandler(AuthenticationHandler):
     def authenticate(self, context) -> None:
         if context.api_key:
             context.identity = Identity(
-                claims={"sub": "svc-1"}, scheme=self.scheme
+                claims={"sub": "svc-1"}, authentication_mode=self.scheme
             )
 
 
@@ -253,9 +253,9 @@ async def handle_request(context):
 
     if context.identity is None:
         print("Anonymous request")
-    elif context.identity.scheme == "Bearer":
+    elif context.identity.authentication_mode == "Bearer":
         print(f"Human user: {context.identity.sub}")
-    elif context.identity.scheme == "ApiKey":
+    elif context.identity.authentication_mode == "ApiKey":
         print(f"Service call: {context.identity.sub}")
 
 
