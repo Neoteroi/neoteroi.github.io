@@ -10,6 +10,7 @@ nav:
   - Index: index.md
   - BlackSheep: /blacksheep/
   - Rodi: /rodi/
+  - GuardPost: /guardpost/
   - MkDocs-Plugins: /mkdocs-plugins/
 
 theme:
