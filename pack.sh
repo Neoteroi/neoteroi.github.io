@@ -3,6 +3,7 @@ folders=(
     blacksheep
     rodi
     mkdocs-plugins
+    guardpost
 )
 
 rm -rf site

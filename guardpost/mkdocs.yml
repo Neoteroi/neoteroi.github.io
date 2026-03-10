@@ -1,0 +1,89 @@
+site_name: GuardPost
+site_author: Roberto Prevato
+site_description: GuardPost, an authentication and authorization framework for Python
+site_url: https://www.neoteroi.dev/guardpost/
+repo_name: Neoteroi/guardpost
+repo_url: https://github.com/Neoteroi/guardpost
+edit_uri: ""
+
+nav:
+  - Overview: index.md
+  - Getting started: getting-started.md
+  - Authentication: authentication.md
+  - Authorization: authorization.md
+  - JWT validation: jwt-validation.md
+  - JWKS and key types: jwks.md
+  - Brute-force protection: protection.md
+  - Dependency injection: dependency-injection.md
+  - Errors: errors.md
+  - About: about.md
+  - Neoteroi docs home: "/"
+
+theme:
+  features:
+    - navigation.footer
+    - content.code.copy
+    - content.action.view
+  palette:
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+  name: "material"
+  custom_dir: overrides/
+  favicon: img/neoteroi.ico
+  logo: img/neoteroi-w.svg
+  icon:
+    repo: fontawesome/brands/github
+
+validation:
+  links:
+    absolute_links: ignore
+
+watch:
+  - docs
+  - overrides
+
+extra:
+  header_bg_color: "#2b579a"
+
+extra_css:
+  - css/neoteroi.css
+  - css/extra.css?v=20221120
+
+extra_javascript:
+  - js/fullscreen.js
+
+plugins:
+  - search
+  - neoteroi.contribs:
+      enabled_by_env: "GIT_CONTRIBS_ON"
+
+markdown_extensions:
+  - pymdownx.highlight:
+      use_pygments: true
+      guess_lang: false
+      anchor_linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+  - pymdownx.blocks.admonition
+  - pymdownx.blocks.details
+  - neoteroi.timeline
+  - neoteroi.cards
+  - neoteroi.projects
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
