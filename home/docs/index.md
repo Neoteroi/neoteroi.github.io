@@ -23,6 +23,12 @@ the documentation of some of the projects.
   image: ./img/gantt.png
   url: /mkdocs-plugins/
 
+- title: GuardPost
+  content: |
+    Authentication and Authorization framework for Python.
+  image: ./img/index.png
+  url: /guardpost/
+
 ::/cards::
 
 ---
