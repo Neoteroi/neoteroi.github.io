@@ -60,6 +60,7 @@ to a non-empty string. An `Identity` created without `authentication_mode` (or w
 `authentication_mode=None`) is treated as **anonymous** — it carries claims but is
 not considered authenticated. `context.identity` being `None` means no identity was
 resolved at all.
+
 ///
 
 ## Implementing an `AuthenticationHandler`

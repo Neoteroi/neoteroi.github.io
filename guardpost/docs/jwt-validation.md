@@ -32,9 +32,9 @@ policy-based authorization without needing JWT parsing.
 
 `AsymmetricJWTValidator` validates JWTs signed with asymmetric keys:
 
-| Algorithm family | Algorithms |
-|-----------------|------------|
-| RSA | `RS256`, `RS384`, `RS512` |
+| Algorithm family    | Algorithms                |
+| ------------------- | ------------------------- |
+| RSA                 | `RS256`, `RS384`, `RS512` |
 | EC (Elliptic Curve) | `ES256`, `ES384`, `ES512` |
 
 ### RSA keys (RS256)
@@ -74,17 +74,17 @@ validator = AsymmetricJWTValidator(
 
 ### Parameters reference
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `valid_issuers` | `list[str]` | required | Accepted `iss` claim values |
-| `valid_audiences` | `list[str]` | required | Accepted `aud` claim values |
-| `algorithms` | `list[str]` | `["RS256"]` | Allowed signing algorithms |
-| `authority` | `str` | `None` | OpenID Connect issuer URL (auto-discovers JWKS URI) |
-| `keys_url` | `str` | `None` | Direct JWKS endpoint URL |
-| `keys_provider` | `KeysProvider` | `None` | Custom keys provider instance |
-| `require_kid` | `bool` | `True` | Reject tokens that lack a `kid` header |
-| `cache_time` | `int` | `10800` | Seconds before cached keys expire |
-| `refresh_time` | `int` | `120` | Seconds before expiry to start proactive refresh |
+| Parameter         | Type           | Default     | Description                                         |
+| ----------------- | -------------- | ----------- | --------------------------------------------------- |
+| `valid_issuers`   | `list[str]`    | required    | Accepted `iss` claim values                         |
+| `valid_audiences` | `list[str]`    | required    | Accepted `aud` claim values                         |
+| `algorithms`      | `list[str]`    | `["RS256"]` | Allowed signing algorithms                          |
+| `authority`       | `str`          | `None`      | OpenID Connect issuer URL (auto-discovers JWKS URI) |
+| `keys_url`        | `str`          | `None`      | Direct JWKS endpoint URL                            |
+| `keys_provider`   | `KeysProvider` | `None`      | Custom keys provider instance                       |
+| `require_kid`     | `bool`         | `True`      | Reject tokens that lack a `kid` header              |
+| `cache_time`      | `int`          | `10800`     | Seconds before cached keys expire                   |
+| `refresh_time`    | `int`          | `120`       | Seconds before expiry to start proactive refresh    |
 
 ## `SymmetricJWTValidator`
 
@@ -251,10 +251,10 @@ validator = AsymmetricJWTValidator(
 
 ## Exceptions
 
-| Exception | When raised |
-|-----------|-------------|
+| Exception            | When raised                                                             |
+| -------------------- | ----------------------------------------------------------------------- |
 | `InvalidAccessToken` | The JWT is malformed, the signature is invalid, or the claims are wrong |
-| `ExpiredAccessToken` | The JWT has a valid signature but is past its `exp` claim |
+| `ExpiredAccessToken` | The JWT has a valid signature but is past its `exp` claim               |
 
 `ExpiredAccessToken` is a subclass of `InvalidAccessToken`, so you can catch
 either or both.
@@ -280,7 +280,7 @@ except InvalidAccessToken as exc:
 GuardPost has been tested with the following identity providers:
 
 - **Auth0** — `authority="https://<your-domain>.auth0.com/"`
-- **Azure Active Directory** — `authority="https://login.microsoftonline.com/<tenant-id>/v2.0"`
+- **Entra ID** — `authority="https://login.microsoftonline.com/<tenant-id>/v2.0"`
 - **Azure AD B2C** — `authority="https://<tenant>.b2clogin.com/<tenant>.onmicrosoft.com/<policy>/v2.0"`
 - **Okta** — `authority="https://<your-okta-domain>/oauth2/default"`
 ///

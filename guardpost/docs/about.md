@@ -19,7 +19,7 @@ JWT bearer authentication, policy-based authorization, and OIDC integration.
 GuardPost has been tested with the following identity providers:
 
 - [Auth0](https://auth0.com/)
-- [Azure Active Directory](https://azure.microsoft.com/en-us/products/active-directory)
+- [Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id)
 - [Azure Active Directory B2C](https://azure.microsoft.com/en-us/products/active-directory/external-identities/b2c)
 - [Okta](https://www.okta.com/)
 
