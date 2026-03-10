@@ -142,13 +142,13 @@ async def main():
         container=container,
     )
 
-    power_user = Identity(claims={"sub": "u1"}, authentication_mode="Bearer")
+    power_user = Identity({"sub": "u1"}, "Bearer")
     await strategy.authorize("delete", power_user)
     print("Authorized ✔")
 
     from guardpost.authorization import ForbiddenError
 
-    basic_user = Identity(claims={"sub": "u2"}, authentication_mode="Bearer")
+    basic_user = Identity({"sub": "u2"}, "Bearer")
     try:
         await strategy.authorize("delete", basic_user)
     except ForbiddenError as exc:
@@ -193,7 +193,7 @@ class ApiKeyHandler(AuthenticationHandler):
             return  # no credentials — anonymous, don't count as failure
         user = await self.user_store.find_by_api_key(api_key)
         if user:
-            context.identity = Identity(claims=user, authentication_mode=self.scheme)
+            context.identity = Identity(user, self.scheme)
         else:
             raise InvalidCredentialsError("Unknown API key.")
 

@@ -46,7 +46,7 @@ class PasswordHandler(AuthenticationHandler):
         if username and password:
             if self._check_credentials(username, password):
                 context.identity = Identity(
-                    claims={"sub": username}, authentication_mode=self.scheme
+                    {"sub": username}, self.scheme
                 )
             else:
                 # Signal a failed attempt — the rate limiter will count this
@@ -80,10 +80,10 @@ limiter = RateLimiter(
 )
 ```
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `max_attempts` | `int` | `5` | Max failures allowed within `duration` seconds |
-| `duration` | `int` | `300` | Time window in seconds for the failure counter |
+| Parameter      | Type  | Default | Description                                    |
+| -------------- | ----- | ------- | ---------------------------------------------- |
+| `max_attempts` | `int` | `5`     | Max failures allowed within `duration` seconds |
+| `duration`     | `int` | `300`   | Time window in seconds for the failure counter |
 
 By default, counters are stored **in memory** — they do not persist across
 process restarts and are not shared between multiple processes. This is
@@ -121,7 +121,7 @@ class PasswordHandler(AuthenticationHandler):
         if context.username and context.password:
             if context.username == "alice" and context.password == "s3cr3t":
                 context.identity = Identity(
-                    claims={"sub": context.username}, authentication_mode=self.scheme
+                    {"sub": context.username}, self.scheme
                 )
             else:
                 raise InvalidCredentialsError("Bad credentials.")

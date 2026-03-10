@@ -23,7 +23,7 @@ from guardpost import AuthenticationHandler, Identity
 class MyHandler(AuthenticationHandler):
     async def authenticate(self, context) -> None:
         # Read credentials from context, validate them, then:
-        context.identity = Identity(claims={"sub": "user-1"}, authentication_mode="Bearer")
+        context.identity = Identity({"sub": "user-1"}, "Bearer")
 ```
 
 The `context` parameter is whatever your application uses to represent a
@@ -51,7 +51,7 @@ Both sync and async implementations are supported:
                 user_info = await fetch_user_info(token)
                 if user_info:
                     context.identity = Identity(
-                        claims=user_info, authentication_mode=self.scheme
+                        user_info, self.scheme
                     )
     ```
 
@@ -71,7 +71,7 @@ Both sync and async implementations are supported:
             sub = self._valid_keys.get(api_key)
             if sub:
                 context.identity = Identity(
-                    claims={"sub": sub}, authentication_mode=self.scheme
+                    {"sub": sub}, self.scheme
                 )
     ```
 
@@ -93,7 +93,7 @@ class CookieHandler(AuthenticationHandler):
         session_id = getattr(context, "session_id", None)
         if session_id:
             context.identity = Identity(
-                claims={"sub": "user-from-cookie"}, authentication_mode=self.scheme
+                {"sub": "user-from-cookie"}, self.scheme
             )
 ```
 
@@ -106,14 +106,14 @@ class CookieHandler(AuthenticationHandler):
 from guardpost import Identity
 
 identity = Identity(
-    claims={
+    {
         "sub": "user-42",
         "name": "Bob",
         "email": "bob@example.com",
         "roles": ["editor"],
         "iss": "https://auth.example.com",
     },
-    authentication_mode="Bearer",
+    "Bearer",
 )
 
 # Convenience properties
@@ -168,7 +168,7 @@ class BearerHandler(AuthenticationHandler):
     async def authenticate(self, context) -> None:
         if context.token == "valid-jwt":
             context.identity = Identity(
-                claims={"sub": "u1", "name": "Alice"}, authentication_mode=self.scheme
+                {"sub": "u1", "name": "Alice"}, self.scheme
             )
 
 
@@ -178,7 +178,7 @@ class ApiKeyHandler(AuthenticationHandler):
     def authenticate(self, context) -> None:
         if context.api_key == "svc-key":
             context.identity = Identity(
-                claims={"sub": "service-a"}, authentication_mode=self.scheme
+                {"sub": "service-a"}, self.scheme
             )
 
 
@@ -233,7 +233,7 @@ class BearerHandler(AuthenticationHandler):
     async def authenticate(self, context) -> None:
         if context.token:
             context.identity = Identity(
-                claims={"sub": "user-1"}, authentication_mode=self.scheme
+                {"sub": "user-1"}, self.scheme
             )
 
 
@@ -243,7 +243,7 @@ class ApiKeyHandler(AuthenticationHandler):
     def authenticate(self, context) -> None:
         if context.api_key:
             context.identity = Identity(
-                claims={"sub": "svc-1"}, authentication_mode=self.scheme
+                {"sub": "svc-1"}, self.scheme
             )
 
 

@@ -40,11 +40,11 @@ Like `AuthenticationHandler.authenticate`, the `handle` method can be either
 
 `AuthorizationContext` is passed to every requirement and carries:
 
-| Attribute / method | Description |
-|--------------------|-------------|
-| `.identity` | The current `Identity` (never `None` inside a requirement) |
-| `.succeed(requirement)` | Mark the given requirement as satisfied |
-| `.fail(message)` | Fail the entire authorization check with an optional message |
+| Attribute / method      | Description                                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| `.identity`             | The current `Identity` (never `None` inside a requirement)   |
+| `.succeed(requirement)` | Mark the given requirement as satisfied                      |
+| `.fail(message)`        | Fail the entire authorization check with an optional message |
 
 ```python {linenums="1"}
 from guardpost import Identity
@@ -125,12 +125,12 @@ async def main():
     )
 
     # Happy path — admin user
-    admin = Identity(claims={"sub": "u1", "roles": ["admin"]}, authentication_mode="Bearer")
+    admin = Identity({"sub": "u1", "roles": ["admin"]}, "Bearer")
     await strategy.authorize("admin", admin)
     print("Authorized ✔")
 
     # ForbiddenError — authenticated but lacks role
-    viewer = Identity(claims={"sub": "u2", "roles": ["viewer"]}, authentication_mode="Bearer")
+    viewer = Identity({"sub": "u2", "roles": ["viewer"]}, "Bearer")
     try:
         await strategy.authorize("admin", viewer)
     except ForbiddenError as exc:
@@ -193,15 +193,15 @@ async def main():
     )
 
     ok_identity = Identity(
-        claims={"sub": "u1", "roles": ["editor"], "email_verified": True},
-        authentication_mode="Bearer",
+        {"sub": "u1", "roles": ["editor"], "email_verified": True},
+        "Bearer",
     )
     await strategy.authorize("verified-editor", ok_identity)
     print("Authorized ✔")
 
     bad_identity = Identity(
-        claims={"sub": "u2", "roles": ["editor"], "email_verified": False},
-        authentication_mode="Bearer",
+        {"sub": "u2", "roles": ["editor"], "email_verified": False},
+        "Bearer",
     )
     try:
         await strategy.authorize("verified-editor", bad_identity)
@@ -214,10 +214,10 @@ asyncio.run(main())
 
 ## `UnauthorizedError` vs `ForbiddenError`
 
-| Exception | When raised |
-|-----------|-------------|
+| Exception           | When raised                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------- |
 | `UnauthorizedError` | `identity` is `None`, or `identity.is_authenticated()` is `False` (anonymous identity) |
-| `ForbiddenError` | `identity` is set but a requirement called `context.fail()` |
+| `ForbiddenError`    | `identity` is set but a requirement called `context.fail()`                            |
 
 Both are subclasses of `AuthorizationError`.
 

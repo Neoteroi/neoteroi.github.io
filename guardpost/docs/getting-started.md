@@ -33,13 +33,13 @@ from guardpost import Identity
 
 # Create an identity with claims
 identity = Identity(
-    claims={
+    {
         "sub": "user-123",
         "name": "Alice",
         "email": "alice@example.com",
         "roles": ["admin", "editor"],
     },
-    authentication_mode="Bearer",
+    "Bearer",
 )
 
 print(identity.sub)          # "user-123"
@@ -87,8 +87,8 @@ class BearerTokenHandler(AuthenticationHandler):
         token = context.token
         if token == "secret-token":
             context.identity = Identity(
-                claims={"sub": "user-1", "name": "Alice"},
-                authentication_mode=self.scheme,
+                {"sub": "user-1", "name": "Alice"},
+                self.scheme,
             )
         # If the token is missing or wrong you can leave context.identity as None,
         # or leave authentication_mode unset to create an anonymous identity
@@ -123,8 +123,8 @@ class BearerTokenHandler(AuthenticationHandler):
     async def authenticate(self, context: MockContext) -> None:
         if context.token == "secret-token":
             context.identity = Identity(
-                claims={"sub": "user-1", "name": "Alice"},
-                authentication_mode=self.scheme,
+                {"sub": "user-1", "name": "Alice"},
+                self.scheme,
             )
 
 
@@ -205,7 +205,7 @@ async def main():
 
     # --- Admin user: authorized ---
     admin_identity = Identity(
-        claims={"sub": "u1", "roles": ["admin"]}, authentication_mode="Bearer"
+        {"sub": "u1", "roles": ["admin"]}, "Bearer"
     )
     await strategy.authorize("admin", admin_identity)
     print("Admin authorized ✔")
@@ -214,7 +214,7 @@ async def main():
     from guardpost.authorization import ForbiddenError
 
     user_identity = Identity(
-        claims={"sub": "u2", "roles": ["viewer"]}, authentication_mode="Bearer"
+        {"sub": "u2", "roles": ["viewer"]}, "Bearer"
     )
     try:
         await strategy.authorize("admin", user_identity)
