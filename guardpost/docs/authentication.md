@@ -23,7 +23,7 @@ from guardpost import AuthenticationHandler, Identity
 class MyHandler(AuthenticationHandler):
     async def authenticate(self, context) -> None:
         # Read credentials from context, validate them, then:
-        context.identity = Identity(claims={"sub": "user-1"}, scheme="Bearer")
+        context.identity = Identity(claims={"sub": "user-1"}, authentication_mode="Bearer")
 ```
 
 The `context` parameter is whatever your application uses to represent a
@@ -99,7 +99,8 @@ class CookieHandler(AuthenticationHandler):
 
 ## The `Identity` class and its claims
 
-`Identity` wraps a `dict` of claims and a `scheme` string.
+`Identity` wraps a `dict` of claims and an `authentication_mode` string.
+`is_authenticated()` returns `True` only when `authentication_mode` is set.
 
 ```python {linenums="1"}
 from guardpost import Identity
@@ -112,33 +113,36 @@ identity = Identity(
         "roles": ["editor"],
         "iss": "https://auth.example.com",
     },
-    scheme="Bearer",
+    authentication_mode="Bearer",
 )
 
 # Convenience properties
-print(identity.sub)           # "user-42"
-print(identity.name)          # "Bob"
-print(identity.access_token)  # None — not set
+print(identity.sub)                 # "user-42"
+print(identity.name)                # "Bob"
+print(identity.access_token)        # None — not set
 
 # Dict-style access
-print(identity["email"])      # "bob@example.com"
-print(identity.get("roles"))  # ["editor"]
+print(identity["email"])            # "bob@example.com"
+print(identity.get("roles"))        # ["editor"]
 
-# Scheme
-print(identity.scheme)        # "Bearer"
+# Authentication mode
+print(identity.authentication_mode) # "Bearer"
 
 # Authentication check
-print(identity.is_authenticated())  # True
-print(Identity.is_authenticated())  # False (class method, no instance)
+print(identity.is_authenticated())  # True — authentication_mode is set
+
+# Anonymous identity: claims present, but no authentication_mode
+anon = Identity({"sub": "guest"})
+print(anon.is_authenticated())      # False
 ```
 
-/// admonition | `None` means unauthenticated
+/// admonition | Anonymous vs no identity
     type: info
 
-`context.identity` starts as `None`. A handler only sets it when authentication
-succeeds. Code that needs an authenticated user should check `context.identity`
-before proceeding, or rely on `AuthorizationStrategy` which raises
-`UnauthorizedError` automatically when the identity is `None`.
+An `Identity` created without `authentication_mode` (or `authentication_mode=None`)
+is **anonymous**: it has claims, but `is_authenticated()` returns `False`. This is
+different from `context.identity` being `None`, which means no identity was resolved
+at all. `AuthorizationStrategy` raises `UnauthorizedError` in both cases.
 ///
 
 ## The `AuthenticationStrategy` class

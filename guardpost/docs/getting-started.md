@@ -39,23 +39,27 @@ identity = Identity(
         "email": "alice@example.com",
         "roles": ["admin", "editor"],
     },
-    scheme="Bearer",
+    authentication_mode="Bearer",
 )
 
 print(identity.sub)          # "user-123"
 print(identity.name)         # "Alice"
 print(identity["email"])     # "alice@example.com" — dict-style access
-print(identity.is_authenticated())  # True
+print(identity.is_authenticated())  # True — authentication_mode is set
 
-# An identity with no claims is still truthy, but conventionally
-# a None identity means "not authenticated"
+# An Identity with no authentication_mode is anonymous (unauthenticated)
+anon = Identity({"sub": "guest"})
+print(anon.is_authenticated())  # False
 ```
 
-/// admonition | Unauthenticated identity
+/// admonition | Anonymous vs unauthenticated
     type: info
 
-By convention, `None` represents an unauthenticated request. `Identity.is_authenticated()`
-returns `True` for any non-`None` identity instance, regardless of its claims.
+`Identity.is_authenticated()` returns `True` only when `authentication_mode` is set
+to a non-empty string. An `Identity` created without `authentication_mode` (or with
+`authentication_mode=None`) is treated as **anonymous** — it carries claims but is
+not considered authenticated. `context.identity` being `None` means no identity was
+resolved at all.
 ///
 
 ## Implementing an `AuthenticationHandler`
@@ -200,7 +204,7 @@ async def main():
 
     # --- Admin user: authorized ---
     admin_identity = Identity(
-        claims={"sub": "u1", "roles": ["admin"]}, scheme="Bearer"
+        claims={"sub": "u1", "roles": ["admin"]}, authentication_mode="Bearer"
     )
     await strategy.authorize("admin", admin_identity)
     print("Admin authorized ✔")
@@ -209,7 +213,7 @@ async def main():
     from guardpost.authorization import ForbiddenError
 
     user_identity = Identity(
-        claims={"sub": "u2", "roles": ["viewer"]}, scheme="Bearer"
+        claims={"sub": "u2", "roles": ["viewer"]}, authentication_mode="Bearer"
     )
     try:
         await strategy.authorize("admin", user_identity)

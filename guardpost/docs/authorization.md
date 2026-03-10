@@ -125,12 +125,12 @@ async def main():
     )
 
     # Happy path — admin user
-    admin = Identity(claims={"sub": "u1", "roles": ["admin"]}, scheme="Bearer")
+    admin = Identity(claims={"sub": "u1", "roles": ["admin"]}, authentication_mode="Bearer")
     await strategy.authorize("admin", admin)
     print("Authorized ✔")
 
     # ForbiddenError — authenticated but lacks role
-    viewer = Identity(claims={"sub": "u2", "roles": ["viewer"]}, scheme="Bearer")
+    viewer = Identity(claims={"sub": "u2", "roles": ["viewer"]}, authentication_mode="Bearer")
     try:
         await strategy.authorize("admin", viewer)
     except ForbiddenError as exc:
@@ -194,14 +194,14 @@ async def main():
 
     ok_identity = Identity(
         claims={"sub": "u1", "roles": ["editor"], "email_verified": True},
-        scheme="Bearer",
+        authentication_mode="Bearer",
     )
     await strategy.authorize("verified-editor", ok_identity)
     print("Authorized ✔")
 
     bad_identity = Identity(
         claims={"sub": "u2", "roles": ["editor"], "email_verified": False},
-        scheme="Bearer",
+        authentication_mode="Bearer",
     )
     try:
         await strategy.authorize("verified-editor", bad_identity)
@@ -216,7 +216,7 @@ asyncio.run(main())
 
 | Exception | When raised |
 |-----------|-------------|
-| `UnauthorizedError` | `identity` is `None` — the request is unauthenticated |
+| `UnauthorizedError` | `identity` is `None`, or `identity.is_authenticated()` is `False` (anonymous identity) |
 | `ForbiddenError` | `identity` is set but a requirement called `context.fail()` |
 
 Both are subclasses of `AuthorizationError`.

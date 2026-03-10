@@ -142,13 +142,13 @@ async def main():
         container=container,
     )
 
-    power_user = Identity(claims={"sub": "u1"}, scheme="Bearer")
+    power_user = Identity(claims={"sub": "u1"}, authentication_mode="Bearer")
     await strategy.authorize("delete", power_user)
     print("Authorized ✔")
 
     from guardpost.authorization import ForbiddenError
 
-    basic_user = Identity(claims={"sub": "u2"}, scheme="Bearer")
+    basic_user = Identity(claims={"sub": "u2"}, authentication_mode="Bearer")
     try:
         await strategy.authorize("delete", basic_user)
     except ForbiddenError as exc:
