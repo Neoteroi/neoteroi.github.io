@@ -222,6 +222,130 @@ components: {}
 tags: []
 ```
 
+### Request body binders support
+
+/// admonition | Enhanced in BlackSheep 2.6.0
+    type: info
+
+BlackSheep 2.6.0 adds full OpenAPI documentation support for `FromText` and `FromFiles` binders. These binders are now automatically documented with appropriate request body schemas and content types.
+
+///
+
+BlackSheep automatically generates OpenAPI documentation for various request body binders. The following examples assume the `docs` handler has been set up as described in the [Built-in support](#built-in-support-for-openapi-documentation) section.
+
+#### FromJSON
+
+Documented with `application/json` content type and the appropriate schema:
+
+```python
+from dataclasses import dataclass
+from blacksheep import FromJSON, post
+
+
+@dataclass
+class CreateUserInput:
+    name: str
+    email: str
+    age: int
+
+
+@docs(
+    summary="Create a new user",
+    responses={201: "User created successfully"}
+)
+@post("/api/users")
+async def create_user(input: FromJSON[CreateUserInput]):
+    return {"user_id": 123}
+```
+
+The OpenAPI documentation automatically includes the request body schema for `CreateUserInput`.
+
+#### FromFiles (since 2.6.0)
+
+Documented with `multipart/form-data` content type:
+
+```python
+from blacksheep import FromFiles, post
+
+
+@docs(
+    summary="Upload files",
+    responses={201: "Files uploaded successfully"}
+)
+@post("/api/upload")
+async def upload_files(files: FromFiles):
+    return {"files_count": len(files.value)}
+```
+
+The OpenAPI documentation automatically documents this as a file upload endpoint with `multipart/form-data` encoding.
+
+#### FromText (since 2.6.0)
+
+Documented with `text/plain` content type:
+
+```python
+from blacksheep import FromText, post
+
+
+@docs(
+    summary="Store text content",
+    responses={201: "Text stored successfully"}
+)
+@post("/api/text")
+async def store_text(content: FromText):
+    return {"length": len(content.value)}
+```
+
+#### Mixed multipart/form-data (since 2.6.0)
+
+When combining `FromText` and `FromFiles` in the same endpoint, BlackSheep generates appropriate `multipart/form-data` documentation:
+
+```python
+from blacksheep import FromFiles, FromText, post
+
+
+@docs(
+    summary="Upload files with description",
+    responses={201: "Upload completed successfully"}
+)
+@post("/api/upload-with-metadata")
+async def upload_with_metadata(
+    description: FromText,
+    files: FromFiles,
+):
+    return {
+        "description": description.value,
+        "files_count": len(files.value)
+    }
+```
+
+The OpenAPI specification will correctly document both the text field and file upload field as part of the `multipart/form-data` request body.
+
+#### FromForm
+
+Documented with `application/x-www-form-urlencoded` or `multipart/form-data` content type:
+
+```python
+from dataclasses import dataclass
+from blacksheep import FromForm, post
+
+
+@dataclass
+class ContactForm:
+    name: str
+    email: str
+    message: str
+
+
+@docs(
+    summary="Submit contact form",
+    responses={200: "Form submitted successfully"}
+)
+@post("/api/contact")
+async def submit_contact(form: FromForm[ContactForm]):
+    return {"status": "received"}
+```
+
 ### Adding description and summary
 
 An endpoint description can be specified either using a `docstring`:
