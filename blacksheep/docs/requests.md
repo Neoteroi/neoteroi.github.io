@@ -324,9 +324,9 @@ Files are read from `multipart/form-data` payload.
             content = file_buffer.read()
     ```
 
-=== "Memory-efficient streaming (2.6.0+)"
+=== "Streaming multipart"
 
-    For handling large file uploads efficiently without loading the entire request body into memory:
+    For handling large file uploads without buffering:
 
     ```python
     from blacksheep import post, Request, created

@@ -359,14 +359,14 @@ def home(accept: FromAcceptHeader, foo: FromFooCookie) -> Response:
 BlackSheep 2.6.0 introduces major improvements for handling `multipart/form-data` requests with the `FromForm` and `FromFiles` binders:
 
 - **Memory-efficient file handling**: Files use `SpooledTemporaryFile` - small files (<1MB) stay in memory, larger files automatically spill to temporary disk files
-- **True streaming parsing**: New streaming API for processing multipart data without buffering the entire request body
+- **True streaming parsing**: New streaming API for processing multipart data without buffering (`async for part in request.multipart_stream()`)
 - **Automatic resource cleanup**: The framework automatically cleans up file resources at the end of each request
 - **Better file API**: `FileBuffer` class provides clean methods (`read()`, `seek()`, `close()`, `save_to()`) for working with uploaded files
 - **OpenAPI documentation**: `FromText` and `FromFiles` are now fully documented in OpenAPI schemas
 
 ///
 
-### FromForm: Application/x-www-form-urlencoded and Multipart
+### FromForm: Form URL encoded and Multipart
 
 The `FromForm` binder handles both `application/x-www-form-urlencoded` and `multipart/form-data` content types:
 
@@ -454,7 +454,7 @@ from blacksheep import post, Request, created
 
 @post("/upload-large")
 async def upload_large_files(request: Request):
-    # Stream multipart data without buffering entire request body
+    # Stream multipart data without buffering
     async for part in request.multipart_stream():
         if part.file_name:
             # This is a file upload
